@@ -97,7 +97,7 @@
     </section>
 
     <!-- Programes Oficials Section -->
-    <section class="official">
+    <section id="official" class="official">
       <div class="official-header">
         <span class="official-badge">
           <AppIcon name="lifebuoy" :size="14" /> En col·laboració amb l'Ajuntament de Barcelona
@@ -122,6 +122,27 @@
             Accedeix al programa oficial →
           </a>
         </div>
+      </div>
+    </section>
+
+    <!-- Partnership Banner -->
+    <section class="partnership">
+      <div class="partnership-inner">
+        <div class="partnership-text">
+          <AppIcon name="heart" :size="20" class="partnership-icon" />
+          <div>
+            <strong>Proposta de col·laboració amb l'Ajuntament</strong>
+            <p>Barcelona Verd pot integrar-se amb <em>decidim.barcelona</em> i els programes Mans al Verd existents, actuant com a capa digital de comunitat sobre la infraestructura institucional ja disponible.</p>
+          </div>
+        </div>
+        <a
+          href="https://ajuntament.barcelona.cat/espaisverds/ca/participa-hi/mans-al-verd"
+          target="_blank"
+          rel="noopener"
+          class="partnership-cta"
+        >
+          Conèixer els programes oficials →
+        </a>
       </div>
     </section>
 
@@ -728,6 +749,63 @@ const features = [
 }
 
 .official-link:hover { color: #1e3a8a; }
+
+/* Partnership banner */
+.partnership {
+  background: #1a2e1a;
+  padding: 32px 48px;
+}
+
+.partnership-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+}
+
+.partnership-text {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  color: white;
+}
+
+.partnership-icon { color: #74c69d; flex-shrink: 0; margin-top: 2px; }
+
+.partnership-text strong {
+  display: block;
+  font-size: 16px;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 6px;
+}
+
+.partnership-text p {
+  font-size: 14px;
+  color: #b7e4c7;
+  line-height: 1.6;
+  margin: 0;
+  max-width: 640px;
+}
+
+.partnership-text em { color: #74c69d; font-style: normal; font-weight: 600; }
+
+.partnership-cta {
+  flex-shrink: 0;
+  background: #2d6a4f;
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 12px 24px;
+  border-radius: 10px;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+
+.partnership-cta:hover { background: #40916c; }
 
 /* Footer */
 .footer {
