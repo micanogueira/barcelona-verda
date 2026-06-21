@@ -6,11 +6,43 @@
 
       <div class="map-wrapper">
         <ClientOnly>
-          <BarcelonaMap />
+          <BarcelonaMap :filter="activeFilter" />
           <template #fallback>
             <div class="map-placeholder">Carregant mapa...</div>
           </template>
         </ClientOnly>
+
+        <!-- List view overlay -->
+        <div v-if="viewMode === 'list'" class="list-overlay">
+          <div v-if="loadingSpaces" class="list-loading">Carregant espais...</div>
+          <div v-else class="list-items">
+            <div v-if="filteredSpaces.length === 0" class="list-empty">
+              Cap espai trobat per a aquest filtre.
+            </div>
+            <div v-for="space in filteredSpaces" :key="space.id" class="list-item">
+              <div class="list-item-icon" :style="{ background: colorByType[space.type] }">
+                <AppIcon :name="iconByType[space.type] ?? 'leaf'" :size="18" />
+              </div>
+              <div class="list-item-body">
+                <strong>{{ space.name }}</strong>
+                <span class="list-item-tag">{{ labelByType(space.type) }}</span>
+                <p v-if="space.neighborhood">{{ space.neighborhood }}</p>
+                <p v-if="space.description" class="list-item-desc">{{ space.description }}</p>
+              </div>
+              <div v-if="space.needs_help" class="list-item-help">Cal ajuda</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- View toggle (map / list) -->
+        <div class="view-toggle">
+          <button :class="['view-btn', { active: viewMode === 'map' }]" @click="viewMode = 'map'">
+            <AppIcon name="map" :size="15" /> Mapa
+          </button>
+          <button :class="['view-btn', { active: viewMode === 'list' }]" @click="viewMode = 'list'">
+            <AppIcon name="clipboard-list" :size="15" /> Llista
+          </button>
+        </div>
 
         <!-- Filter panel (left side) -->
         <div :class="['filter-panel', { collapsed: !panelOpen }]">
@@ -76,6 +108,31 @@ const supabase = useSupabaseClient()
 
 const activeFilter = ref('all')
 const panelOpen = ref(true)
+const viewMode = ref('map')
+
+const iconByType = { park: 'trees', garden: 'flower', hort: 'carrot', square: 'droplet', mediator: 'info-circle' }
+const colorByType = { park: '#2d6a4f', garden: '#c75c9e', hort: '#e08e29', square: '#3a86c8', mediator: '#6366f1' }
+function labelByType(type) {
+  return { park: 'Parc', garden: 'Jardí', hort: 'Hort urbà', square: 'Plaça', mediator: "Punt d'informació" }[type] ?? type
+}
+
+const spaces = ref([])
+const loadingSpaces = ref(false)
+const filteredSpaces = computed(() =>
+  activeFilter.value === 'all' ? spaces.value : spaces.value.filter(s => s.type === activeFilter.value)
+)
+
+async function loadSpaces() {
+  loadingSpaces.value = true
+  const { data } = await supabase
+    .from('green_spaces')
+    .select('id, name, type, description, neighborhood, needs_help, participant_count')
+    .order('name')
+  spaces.value = data ?? []
+  loadingSpaces.value = false
+}
+
+watch(viewMode, (val) => { if (val === 'list' && !spaces.value.length) loadSpaces() })
 
 const filters = [
   { value: 'all',      icon: 'map',      label: 'Tots els espais' },
@@ -262,6 +319,129 @@ const features = [
 }
 
 .filter-icon { flex-shrink: 0; }
+
+/* View toggle */
+.view-toggle {
+  position: absolute;
+  top: 80px;
+  right: 56px;
+  display: flex;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(8px);
+  border-radius: 10px;
+  padding: 4px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  z-index: 5;
+  gap: 2px;
+}
+
+.view-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border: none;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #4a5568;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.view-btn:hover { background: #f0faf4; color: #1b4332; }
+.view-btn.active { background: #2d6a4f; color: white; }
+
+/* List overlay */
+.list-overlay {
+  position: absolute;
+  top: 64px;
+  left: 0; right: 0; bottom: 0;
+  background: rgba(248, 249, 244, 0.97);
+  backdrop-filter: blur(4px);
+  overflow-y: auto;
+  z-index: 4;
+  padding: 24px 48px;
+}
+
+.list-loading, .list-empty {
+  text-align: center;
+  color: #718096;
+  padding: 60px 0;
+  font-size: 16px;
+}
+
+.list-items {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.list-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  background: white;
+  border-radius: 14px;
+  padding: 16px 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.list-item-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  flex-shrink: 0;
+}
+
+.list-item-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.list-item-body strong {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1b4332;
+}
+
+.list-item-tag {
+  font-size: 11px;
+  font-weight: 600;
+  color: #4a7c59;
+  background: #d8f3dc;
+  padding: 1px 8px;
+  border-radius: 4px;
+  align-self: flex-start;
+}
+
+.list-item-body p {
+  font-size: 13px;
+  color: #718096;
+  margin: 0;
+}
+
+.list-item-desc { color: #4a5568 !important; }
+
+.list-item-help {
+  font-size: 11px;
+  font-weight: 700;
+  color: #e53e3e;
+  background: #fff5f5;
+  border: 1px solid #fed7d7;
+  padding: 3px 10px;
+  border-radius: 6px;
+  align-self: center;
+  flex-shrink: 0;
+}
 
 /* Features */
 .features {

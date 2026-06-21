@@ -13,21 +13,22 @@ const props = defineProps({
 const mapContainer = ref(null)
 const supabase = useSupabaseClient()
 let map = null
+const markers = [] // { marker, type }
 
 const ICON_BY_TYPE = {
-  park: 'trees',
-  garden: 'flower',
-  hort: 'carrot',
-  square: 'droplet',
+  park:     'trees',
+  garden:   'flower',
+  hort:     'carrot',
+  square:   'droplet',
   mediator: 'info-circle',
 }
 
 const MARKER_COLOR = {
-  park: '#2d6a4f',
-  garden: '#c75c9e',
-  hort: '#e08e29',
-  square: '#3a86c8',
-  mediator: '#3a7bd5',
+  park:     '#2d6a4f',
+  garden:   '#c75c9e',
+  hort:     '#e08e29',
+  square:   '#3a86c8',
+  mediator: '#6366f1',
 }
 
 onMounted(async () => {
@@ -53,7 +54,6 @@ onMounted(async () => {
 
   map.addControl(new maplibregl.NavigationControl(), 'top-right')
   map.addControl(new maplibregl.ScaleControl({ unit: 'metric' }), 'bottom-left')
-
   map.on('load', () => loadGreenSpaces())
 })
 
@@ -77,33 +77,44 @@ async function loadGreenSpaces() {
     el.innerHTML = iconMarkup(iconName, { size: 17 })
     if (space.needs_help) el.classList.add('needs-help')
 
-    new maplibregl.Marker({ element: el })
+    const marker = new maplibregl.Marker({ element: el })
       .setLngLat(coords)
       .setPopup(
         new maplibregl.Popup({ offset: 25 }).setHTML(`
           <div class="popup-content">
             <strong>${space.name}</strong>
-            <span class="popup-tag">${space.type}</span>
+            <span class="popup-tag popup-tag--${space.type}">${labelByType(space.type)}</span>
             ${space.description ? `<p>${space.description}</p>` : ''}
-            ${space.neighborhood ? `<p class="popup-hood">${iconMarkup('pin', { size: 13 })}${space.neighborhood}</p>` : ''}
-            ${space.participant_count ? `<p class="popup-count">${iconMarkup('users', { size: 13 })}${space.participant_count} participants</p>` : ''}
+            ${space.neighborhood ? `<p class="popup-meta">${iconMarkup('pin', { size: 13 })} ${space.neighborhood}</p>` : ''}
+            ${space.participant_count ? `<p class="popup-meta">${iconMarkup('users', { size: 13 })} ${space.participant_count} participants</p>` : ''}
           </div>
         `)
       )
       .addTo(map)
+
+    markers.push({ marker, type: space.type })
   })
+}
+
+// Apply filter: show only matching markers
+watch(() => props.filter, (val) => {
+  markers.forEach(({ marker, type }) => {
+    const visible = val === 'all' || type === val
+    marker.getElement().style.display = visible ? 'block' : 'none'
+  })
+})
+
+function labelByType(type) {
+  return { park: 'Parc', garden: 'Jardí', hort: 'Hort urbà', square: 'Plaça', mediator: "Punt d'informació" }[type] ?? type
 }
 
 function parseLocation(location) {
   if (!location) return null
-  // GeoJSON object
   if (typeof location === 'object' && location.coordinates) return location.coordinates
   if (typeof location !== 'string') return null
-  // GeoJSON string
   if (location.startsWith('{')) {
     try { const g = JSON.parse(location); return g.coordinates ?? null } catch {}
   }
-  // EWKB hex (what PostgREST returns for geography columns)
   try {
     const bytes = location.match(/.{2}/g).map(h => parseInt(h, 16))
     const view = new DataView(new Uint8Array(bytes).buffer)
@@ -138,14 +149,12 @@ onUnmounted(() => map?.remove())
 .map-marker.needs-help::after {
   content: '!';
   position: absolute;
-  top: -4px;
-  right: -4px;
+  top: -4px; right: -4px;
   background: #e53e3e;
   color: white;
   font-size: 10px;
   font-weight: 800;
-  width: 14px;
-  height: 14px;
+  width: 14px; height: 14px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -153,17 +162,20 @@ onUnmounted(() => map?.remove())
   border: 1.5px solid #fff;
 }
 
-.popup-content { font-family: 'Inter', sans-serif; min-width: 180px; }
-.popup-content strong { display: block; font-size: 15px; color: #1b4332; margin-bottom: 4px; }
-.popup-tag { display: inline-block; background: #d8f3dc; color: #2d6a4f; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px; margin-bottom: 8px; }
-.popup-content p { font-size: 13px; color: #4a5568; margin: 4px 0; }
-.popup-hood, .popup-count {
-  color: #718096 !important;
-  font-size: 12px !important;
-  display: flex;
-  align-items: center;
-  gap: 4px;
+.popup-content { font-family: 'Inter', sans-serif; min-width: 190px; }
+.popup-content strong { display: block; font-size: 15px; color: #1b4332; margin-bottom: 6px; }
+.popup-tag {
+  display: inline-block;
+  font-size: 11px; font-weight: 600;
+  padding: 2px 8px; border-radius: 4px; margin-bottom: 8px;
+  background: #d8f3dc; color: #2d6a4f;
 }
+.popup-tag--garden   { background: #fce4f6; color: #9c2f7f; }
+.popup-tag--hort     { background: #fef3e2; color: #9a5e0a; }
+.popup-tag--square   { background: #dbeafe; color: #1d4ed8; }
+.popup-tag--mediator { background: #ede9fe; color: #4f46e5; }
+.popup-content p { font-size: 13px; color: #4a5568; margin: 4px 0; }
+.popup-meta { display: flex; align-items: center; gap: 4px; color: #718096 !important; font-size: 12px !important; }
 </style>
 
 <style scoped>
