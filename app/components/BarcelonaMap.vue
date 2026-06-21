@@ -31,6 +31,13 @@ const MARKER_COLOR = {
   tree:     '#52b788',
 }
 
+const OFFICIAL_PROGRAM = {
+  park:    { label: 'Mans al Verd',               url: 'https://ajuntament.barcelona.cat/espaisverds/ca/participa-hi/mans-al-verd' },
+  garden:  { label: "Cogestió d'Espais Públics",  url: 'https://ajuntament.barcelona.cat/espaisverds/ca/participa-hi/mans-al-verd/cogestio-despais-publics' },
+  hort:    { label: "Xarxa d'Horts Municipals",   url: 'https://ajuntament.barcelona.cat/espaisverds/ca/participa-hi/mans-al-verd/xarxa-dhorts-municipals' },
+  mediator: null,
+}
+
 onMounted(() => {
   map = new maplibregl.Map({
     container: mapContainer.value,
@@ -93,6 +100,14 @@ async function loadGreenSpaces() {
             ${space.neighborhood ? `<p class="popup-meta">${iconMarkup('pin', { size: 13 })} ${space.neighborhood}</p>` : ''}
             ${space.participant_count ? `<p class="popup-meta">${iconMarkup('users', { size: 13 })} ${space.participant_count} participants</p>` : ''}
             ${space.needs_help ? `<a href="/participar" class="popup-help-cta">Vull ajudar →</a>` : ''}
+            ${OFFICIAL_PROGRAM[space.type] ? `
+            <div class="popup-official">
+              ${iconMarkup('info-circle', { size: 12 })}
+              <span>Programa oficial:</span>
+              <a href="${OFFICIAL_PROGRAM[space.type].url}" target="_blank" rel="noopener">
+                ${OFFICIAL_PROGRAM[space.type].label} →
+              </a>
+            </div>` : ''}
           </div>
         `)
       )
@@ -248,6 +263,20 @@ onUnmounted(() => map?.remove())
   text-decoration: none;
 }
 .popup-help-cta:hover { background: #c53030; }
+.popup-official {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #e8f0e8;
+  font-size: 12px;
+  color: #718096;
+}
+.popup-official span { font-weight: 600; color: #4a5568; }
+.popup-official a { color: #1d4ed8; text-decoration: none; font-weight: 600; }
+.popup-official a:hover { text-decoration: underline; }
 .popup-content strong { display: block; font-size: 15px; color: #1b4332; margin-bottom: 6px; }
 .popup-tag {
   display: inline-block;
