@@ -2,8 +2,8 @@
   <div class="page">
     <nav class="topbar">
       <NuxtLink to="/" class="back">← Inici</NuxtLink>
-      <span class="logo"><AppIcon name="leaf" :size="18" /> Barcelona Verd</span>
-      <NuxtLink to="/login" class="btn-login">Entrar</NuxtLink>
+      <NuxtLink to="/" class="logo"><AppIcon name="leaf" :size="18" /> Barcelona Verd</NuxtLink>
+      <NuxtLink to="/login" class="topbar-login">Entrar</NuxtLink>
     </nav>
 
     <header class="page-header">
@@ -133,10 +133,10 @@ const officialPrograms = [
 ]
 
 const steps = [
-  { title: 'Registra\'t', text: 'Crea el teu compte en menys d\'un minut. Tria el teu rol i el teu barri.' },
-  { title: 'Explora el mapa', text: 'Descobreix els espais verds, horts i arbres prop de tu. Veu on cal ajuda.' },
-  { title: 'Participa', text: 'Apunta\'t com a voluntari, connecta el teu comerç o accedeix a un programa oficial.' },
-  { title: 'Creix amb la comunitat', text: 'Rep reconeixement i inspira altres veïns a unir-se.' },
+  { title: 'Explora', text: 'Obre el mapa interactiu i descobreix els espais verds, horts i arbres del teu barri — sense necessitat de compte.' },
+  { title: 'Tria com participar', text: 'Vols ser voluntari, mediador de xarxa o accedir directament a un programa oficial de l\'Ajuntament?' },
+  { title: 'Registra\'t o accedeix', text: 'Crea el teu compte a Barcelona Verd per als rols de la plataforma, o accedeix al programa oficial que t\'interessa.' },
+  { title: 'Fes créixer la xarxa', text: 'La teva participació és visible al mapa i inspira altres veïns dels 73 barris de Barcelona.' },
 ]
 </script>
 
@@ -152,11 +152,9 @@ const steps = [
   border-bottom: 1px solid #e2e8e0;
 }
 .back { color: #2d6a4f; text-decoration: none; font-size: 14px; font-weight: 500; }
-.logo { display: flex; align-items: center; gap: 6px; font-size: 18px; font-weight: 800; color: #1b4332; }
-.btn-login {
-  background: #2d6a4f; color: white; text-decoration: none;
-  padding: 8px 20px; border-radius: 8px; font-size: 14px; font-weight: 600;
-}
+.logo { display: flex; align-items: center; gap: 6px; font-size: 18px; font-weight: 800; color: #1b4332; text-decoration: none; }
+.topbar-login { color: #2d3748; text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.15s; }
+.topbar-login:hover { color: #2d6a4f; }
 
 .page-header {
   text-align: center;
