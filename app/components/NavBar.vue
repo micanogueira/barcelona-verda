@@ -25,8 +25,7 @@
     <div class="navbar-links">
       <a href="#map">Mapa</a>
       <NuxtLink to="/participar">Com Participar</NuxtLink>
-      <a href="#official" class="btn-official">Programes Oficials</a>
-      <a href="#about">Sobre</a>
+<a href="#about">Sobre</a>
       <NuxtLink to="/login" class="btn-login">Entrar</NuxtLink>
     </div>
   </nav>
@@ -117,16 +116,6 @@ defineProps({
 }
 
 .navbar-links a:hover { color: #2d6a4f; }
-
-.btn-official {
-  color: #1d4ed8 !important;
-  background: #dbeafe;
-  padding: 5px 12px;
-  border-radius: 6px;
-  font-weight: 600 !important;
-}
-
-.btn-official:hover { background: #bfdbfe !important; color: #1e3a8a !important; }
 
 .btn-login {
   background: #2d6a4f;

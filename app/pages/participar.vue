@@ -8,10 +8,15 @@
 
     <header class="page-header">
       <h1>Com pots participar?</h1>
-      <p>Tria el rol que millor s'adapta a tu. No cal experiència prèvia — només ganes de fer Barcelona més verda.</p>
+      <p>Totes les maneres de contribuir als espais verds de Barcelona, en un sol lloc. Des de registrar-te a la nostra plataforma fins a accedir als programes oficials de l'Ajuntament.</p>
     </header>
 
+    <!-- Via Barcelona Verd -->
     <section class="roles">
+      <div class="section-label">
+        <AppIcon name="leaf" :size="15" />
+        Registra't a Barcelona Verd
+      </div>
       <div v-for="role in roles" :key="role.id" class="role-card">
         <div class="role-icon" :style="{ background: role.color }">
           <AppIcon :name="role.icon" :size="56" stroke-width="1.5" />
@@ -21,10 +26,36 @@
           <p class="role-desc">{{ role.description }}</p>
           <ul class="role-actions">
             <li v-for="action in role.actions" :key="action">
-            <AppIcon name="check" :size="14" class="check-icon" />{{ action }}
-          </li>
+              <AppIcon name="check" :size="14" class="check-icon" />{{ action }}
+            </li>
           </ul>
           <NuxtLink to="/login" class="btn-role">{{ role.cta }}</NuxtLink>
+        </div>
+      </div>
+    </section>
+
+    <!-- Via Programes Oficials -->
+    <section class="official-programs">
+      <div class="section-label section-label--blue">
+        <AppIcon name="info-circle" :size="15" />
+        Programes oficials de l'Ajuntament
+      </div>
+      <p class="official-intro">Aquests programes ja existeixen a la ciutat. Barcelona Verd t'ajuda a entendre'ls i accedir-hi de manera senzilla.</p>
+      <div class="official-grid">
+        <div v-for="prog in officialPrograms" :key="prog.id" class="official-card">
+          <div class="official-card-top">
+            <AppIcon :name="prog.icon" :size="26" class="official-icon" />
+            <span class="official-tag">Programa oficial</span>
+          </div>
+          <h3>{{ prog.title }}</h3>
+          <p class="official-desc">{{ prog.description }}</p>
+          <div class="official-bv-adds">
+            <span class="official-bv-label">Barcelona Verd afegeix</span>
+            <p>{{ prog.bvAdds }}</p>
+          </div>
+          <a :href="prog.officialUrl" target="_blank" rel="noopener" class="btn-official">
+            Accedeix al programa →
+          </a>
         </div>
       </div>
     </section>
@@ -72,27 +103,48 @@ const roles = [
     ],
     cta: 'Apuntar-me com a voluntari/ària',
   },
+]
+
+const officialPrograms = [
   {
-    id: 'citizen',
-    icon: 'user',
-    title: 'Ciutadà/ana',
-    color: 'linear-gradient(135deg, #d4a017, #f4c842)',
-    description: 'Explora el mapa, descobreix els espais verds del teu barri, proposa millores i segueix el creixement de Barcelona Verd des de casa.',
-    actions: [
-      'Explora el mapa interactiu',
-      'Proposa nous espais verds',
-      'Segueix els teus ambaixadors locals',
-      'Participa a la Festa Anual',
-    ],
-    cta: 'Crear compte gratuït',
+    id: 1,
+    icon: 'pine',
+    title: "Cuida l'escocell",
+    description: "Programa municipal d'adopció d'escocells (els espais de terra al voltant dels arbres). Qualsevol veí +18 anys pot apadrinar fins a 3 arbres.",
+    bvAdds: "Seguiment visual del progrés, historial de cura i visibilitat al mapa — la Prefeitura té el programa però no la capa digital de comunitat.",
+    officialUrl: "https://ajuntament.barcelona.cat/espaisverds/ca/participa-hi/mans-al-verd/cuida-lescocell",
+  },
+  {
+    id: 2,
+    icon: 'carrot',
+    title: "Xarxa d'Horts Municipals",
+    description: "15 horts municipals repartits pels 10 districtes, amb parcel·les per a persones +65 anys i entitats. Sorteig públic anual.",
+    bvAdds: "Vagas disponibles en temps real i alertes per a noves convocatòries — la web oficial només té PDFs descarregables.",
+    officialUrl: "https://ajuntament.barcelona.cat/espaisverds/ca/participa-hi/mans-al-verd/xarxa-dhorts-municipals",
+  },
+  {
+    id: 3,
+    icon: 'leaf',
+    title: "Mans al Verd",
+    description: "Programa paraigua que inclou horts, cessió d'espais, cogestió i adopció d'escocells. El gran marc de participació ciutadana en espais verds.",
+    bvAdds: "Mapa de projectes actius i visibilitat de qui ja participa al teu barri — el programa existeix però és invisible per a la majoria.",
+    officialUrl: "https://ajuntament.barcelona.cat/espaisverds/ca/participa-hi/mans-al-verd",
+  },
+  {
+    id: 4,
+    icon: 'users',
+    title: "Cogestió d'Espais Públics",
+    description: "Entitats sense ànim de lucre poden cogestionar parterres, jardineres o basses naturalitzades durant 2 anys, via formulari.",
+    bvAdds: "Llista pública d'entitats en cogestió al mapa, inspirant noves candidatures — ara cap ciutadà sap quines entitats ja gestionen espais al seu barri.",
+    officialUrl: "https://ajuntament.barcelona.cat/espaisverds/ca/participa-hi/mans-al-verd/cogestio-despais-publics",
   },
 ]
 
 const steps = [
   { title: 'Registra\'t', text: 'Crea el teu compte en menys d\'un minut. Tria el teu rol i el teu barri.' },
   { title: 'Explora el mapa', text: 'Descobreix els espais verds, horts i arbres prop de tu. Veu on cal ajuda.' },
-  { title: 'Participa', text: 'Adopta un arbre, apunta\'t a una jornada o connecta el teu comerç a la xarxa.' },
-  { title: 'Creix amb la comunitat', text: 'Acumula punts, rep reconeixement i inspira altres veïns a unir-se.' },
+  { title: 'Participa', text: 'Apunta\'t com a voluntari, connecta el teu comerç o accedeix a un programa oficial.' },
+  { title: 'Creix amb la comunitat', text: 'Rep reconeixement i inspira altres veïns a unir-se.' },
 ]
 </script>
 
@@ -180,6 +232,96 @@ const steps = [
   transition: background 0.15s;
 }
 .btn-role:hover { background: #1b4332; }
+
+/* Section labels */
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #2d6a4f;
+  background: #e8f5ec;
+  padding: 6px 14px;
+  border-radius: 20px;
+  margin-bottom: 24px;
+}
+.section-label--blue { color: #1d4ed8; background: #dbeafe; }
+
+/* Official Programs Section */
+.official-programs {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 48px 80px;
+}
+.official-intro {
+  font-size: 16px;
+  color: #4a5568;
+  margin-bottom: 32px;
+  max-width: 600px;
+}
+.official-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+.official-card {
+  background: white;
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.official-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.official-icon { color: #2d6a4f; }
+.official-tag {
+  font-size: 11px;
+  font-weight: 700;
+  color: #1d4ed8;
+  background: #dbeafe;
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+.official-card h3 { font-size: 17px; font-weight: 800; color: #1b4332; margin: 0; }
+.official-desc { font-size: 14px; color: #4a5568; line-height: 1.6; margin: 0; }
+.official-bv-adds {
+  background: #f0faf4;
+  border-left: 3px solid #52b788;
+  border-radius: 0 8px 8px 0;
+  padding: 10px 14px;
+}
+.official-bv-label {
+  display: block;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: #2d6a4f;
+  margin-bottom: 4px;
+}
+.official-bv-adds p { font-size: 13px; color: #4a7c59; margin: 0; line-height: 1.5; }
+.btn-official {
+  display: inline-block;
+  margin-top: auto;
+  background: #1d4ed8;
+  color: white;
+  text-decoration: none;
+  padding: 9px 20px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  transition: background 0.15s;
+  align-self: flex-start;
+}
+.btn-official:hover { background: #1e3a8a; }
 
 /* How it works */
 .how-it-works {
