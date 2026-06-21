@@ -62,7 +62,7 @@
             <button
               v-for="f in filters"
               :key="f.value"
-              :class="['filter-btn', { active: activeFilter === f.value }]"
+              :class="['filter-btn', { active: activeFilter === f.value }, f.value === 'help' ? 'help-filter' : '']"
               @click="activeFilter = f.value"
             >
               <AppIcon :name="f.icon" :size="15" class="filter-icon" />
@@ -118,9 +118,11 @@ function labelByType(type) {
 
 const spaces = ref([])
 const loadingSpaces = ref(false)
-const filteredSpaces = computed(() =>
-  activeFilter.value === 'all' ? spaces.value : spaces.value.filter(s => s.type === activeFilter.value)
-)
+const filteredSpaces = computed(() => {
+  if (activeFilter.value === 'all') return spaces.value
+  if (activeFilter.value === 'help') return spaces.value.filter(s => s.needs_help)
+  return spaces.value.filter(s => s.type === activeFilter.value)
+})
 
 async function loadSpaces() {
   loadingSpaces.value = true
@@ -318,6 +320,9 @@ const features = [
   background: #2d6a4f;
   color: white;
 }
+
+.filter-btn.help-filter:hover { background: #fff5f5; color: #c53030; }
+.filter-btn.help-filter.active { background: #e53e3e; }
 
 .filter-icon { flex-shrink: 0; }
 

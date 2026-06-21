@@ -96,7 +96,7 @@ async function loadGreenSpaces() {
       )
       .addTo(map)
 
-    spaceMarkers.push({ marker, type: space.type })
+    spaceMarkers.push({ marker, type: space.type, needsHelp: !!space.needs_help })
   })
 }
 
@@ -139,8 +139,9 @@ async function loadTrees() {
 }
 
 watch(() => props.filter, (val) => {
-  spaceMarkers.forEach(({ marker, type }) => {
-    setVisible(marker, val === 'all' || type === val)
+  spaceMarkers.forEach(({ marker, type, needsHelp }) => {
+    const show = val === 'all' || type === val || (val === 'help' && needsHelp)
+    setVisible(marker, show)
   })
   treeMarkers.forEach((marker) => {
     setVisible(marker, val === 'all' || val === 'tree')
