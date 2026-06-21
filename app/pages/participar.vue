@@ -8,7 +8,8 @@
 
     <header class="page-header">
       <h1>Com pots participar?</h1>
-      <p>Tots els programes oficials i les formes de participar — explicats de manera clara, en un sol lloc.</p>
+      <p>El projecte Barcelona Verd connecta veïns, voluntaris i la ciutat per crear espais verds junts. Aquí trobaràs totes les formes de participació i els programes oficials, en un sol lloc.</p>
+      <p class="page-header-sub">Siguis voluntari/ària, mediador/a o ciutadà/ana actiu/va, hi ha un rol per a tothom.</p>
     </header>
 
     <!-- Via Barcelona Verd -->
@@ -171,7 +172,8 @@ const steps = [
   padding: 72px 48px 48px;
 }
 .page-header h1 { font-size: 42px; font-weight: 800; color: #1b4332; margin-bottom: 16px; letter-spacing: -0.5px; }
-.page-header p { font-size: 18px; color: #4a7c59; max-width: 560px; margin: 0 auto; }
+.page-header p { font-size: 18px; color: #4a7c59; max-width: 580px; margin: 0 auto 12px; }
+.page-header-sub { font-size: 16px !important; color: #2d6a4f !important; font-weight: 600; }
 
 .roles {
   display: flex;
