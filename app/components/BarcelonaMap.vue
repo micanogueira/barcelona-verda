@@ -71,13 +71,17 @@ async function loadGreenSpaces() {
     const iconName = ICON_BY_TYPE[space.type] ?? 'leaf'
     const color    = MARKER_COLOR[space.type] ?? '#52b788'
 
+    const wrapper = document.createElement('div')
+    wrapper.className = 'map-marker-wrapper'
+    if (space.needs_help) wrapper.classList.add('needs-help')
+
     const el = document.createElement('div')
     el.className = 'map-marker'
     el.style.background = color
     el.innerHTML = iconMarkup(iconName, { size: 17 })
-    if (space.needs_help) el.classList.add('needs-help')
+    wrapper.appendChild(el)
 
-    const marker = new maplibregl.Marker({ element: el, anchor: 'center' })
+    const marker = new maplibregl.Marker({ element: wrapper, anchor: 'center' })
       .setLngLat(coords)
       .setPopup(
         new maplibregl.Popup({ offset: 20 }).setHTML(`
@@ -107,12 +111,16 @@ async function loadTrees() {
     const coords = parseLocation(tree.location)
     if (!coords) return
 
+    const wrapper = document.createElement('div')
+    wrapper.className = 'map-marker-wrapper'
+
     const el = document.createElement('div')
     el.className = 'map-marker'
     el.style.background = MARKER_COLOR.tree
     el.innerHTML = iconMarkup('pine', { size: 17 })
+    wrapper.appendChild(el)
 
-    const marker = new maplibregl.Marker({ element: el, anchor: 'center' })
+    const marker = new maplibregl.Marker({ element: wrapper, anchor: 'center' })
       .setLngLat(coords)
       .setPopup(
         new maplibregl.Popup({ offset: 20 }).setHTML(`
@@ -132,14 +140,18 @@ async function loadTrees() {
 
 watch(() => props.filter, (val) => {
   spaceMarkers.forEach(({ marker, type }) => {
-    const show = val === 'all' || type === val
-    marker.getElement().style.display = show ? 'block' : 'none'
+    setVisible(marker, val === 'all' || type === val)
   })
   treeMarkers.forEach((marker) => {
-    const show = val === 'all' || val === 'tree'
-    marker.getElement().style.display = show ? 'block' : 'none'
+    setVisible(marker, val === 'all' || val === 'tree')
   })
 })
+
+function setVisible(marker, visible) {
+  const el = marker.getElement()
+  el.style.visibility = visible ? 'visible' : 'hidden'
+  el.style.pointerEvents = visible ? 'auto' : 'none'
+}
 
 function labelByType(type) {
   return { park: 'Parc', garden: 'Jardí', hort: 'Hort urbà', mediator: "Punt d'informació", tree: 'Arbre' }[type] ?? type
@@ -168,8 +180,15 @@ onUnmounted(() => map?.remove())
 </script>
 
 <style>
-.map-marker {
+/* Wrapper: MapLibre applies position transforms here — NO transition */
+.map-marker-wrapper {
   position: relative;
+  width: 32px;
+  height: 32px;
+}
+
+/* Visual circle: safe to animate since MapLibre never touches this element */
+.map-marker {
   width: 32px;
   height: 32px;
   border-radius: 50%;
@@ -183,7 +202,7 @@ onUnmounted(() => map?.remove())
   transition: transform 0.15s;
 }
 .map-marker:hover { transform: scale(1.15); }
-.map-marker.needs-help::after {
+.map-marker-wrapper.needs-help::after {
   content: '!';
   position: absolute;
   top: -4px; right: -4px;
