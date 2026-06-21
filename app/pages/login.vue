@@ -281,4 +281,12 @@ async function handleRegister() {
   font-size: 17px;
   font-weight: 500;
 }
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .auth-page { grid-template-columns: 1fr; }
+  .auth-side { display: none; }
+  .auth-card { padding: 40px 24px; justify-content: flex-start; padding-top: 48px; }
+  .auth-form { max-width: 100%; }
+}
 </style>

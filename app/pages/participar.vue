@@ -279,4 +279,23 @@ const steps = [
 }
 .step h3 { font-size: 16px; font-weight: 700; color: white; }
 .step p { font-size: 14px; color: rgba(255,255,255,0.75); line-height: 1.6; }
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .topbar { padding: 16px 20px; }
+
+  .page-header { padding: 48px 20px 32px; }
+  .page-header h1 { font-size: 30px; }
+  .page-header p { font-size: 16px; }
+
+  .all-options { padding: 0 20px 56px; }
+  .official-grid { grid-template-columns: 1fr; }
+
+  .how-it-works { padding: 56px 20px; }
+  .steps { grid-template-columns: 1fr 1fr; gap: 24px; }
+}
+
+@media (max-width: 480px) {
+  .steps { grid-template-columns: 1fr; }
+}
 </style>

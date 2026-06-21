@@ -127,4 +127,13 @@ defineProps({
 }
 
 .btn-login:hover { background: #1b4332 !important; }
+
+@media (max-width: 768px) {
+  .navbar { padding: 0 20px; height: 56px; }
+  .navbar-brand { font-size: 15px; }
+  .navbar-stats { display: none; }
+  .navbar-links { gap: 14px; }
+  .navbar-links a { font-size: 13px; }
+  .btn-login { padding: 6px 12px; font-size: 13px; }
+}
 </style>

@@ -569,4 +569,22 @@ onMounted(() => {
   color: #718096;
   font-size: 14px;
 }
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .about { padding: 56px 24px; }
+  .about-text h2 { font-size: 26px; }
+
+  .partnership { padding: 28px 24px; }
+  .partnership-inner { flex-direction: column; gap: 20px; }
+  .partnership-cta { width: 100%; text-align: center; }
+
+  .footer { padding: 24px 20px; }
+
+  /* Filter panel */
+  .filter-panel { top: 68px; left: 12px; }
+
+  /* Sidebar list */
+  .spaces-sidebar { display: none; }
+}
 </style>
