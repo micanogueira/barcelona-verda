@@ -4,14 +4,38 @@
       <span class="leaf-icon">🌿</span>
       <span class="brand-name">Barcelona Verd</span>
     </div>
+
+    <div v-if="stats" class="navbar-stats">
+      <div class="counter">
+        <span class="counter-num">{{ stats.trees.toLocaleString('ca') }}</span>
+        <span class="counter-label">Àrbres</span>
+      </div>
+      <span class="counter-dot" />
+      <div class="counter">
+        <span class="counter-num">{{ stats.ambassadors.toLocaleString('ca') }}</span>
+        <span class="counter-label">Ambaixadors</span>
+      </div>
+      <span class="counter-dot" />
+      <div class="counter">
+        <span class="counter-num">{{ stats.neighborhoods }}</span>
+        <span class="counter-label">Barris</span>
+      </div>
+    </div>
+
     <div class="navbar-links">
       <a href="#map">Mapa</a>
-      <a href="#features">Com Participar</a>
+      <NuxtLink to="/participar">Com Participar</NuxtLink>
       <a href="#about">Sobre</a>
       <NuxtLink to="/login" class="btn-login">Entrar</NuxtLink>
     </div>
   </nav>
 </template>
+
+<script setup>
+defineProps({
+  stats: { type: Object, default: null },
+})
+</script>
 
 <style scoped>
 .navbar {
@@ -23,8 +47,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20px 48px;
-  background: rgba(255, 255, 255, 0.95);
+  padding: 0 48px;
+  height: 64px;
+  background: rgba(255, 255, 255, 0.97);
   backdrop-filter: blur(8px);
   border-bottom: 1px solid rgba(45, 106, 79, 0.1);
 }
@@ -33,48 +58,73 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 700;
   color: #1b4332;
-  text-decoration: none;
+  flex-shrink: 0;
 }
 
-.leaf-icon {
-  font-size: 22px;
+.leaf-icon { font-size: 20px; }
+
+/* Stats counters */
+.navbar-stats {
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
-.brand-name {
+.counter {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+}
+
+.counter-num {
+  font-size: 16px;
+  font-weight: 800;
+  color: #1b4332;
   letter-spacing: -0.3px;
 }
 
+.counter-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #4a7c59;
+}
+
+.counter-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #b7e4c7;
+}
+
+/* Nav links */
 .navbar-links {
   display: flex;
   align-items: center;
-  gap: 32px;
+  gap: 28px;
+  flex-shrink: 0;
 }
 
 .navbar-links a {
   text-decoration: none;
   color: #2d3748;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 500;
   transition: color 0.2s;
 }
 
-.navbar-links a:hover {
-  color: #2d6a4f;
-}
+.navbar-links a:hover { color: #2d6a4f; }
 
 .btn-login {
   background: #2d6a4f;
   color: white !important;
-  padding: 8px 20px;
+  padding: 7px 18px;
   border-radius: 8px;
   font-weight: 600 !important;
   transition: background 0.2s !important;
 }
 
-.btn-login:hover {
-  background: #1b4332 !important;
-}
+.btn-login:hover { background: #1b4332 !important; }
 </style>

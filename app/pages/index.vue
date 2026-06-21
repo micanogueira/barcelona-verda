@@ -2,7 +2,7 @@
   <main>
     <!-- Hero: Map Section -->
     <section class="hero">
-      <NavBar />
+      <NavBar :stats="stats" />
 
       <div class="map-wrapper">
         <ClientOnly>
@@ -12,31 +12,26 @@
           </template>
         </ClientOnly>
 
-        <!-- Stats overlay -->
-        <div class="stats-overlay">
-          <div class="stat">
-            <span class="stat-number">2.847</span>
-            <span class="stat-label">Àrbres registrats</span>
-          </div>
-          <div class="stat-divider" />
-          <div class="stat">
-            <span class="stat-number">412</span>
-            <span class="stat-label">Ambaixadors actius</span>
-          </div>
-          <div class="stat-divider" />
-          <div class="stat">
-            <span class="stat-number">73</span>
-            <span class="stat-label">Barris participants</span>
-          </div>
-        </div>
+        <!-- Filter panel (left side) -->
+        <div :class="['filter-panel', { collapsed: !panelOpen }]">
+          <button class="panel-toggle" @click="panelOpen = !panelOpen">
+            <span class="filter-icon">🗂️</span>
+            <span v-if="panelOpen" class="toggle-label">Espais verds</span>
+            <span class="toggle-arrow">{{ panelOpen ? '‹' : '›' }}</span>
+          </button>
 
-        <!-- Filter bar -->
-        <div class="filter-bar">
-          <button class="filter-btn active">Tots els espais</button>
-          <button class="filter-btn">Parcs i jardins</button>
-          <button class="filter-btn">Horts urbans</button>
-          <button class="filter-btn">Àrbres</button>
-          <button class="filter-btn">On cal ajuda</button>
+          <template v-if="panelOpen">
+            <div class="filter-divider" />
+            <button
+              v-for="f in filters"
+              :key="f.value"
+              :class="['filter-btn', { active: activeFilter === f.value }]"
+              @click="activeFilter = f.value"
+            >
+              <span class="filter-icon">{{ f.icon }}</span>
+              {{ f.label }}
+            </button>
+          </template>
         </div>
       </div>
     </section>
@@ -56,9 +51,9 @@
           <div class="card-body">
             <h3>{{ feature.title }}</h3>
             <p>{{ feature.description }}</p>
-            <a :href="feature.href" class="card-link">
+            <NuxtLink :to="feature.href" class="card-link">
               {{ feature.cta }} →
-            </a>
+            </NuxtLink>
           </div>
         </div>
       </div>
@@ -72,12 +67,56 @@
 </template>
 
 <script setup>
+const supabase = useSupabaseClient()
+
+const activeFilter = ref('all')
+const panelOpen = ref(true)
+
+const filters = [
+  { value: 'all',      icon: '🗺️', label: 'Tots els espais' },
+  { value: 'park',     icon: '🌳', label: 'Parcs i jardins' },
+  { value: 'hort',     icon: '🥕', label: 'Horts urbans' },
+  { value: 'tree',     icon: '🌲', label: 'Àrbres' },
+  { value: 'mediator', icon: '🤝', label: 'Mediadors' },
+  { value: 'help',     icon: '🆘', label: 'On cal ajuda' },
+]
+
+// Real-time stats from Supabase
+const stats = ref(null)
+
+async function loadStats() {
+  const [{ count: trees }, { count: ambassadors }, { data: spaces }] = await Promise.all([
+    supabase.from('trees').select('*', { count: 'exact', head: true }),
+    supabase.from('profiles').select('*', { count: 'exact', head: true }).eq('role', 'ambassador'),
+    supabase.from('green_spaces').select('neighborhood'),
+  ])
+  const neighborhoods = new Set(spaces?.map(s => s.neighborhood).filter(Boolean)).size
+  stats.value = {
+    trees: trees ?? 2847,
+    ambassadors: ambassadors ?? 412,
+    neighborhoods: neighborhoods || 73,
+  }
+}
+
+onMounted(loadStats)
+
+// Realtime subscription — updates counters live
+onMounted(() => {
+  const channel = supabase
+    .channel('stats')
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'trees' }, loadStats)
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'profiles' }, loadStats)
+    .subscribe()
+
+  onUnmounted(() => supabase.removeChannel(channel))
+})
+
 const features = [
   {
     id: 1,
     emoji: '🌳',
     title: "Ambaixadors d'Arbres",
-    description: 'Adopta un arbre al teu barri. Cuida\'l, segueix el seu creixement i guanya reconeixement per la teva feina.',
+    description: "Adopta un arbre al teu barri. Cuida'l, segueix el seu creixement i guanya reconeixement per la teva feina.",
     cta: 'Converteix-te en ambaixador',
     href: '/ambaixadors',
     gradient: 'linear-gradient(135deg, #1b4332 0%, #2d6a4f 100%)',
@@ -95,7 +134,7 @@ const features = [
     id: 3,
     emoji: '📋',
     title: 'Com Participar',
-    description: 'Des de voluntari fins a ambaixador, hi ha un rol per a tothom. Descobreix com pots contribuir.',
+    description: "Des de voluntari fins a ambaixador, hi ha un rol per a tothom. Descobreix com pots contribuir.",
     cta: 'Veure les opcions',
     href: '/participar',
     gradient: 'linear-gradient(135deg, #40916c 0%, #74c69d 100%)',
@@ -104,7 +143,7 @@ const features = [
     id: 4,
     emoji: '🎉',
     title: 'Festa Anual',
-    description: 'Cada any celebrem els veïns més compromesos. Lliurament de premis i nomenament d\'ambaixadors.',
+    description: "Cada any celebrem els veïns més compromesos. Lliurament de premis i nomenament d'ambaixadors.",
     cta: 'Saber-ne més',
     href: '/festa',
     gradient: 'linear-gradient(135deg, #d4a017 0%, #f4c842 100%)',
@@ -136,81 +175,80 @@ const features = [
   font-size: 18px;
 }
 
-/* Stats overlay */
-.stats-overlay {
-  position: absolute;
-  bottom: 80px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  gap: 0;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(12px);
-  border-radius: 16px;
-  padding: 20px 40px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-  z-index: 5;
-}
-
-.stat {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  padding: 0 32px;
-}
-
-.stat-number {
-  font-size: 28px;
-  font-weight: 800;
-  color: #1b4332;
-  letter-spacing: -0.5px;
-}
-
-.stat-label {
-  font-size: 13px;
-  color: #4a7c59;
-  font-weight: 500;
-}
-
-.stat-divider {
-  width: 1px;
-  height: 40px;
-  background: #d8f3dc;
-}
-
-/* Filter bar */
-.filter-bar {
+/* Left filter panel */
+.filter-panel {
   position: absolute;
   top: 80px;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 20px;
   display: flex;
-  gap: 8px;
+  flex-direction: column;
+  gap: 4px;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(8px);
-  padding: 8px;
-  border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  padding: 10px;
+  border-radius: 14px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
   z-index: 5;
-  white-space: nowrap;
+  min-width: 170px;
+  transition: min-width 0.2s;
+}
+
+.filter-panel.collapsed {
+  min-width: unset;
+}
+
+.panel-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #1b4332;
+  background: #f0faf4;
+  cursor: pointer;
+  width: 100%;
+  transition: background 0.15s;
+}
+
+.panel-toggle:hover { background: #d8f3dc; }
+
+.toggle-label { flex: 1; text-align: left; }
+
+.toggle-arrow {
+  font-size: 16px;
+  font-weight: 400;
+  color: #4a7c59;
+  line-height: 1;
+}
+
+.filter-divider {
+  height: 1px;
+  background: #e8f5ee;
+  margin: 2px 4px;
 }
 
 .filter-btn {
-  padding: 8px 18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 10px;
   border: none;
-  border-radius: 8px;
-  font-size: 14px;
+  border-radius: 9px;
+  font-size: 13px;
   font-weight: 500;
   cursor: pointer;
   background: transparent;
   color: #4a5568;
   transition: all 0.15s;
+  text-align: left;
+  width: 100%;
 }
 
 .filter-btn:hover {
-  background: #d8f3dc;
+  background: #f0faf4;
   color: #1b4332;
 }
 
@@ -218,6 +256,8 @@ const features = [
   background: #2d6a4f;
   color: white;
 }
+
+.filter-icon { font-size: 15px; }
 
 /* Features */
 .features {
@@ -273,13 +313,9 @@ const features = [
   justify-content: center;
 }
 
-.card-emoji {
-  font-size: 48px;
-}
+.card-emoji { font-size: 48px; }
 
-.card-body {
-  padding: 24px;
-}
+.card-body { padding: 24px; }
 
 .card-body h3 {
   font-size: 18px;
@@ -303,9 +339,7 @@ const features = [
   transition: color 0.15s;
 }
 
-.card-link:hover {
-  color: #1b4332;
-}
+.card-link:hover { color: #1b4332; }
 
 /* Footer */
 .footer {
