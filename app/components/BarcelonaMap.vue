@@ -4,6 +4,7 @@
 
 <script setup>
 import maplibregl from 'maplibre-gl'
+import { iconMarkup } from '~/utils/icons'
 
 const props = defineProps({
   filter: { type: String, default: 'all' },
@@ -14,10 +15,17 @@ const supabase = useSupabaseClient()
 let map = null
 
 const ICON_BY_TYPE = {
-  park: '🌳',
-  garden: '🌸',
-  hort: '🥕',
-  square: '⛲',
+  park: 'trees',
+  garden: 'flower',
+  hort: 'carrot',
+  square: 'droplet',
+}
+
+const MARKER_COLOR = {
+  park: '#2d6a4f',
+  garden: '#c75c9e',
+  hort: '#e08e29',
+  square: '#3a86c8',
 }
 
 onMounted(async () => {
@@ -52,18 +60,19 @@ async function loadGreenSpaces() {
     .from('green_spaces')
     .select('id, name, type, description, neighborhood, needs_help, participant_count, location')
 
-  if (error) { console.error('Supabase error:', error); return }
-  if (!data?.length) { console.warn('No green spaces returned'); return }
-  console.log('Green spaces loaded:', data.length)
-  console.log('location sample:', JSON.stringify(data[0]?.location))
+  if (error || !data?.length) return
 
   data.forEach((space) => {
     const coords = parseLocation(space.location)
     if (!coords) return
 
+    const iconName = ICON_BY_TYPE[space.type] ?? 'leaf'
+    const color = MARKER_COLOR[space.type] ?? '#52b788'
+
     const el = document.createElement('div')
     el.className = 'map-marker'
-    el.innerHTML = ICON_BY_TYPE[space.type] ?? '🌿'
+    el.style.background = color
+    el.innerHTML = iconMarkup(iconName, { size: 17 })
     if (space.needs_help) el.classList.add('needs-help')
 
     new maplibregl.Marker({ element: el })
@@ -74,8 +83,8 @@ async function loadGreenSpaces() {
             <strong>${space.name}</strong>
             <span class="popup-tag">${space.type}</span>
             ${space.description ? `<p>${space.description}</p>` : ''}
-            ${space.neighborhood ? `<p class="popup-hood">📍 ${space.neighborhood}</p>` : ''}
-            ${space.participant_count ? `<p class="popup-count">👥 ${space.participant_count} participants</p>` : ''}
+            ${space.neighborhood ? `<p class="popup-hood">${iconMarkup('pin', { size: 13 })}${space.neighborhood}</p>` : ''}
+            ${space.participant_count ? `<p class="popup-count">${iconMarkup('users', { size: 13 })}${space.participant_count} participants</p>` : ''}
           </div>
         `)
       )
@@ -110,16 +119,20 @@ onUnmounted(() => map?.remove())
 
 <style>
 .map-marker {
-  width: 36px;
-  height: 36px;
-  font-size: 24px;
-  line-height: 36px;
-  text-align: center;
+  position: relative;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+  border: 2px solid rgba(255,255,255,0.9);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
   transition: transform 0.15s;
 }
-.map-marker:hover { transform: scale(1.2); }
+.map-marker:hover { transform: scale(1.15); }
 .map-marker.needs-help::after {
   content: '!';
   position: absolute;
@@ -135,13 +148,20 @@ onUnmounted(() => map?.remove())
   display: flex;
   align-items: center;
   justify-content: center;
+  border: 1.5px solid #fff;
 }
 
 .popup-content { font-family: 'Inter', sans-serif; min-width: 180px; }
 .popup-content strong { display: block; font-size: 15px; color: #1b4332; margin-bottom: 4px; }
 .popup-tag { display: inline-block; background: #d8f3dc; color: #2d6a4f; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px; margin-bottom: 8px; }
 .popup-content p { font-size: 13px; color: #4a5568; margin: 4px 0; }
-.popup-hood, .popup-count { color: #718096 !important; font-size: 12px !important; }
+.popup-hood, .popup-count {
+  color: #718096 !important;
+  font-size: 12px !important;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
 </style>
 
 <style scoped>

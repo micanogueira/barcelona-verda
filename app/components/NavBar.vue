@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar">
     <div class="navbar-brand">
-      <span class="leaf-icon">🌿</span>
+      <AppIcon name="leaf" :size="20" class="leaf-icon" />
       <span class="brand-name">Barcelona Verd</span>
     </div>
 
@@ -64,7 +64,7 @@ defineProps({
   flex-shrink: 0;
 }
 
-.leaf-icon { font-size: 20px; }
+.leaf-icon { flex-shrink: 0; }
 
 /* Stats counters */
 .navbar-stats {

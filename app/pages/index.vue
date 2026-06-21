@@ -15,9 +15,14 @@
         <!-- Filter panel (left side) -->
         <div :class="['filter-panel', { collapsed: !panelOpen }]">
           <button class="panel-toggle" @click="panelOpen = !panelOpen">
-            <span class="filter-icon">🗂️</span>
+            <AppIcon name="map2" :size="16" class="filter-icon" />
             <span v-if="panelOpen" class="toggle-label">Espais verds</span>
-            <span class="toggle-arrow">{{ panelOpen ? '‹' : '›' }}</span>
+            <AppIcon
+              name="chevron-left"
+              :size="14"
+              class="toggle-arrow"
+              :style="{ transform: panelOpen ? 'none' : 'rotate(180deg)' }"
+            />
           </button>
 
           <template v-if="panelOpen">
@@ -28,7 +33,7 @@
               :class="['filter-btn', { active: activeFilter === f.value }]"
               @click="activeFilter = f.value"
             >
-              <span class="filter-icon">{{ f.icon }}</span>
+              <AppIcon :name="f.icon" :size="15" class="filter-icon" />
               {{ f.label }}
             </button>
           </template>
@@ -46,7 +51,7 @@
       <div class="cards-grid">
         <div v-for="feature in features" :key="feature.id" class="card">
           <div class="card-image" :style="{ background: feature.gradient }">
-            <span class="card-emoji">{{ feature.emoji }}</span>
+            <AppIcon :name="feature.icon" :size="40" class="card-emoji" />
           </div>
           <div class="card-body">
             <h3>{{ feature.title }}</h3>
@@ -73,12 +78,12 @@ const activeFilter = ref('all')
 const panelOpen = ref(true)
 
 const filters = [
-  { value: 'all',      icon: '🗺️', label: 'Tots els espais' },
-  { value: 'park',     icon: '🌳', label: 'Parcs i jardins' },
-  { value: 'hort',     icon: '🥕', label: 'Horts urbans' },
-  { value: 'tree',     icon: '🌲', label: 'Àrbres' },
-  { value: 'mediator', icon: '🤝', label: 'Mediadors' },
-  { value: 'help',     icon: '🆘', label: 'On cal ajuda' },
+  { value: 'all',      icon: 'map',      label: 'Tots els espais' },
+  { value: 'park',     icon: 'trees',    label: 'Parcs i jardins' },
+  { value: 'hort',     icon: 'carrot',   label: 'Horts urbans' },
+  { value: 'tree',     icon: 'pine',     label: 'Àrbres' },
+  { value: 'mediator', icon: 'link2',    label: 'Mediadors' },
+  { value: 'help',     icon: 'lifebuoy', label: 'On cal ajuda' },
 ]
 
 // Real-time stats from Supabase
@@ -114,7 +119,7 @@ onMounted(() => {
 const features = [
   {
     id: 1,
-    emoji: '🌳',
+    icon: 'pine',
     title: "Ambaixadors d'Arbres",
     description: "Adopta un arbre al teu barri. Cuida'l, segueix el seu creixement i guanya reconeixement per la teva feina.",
     cta: 'Converteix-te en ambaixador',
@@ -123,7 +128,7 @@ const features = [
   },
   {
     id: 2,
-    emoji: '🤝',
+    icon: 'link2',
     title: 'Xarxa de Mediadors',
     description: 'Mercats, metges, perruqueries i comerços de barri que connecten veïns amb el moviment verd.',
     cta: 'Uneix-te a la xarxa',
@@ -132,7 +137,7 @@ const features = [
   },
   {
     id: 3,
-    emoji: '📋',
+    icon: 'clipboard-list',
     title: 'Com Participar',
     description: "Des de voluntari fins a ambaixador, hi ha un rol per a tothom. Descobreix com pots contribuir.",
     cta: 'Veure les opcions',
@@ -141,7 +146,7 @@ const features = [
   },
   {
     id: 4,
-    emoji: '🎉',
+    icon: 'confetti',
     title: 'Festa Anual',
     description: "Cada any celebrem els veïns més compromesos. Lliurament de premis i nomenament d'ambaixadors.",
     cta: 'Saber-ne més',
@@ -218,10 +223,9 @@ const features = [
 .toggle-label { flex: 1; text-align: left; }
 
 .toggle-arrow {
-  font-size: 16px;
-  font-weight: 400;
+  flex-shrink: 0;
   color: #4a7c59;
-  line-height: 1;
+  transition: transform 0.2s;
 }
 
 .filter-divider {
@@ -257,7 +261,7 @@ const features = [
   color: white;
 }
 
-.filter-icon { font-size: 15px; }
+.filter-icon { flex-shrink: 0; }
 
 /* Features */
 .features {
@@ -313,7 +317,7 @@ const features = [
   justify-content: center;
 }
 
-.card-emoji { font-size: 48px; }
+.card-emoji { color: #fff; }
 
 .card-body { padding: 24px; }
 
