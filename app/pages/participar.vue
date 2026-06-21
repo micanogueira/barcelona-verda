@@ -2,7 +2,7 @@
   <div class="page">
     <nav class="topbar">
       <NuxtLink to="/" class="back">← Inici</NuxtLink>
-      <span class="logo">🌿 Barcelona Verd</span>
+      <span class="logo"><AppIcon name="leaf" :size="18" /> Barcelona Verd</span>
       <NuxtLink to="/login" class="btn-login">Entrar</NuxtLink>
     </nav>
 
@@ -13,12 +13,16 @@
 
     <section class="roles">
       <div v-for="role in roles" :key="role.id" class="role-card">
-        <div class="role-icon" :style="{ background: role.color }">{{ role.emoji }}</div>
+        <div class="role-icon" :style="{ background: role.color }">
+          <AppIcon :name="role.icon" :size="56" stroke-width="1.5" />
+        </div>
         <div class="role-body">
           <h2>{{ role.title }}</h2>
           <p class="role-desc">{{ role.description }}</p>
           <ul class="role-actions">
-            <li v-for="action in role.actions" :key="action">✓ {{ action }}</li>
+            <li v-for="action in role.actions" :key="action">
+            <AppIcon name="check" :size="14" class="check-icon" />{{ action }}
+          </li>
           </ul>
           <NuxtLink to="/login" class="btn-role">{{ role.cta }}</NuxtLink>
         </div>
@@ -42,7 +46,7 @@
 const roles = [
   {
     id: 'ambassador',
-    emoji: '🌳',
+    icon: 'pine',
     title: "Ambaixador/a d'Arbres",
     color: 'linear-gradient(135deg, #1b4332, #2d6a4f)',
     description: 'Adoptes un o més arbres al teu barri. Els cuides, reportes el seu estat i construeixes un vincle amb l\'espai verd de la teva comunitat.',
@@ -56,7 +60,7 @@ const roles = [
   },
   {
     id: 'mediator',
-    emoji: '🤝',
+    icon: 'link2',
     title: 'Mediador/a de Xarxa',
     color: 'linear-gradient(135deg, #276221, #52b788)',
     description: 'Ets un comerç, mercat, metge, perruqueria o entitat local. Ajudes a connectar els teus clients i veïns amb la plataforma, actuant com a punt de confiança.',
@@ -70,7 +74,7 @@ const roles = [
   },
   {
     id: 'volunteer',
-    emoji: '🙌',
+    icon: 'heart',
     title: 'Voluntari/ària',
     color: 'linear-gradient(135deg, #40916c, #74c69d)',
     description: 'Dones hores per ajudar en jornades de plantació, manteniment o acompanyament de persones grans que volen participar però necessiten suport digital.',
@@ -84,7 +88,7 @@ const roles = [
   },
   {
     id: 'citizen',
-    emoji: '👋',
+    icon: 'user',
     title: 'Ciutadà/ana',
     color: 'linear-gradient(135deg, #d4a017, #f4c842)',
     description: 'Explora el mapa, descobreix els espais verds del teu barri, proposa millores i segueix el creixement de Barcelona Verd des de casa.',
@@ -118,7 +122,7 @@ const steps = [
   border-bottom: 1px solid #e2e8e0;
 }
 .back { color: #2d6a4f; text-decoration: none; font-size: 14px; font-weight: 500; }
-.logo { font-size: 18px; font-weight: 800; color: #1b4332; }
+.logo { display: flex; align-items: center; gap: 6px; font-size: 18px; font-weight: 800; color: #1b4332; }
 .btn-login {
   background: #2d6a4f; color: white; text-decoration: none;
   padding: 8px 20px; border-radius: 8px; font-size: 14px; font-weight: 600;
@@ -153,8 +157,8 @@ const steps = [
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 56px;
   min-height: 200px;
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .role-body { padding: 32px 36px; }
@@ -168,7 +172,15 @@ const steps = [
   gap: 6px;
   margin-bottom: 24px;
 }
-.role-actions li { font-size: 14px; color: #2d6a4f; font-weight: 500; }
+.role-actions li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #2d6a4f;
+  font-weight: 500;
+}
+.check-icon { flex-shrink: 0; }
 
 .btn-role {
   display: inline-block;

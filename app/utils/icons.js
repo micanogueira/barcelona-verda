@@ -26,6 +26,9 @@ export const ICON_PATHS = {
   confetti:
     '<path d="M4 5h2" /><path d="M5 4v2" /><path d="M11.5 4l-.5 2" /><path d="M18 5h2" /><path d="M19 4v2" /><path d="M15 9l-1 1" /><path d="M18 13l2 -.5" /><path d="M18 19h2" /><path d="M19 18v2" /><path d="M14 16.518l-6.518 -6.518l-4.39 9.58a1 1 0 0 0 1.329 1.329l9.579 -4.39" />',
   'chevron-left': '<path d="M15 6l-6 6l6 6" />',
+  user: '<circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>',
+  check: '<path d="M5 13l4 4L19 7"/>',
+  heart: '<path d="M12 21C12 21 4 13.5 4 8.5a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 8.5c0 5-8 12.5-8 12.5z"/>',
 }
 
 // Gera o markup completo de um <svg> em string — usado fora do Vue (ex.

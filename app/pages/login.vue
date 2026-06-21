@@ -3,7 +3,10 @@
     <div class="auth-card">
       <NuxtLink to="/" class="back-link">← Tornar a l'inici</NuxtLink>
 
-      <div class="auth-logo">🌿 Barcelona Verd</div>
+      <div class="auth-logo">
+        <AppIcon name="leaf" :size="22" class="logo-icon" />
+        Barcelona Verd
+      </div>
 
       <div class="auth-tabs">
         <button :class="['tab', { active: mode === 'login' }]" @click="mode = 'login'">Entrar</button>
@@ -61,10 +64,10 @@
       <div class="side-content">
         <h2>Junts fem Barcelona més verda</h2>
         <ul class="side-list">
-          <li>🌳 Adopta i cuida un arbre al teu barri</li>
-          <li>🗺️ Explora els espais verds en temps real</li>
-          <li>🤝 Connecta amb la xarxa de mediadors</li>
-          <li>🎉 Participa en la Festa Anual</li>
+          <li><AppIcon name="pine" :size="20" />Adopta i cuida un arbre al teu barri</li>
+          <li><AppIcon name="map" :size="20" />Explora els espais verds en temps real</li>
+          <li><AppIcon name="link2" :size="20" />Connecta amb la xarxa de mediadors</li>
+          <li><AppIcon name="confetti" :size="20" />Participa en la Festa Anual</li>
         </ul>
       </div>
     </div>
@@ -134,11 +137,16 @@ async function handleRegister() {
 }
 
 .auth-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   font-size: 22px;
   font-weight: 800;
   color: #1b4332;
   margin-bottom: 32px;
 }
+
+.logo-icon { color: #2d6a4f; flex-shrink: 0; }
 
 .auth-tabs {
   display: flex;
@@ -254,6 +262,9 @@ async function handleRegister() {
 }
 
 .side-list li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   color: rgba(255, 255, 255, 0.9);
   font-size: 17px;
   font-weight: 500;
