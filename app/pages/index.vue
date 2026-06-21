@@ -135,7 +135,7 @@
             Barcelona Verd és una plataforma ciutadana per integrar els veïns — especialment la gent gran — en la cocreació i el manteniment dels espais verds urbans de Barcelona.
           </p>
           <p>
-            El projecte neix d'una recerca acadèmica sobre la bretxa de participació en les iniciatives de verd urbà: les polítiques existents sovint arriben massa poc als grups més vulnerables, i els canals digitals actuals de l'Ajuntament no estan pensats per a la inclusió activa.
+            El projecte neix d'una recerca acadèmica sobre la bretxa de participació en les iniciatives de verd urbà: les polítiques existents sovint arriben massa poc als grups més vulnerables, i els canals digitals actuals de l'Ajuntament no estan pensats per a la inclusió activa. Barcelona compta amb més de <strong>250.000 arbres</strong>, <strong>15 horts municipals</strong> i programes de participació consolidats — però cap eina digital unificada que els connecti entre si i amb els ciutadans dels <strong>73 barris</strong> de la ciutat.
           </p>
           <p>
             La nostra proposta: una plataforma que actua com a <strong>porta d'entrada amigable</strong> als programes oficials ja existents (Mans al Verd, XHM, Cuida l'escocell), afegint la capa digital de comunitat, reconeixement i visibilitat que avui no existeix.
@@ -144,24 +144,6 @@
             <span class="about-team-label">Equip</span>
             <p>Marta Alfonso · Mehdike Ruveyda · Jacob Stark · Micaelle Nogueira</p>
             <p class="about-course">Sustainable Smart Cities · TU Munich · Juliol 2026</p>
-          </div>
-        </div>
-        <div class="about-stats">
-          <div class="about-stat">
-            <span class="about-stat-num">250.000</span>
-            <span class="about-stat-label">arbres al patrimoni municipal de Barcelona</span>
-          </div>
-          <div class="about-stat">
-            <span class="about-stat-num">15</span>
-            <span class="about-stat-label">horts municipals gestionats per l'Ajuntament</span>
-          </div>
-          <div class="about-stat">
-            <span class="about-stat-num">73</span>
-            <span class="about-stat-label">barris que poden beneficiar-se de la plataforma</span>
-          </div>
-          <div class="about-stat">
-            <span class="about-stat-num">0</span>
-            <span class="about-stat-label">plataformes unificades de participació en espais verds avui</span>
           </div>
         </div>
       </div>
@@ -665,12 +647,8 @@ const features = [
 }
 
 .about-inner {
-  max-width: 1200px;
+  max-width: 760px;
   margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr 380px;
-  gap: 80px;
-  align-items: start;
 }
 
 .about-badge {
@@ -731,34 +709,6 @@ const features = [
   font-weight: 400 !important;
 }
 
-.about-stats {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
-.about-stat {
-  padding: 20px 24px;
-  background: #f8f9f4;
-  border-radius: 14px;
-  border-left: 4px solid #2d6a4f;
-}
-
-.about-stat-num {
-  display: block;
-  font-size: 36px;
-  font-weight: 800;
-  color: #1b4332;
-  letter-spacing: -1px;
-  line-height: 1;
-  margin-bottom: 6px;
-}
-
-.about-stat-label {
-  font-size: 13px;
-  color: #4a7c59;
-  line-height: 1.4;
-}
 
 /* Official Programs */
 .official {
