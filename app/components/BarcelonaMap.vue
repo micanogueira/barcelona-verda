@@ -19,6 +19,7 @@ const ICON_BY_TYPE = {
   garden: 'flower',
   hort: 'carrot',
   square: 'droplet',
+  mediator: 'info-circle',
 }
 
 const MARKER_COLOR = {
@@ -26,6 +27,7 @@ const MARKER_COLOR = {
   garden: '#c75c9e',
   hort: '#e08e29',
   square: '#3a86c8',
+  mediator: '#3a7bd5',
 }
 
 onMounted(async () => {

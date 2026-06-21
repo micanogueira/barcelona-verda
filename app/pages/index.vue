@@ -82,7 +82,7 @@ const filters = [
   { value: 'park',     icon: 'trees',    label: 'Parcs i jardins' },
   { value: 'hort',     icon: 'carrot',   label: 'Horts urbans' },
   { value: 'tree',     icon: 'pine',     label: 'Àrbres' },
-  { value: 'mediator', icon: 'link2',    label: 'Mediadors' },
+  { value: 'mediator', icon: 'info-circle', label: "Punts d'informació" },
   { value: 'help',     icon: 'lifebuoy', label: 'On cal ajuda' },
 ]
 
