@@ -198,9 +198,12 @@ onUnmounted(() => map?.remove())
 </script>
 
 <style>
-/* Wrapper: MapLibre applies position transforms here — NO transition */
+/* Wrapper: MapLibre positions this element via transform from the map's
+   top-left corner — it MUST stay position:absolute (the .maplibregl-marker
+   default). Overriding it with position:relative breaks the origin and makes
+   markers drift together on zoom. NO transition here either. */
 .map-marker-wrapper {
-  position: relative;
+  position: absolute;
   width: 32px;
   height: 32px;
 }
