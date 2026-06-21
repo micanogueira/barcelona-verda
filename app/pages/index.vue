@@ -142,7 +142,7 @@
           </p>
           <div class="about-team">
             <span class="about-team-label">Equip</span>
-            <p>Marta Alfonso · Mehdike Ruveyda · Jacob Stark · Micaelle Lavigne</p>
+            <p>Marta Alfonso · Mehdike Ruveyda · Jacob Stark · Micaelle Nogueira</p>
             <p class="about-course">Sustainable Smart Cities · TU Munich · Juliol 2026</p>
           </div>
         </div>
