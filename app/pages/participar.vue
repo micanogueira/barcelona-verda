@@ -12,37 +12,27 @@
       <p class="page-header-sub">Siguis voluntari/ària, mediador/a o ciutadà/ana actiu/va, hi ha un rol per a tothom.</p>
     </header>
 
-    <!-- Via Barcelona Verd -->
-    <section class="roles">
-      <div class="section-label">
-        <AppIcon name="leaf" :size="15" />
-        Registra't a Barcelona Verd
-      </div>
-      <div v-for="role in roles" :key="role.id" class="role-card">
-        <div class="role-icon" :style="{ background: role.color }">
-          <AppIcon :name="role.icon" :size="56" stroke-width="1.5" />
-        </div>
-        <div class="role-body">
-          <h2>{{ role.title }}</h2>
-          <p class="role-desc">{{ role.description }}</p>
-          <ul class="role-actions">
-            <li v-for="action in role.actions" :key="action">
-              <AppIcon name="check" :size="14" class="check-icon" />{{ action }}
-            </li>
-          </ul>
-          <NuxtLink to="/login" class="btn-role">{{ role.cta }}</NuxtLink>
-        </div>
-      </div>
-    </section>
-
-    <!-- Via Programes Oficials -->
-    <section class="official-programs">
-      <div class="section-label section-label--blue">
-        <AppIcon name="info-circle" :size="15" />
-        Programes oficials de l'Ajuntament
-      </div>
-      <p class="official-intro">Aquests programes ja existeixen a la ciutat. Barcelona Verd t'ajuda a entendre'ls i accedir-hi de manera senzilla.</p>
+    <!-- All participation options — unified grid -->
+    <section class="all-options">
       <div class="official-grid">
+
+        <div v-for="role in roles" :key="role.id" class="official-card">
+          <div class="official-card-top">
+            <AppIcon :name="role.icon" :size="26" class="official-icon" />
+          </div>
+          <h3>{{ role.title }}</h3>
+          <p class="official-desc">{{ role.description }}</p>
+          <div class="official-bv-adds">
+            <span class="official-bv-label">Amb Barcelona Verd</span>
+            <ul class="card-actions">
+              <li v-for="action in role.actions" :key="action">
+                <AppIcon name="check" :size="12" class="check-icon" />{{ action }}
+              </li>
+            </ul>
+          </div>
+          <NuxtLink to="/login" class="btn-card">{{ role.cta }}</NuxtLink>
+        </div>
+
         <div v-for="prog in officialPrograms" :key="prog.id" class="official-card">
           <div class="official-card-top">
             <AppIcon :name="prog.icon" :size="26" class="official-icon" />
@@ -54,10 +44,11 @@
             <span class="official-bv-label">Barcelona Verd afegeix</span>
             <p>{{ prog.bvAdds }}</p>
           </div>
-          <a :href="prog.officialUrl" target="_blank" rel="noopener" class="btn-official">
+          <a :href="prog.officialUrl" target="_blank" rel="noopener" class="btn-card">
             Accedeix al programa →
           </a>
         </div>
+
       </div>
     </section>
 
@@ -175,95 +166,32 @@ const steps = [
 .page-header p { font-size: 18px; color: #4a7c59; max-width: 580px; margin: 0 auto 12px; }
 .page-header-sub { font-size: 16px !important; color: #2d6a4f !important; font-weight: 600; }
 
-.roles {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  max-width: 860px;
-  margin: 0 auto;
-  padding: 0 48px 80px;
-}
-
-.role-card {
-  display: grid;
-  grid-template-columns: 200px 1fr;
-  background: white;
-  border-radius: 20px;
-  overflow: hidden;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-}
-
-.role-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 200px;
-  color: rgba(255, 255, 255, 0.9);
-}
-
-.role-body { padding: 32px 36px; }
-.role-body h2 { font-size: 22px; font-weight: 800; color: #1b4332; margin-bottom: 10px; }
-.role-desc { color: #4a5568; font-size: 15px; line-height: 1.6; margin-bottom: 16px; }
-
-.role-actions {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  margin-bottom: 24px;
-}
-.role-actions li {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 14px;
-  color: #2d6a4f;
-  font-weight: 500;
-}
 .check-icon { flex-shrink: 0; }
 
-.btn-role {
-  display: inline-block;
-  background: #2d6a4f;
-  color: white;
-  text-decoration: none;
-  padding: 10px 24px;
-  border-radius: 10px;
-  font-size: 14px;
-  font-weight: 700;
-  transition: background 0.15s;
-}
-.btn-role:hover { background: #1b4332; }
-
-/* Section labels */
-.section-label {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  color: #2d6a4f;
-  background: #e8f5ec;
-  padding: 6px 14px;
-  border-radius: 20px;
-  margin-bottom: 24px;
-}
-.section-label--blue { color: #1d4ed8; background: #dbeafe; }
-
-/* Official Programs Section */
-.official-programs {
+/* Unified options grid */
+.all-options {
   max-width: 1080px;
   margin: 0 auto;
   padding: 0 48px 80px;
 }
-.official-intro {
-  font-size: 16px;
-  color: #4a5568;
-  margin-bottom: 32px;
-  max-width: 600px;
+
+.card-actions {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin: 0;
+  padding: 0;
 }
+.card-actions li {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  color: #4a7c59;
+  line-height: 1.4;
+}
+
 .official-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -310,10 +238,11 @@ const steps = [
   margin-bottom: 4px;
 }
 .official-bv-adds p { font-size: 13px; color: #4a7c59; margin: 0; line-height: 1.5; }
-.btn-official {
+.btn-card {
   display: inline-block;
   margin-top: auto;
-  background: #1d4ed8;
+  align-self: flex-start;
+  background: #2d6a4f;
   color: white;
   text-decoration: none;
   padding: 9px 20px;
@@ -321,9 +250,8 @@ const steps = [
   font-size: 13px;
   font-weight: 700;
   transition: background 0.15s;
-  align-self: flex-start;
 }
-.btn-official:hover { background: #1e3a8a; }
+.btn-card:hover { background: #1b4332; }
 
 /* How it works */
 .how-it-works {
