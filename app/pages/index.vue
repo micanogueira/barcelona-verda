@@ -73,29 +73,6 @@
       </div>
     </section>
 
-    <!-- Features Section -->
-    <section id="features" class="features">
-      <div class="features-header">
-        <h2>Com pots participar?</h2>
-        <p>Barcelona Verd connecta veïns, voluntaris i la ciutat per crear espais verds junts.</p>
-      </div>
-
-      <div class="cards-grid">
-        <div v-for="feature in features" :key="feature.id" class="card">
-          <div class="card-image" :style="{ background: feature.gradient }">
-            <AppIcon :name="feature.icon" :size="40" class="card-emoji" />
-          </div>
-          <div class="card-body">
-            <h3>{{ feature.title }}</h3>
-            <p>{{ feature.description }}</p>
-            <NuxtLink :to="feature.href" class="card-link">
-              {{ feature.cta }} →
-            </NuxtLink>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <!-- About Section -->
     <section id="about" class="about">
       <div class="about-inner">
@@ -221,35 +198,6 @@ onMounted(() => {
   onUnmounted(() => supabase.removeChannel(channel))
 })
 
-const features = [
-  {
-    id: 1,
-    icon: 'map2',
-    title: 'Mapa Interactiu',
-    description: "Un únic mapa que unifica parcs, jardins, horts, arbres i punts d'informació — tot el que el site oficial té fragmentat en PDFs i eines separades.",
-    cta: 'Explorar el mapa',
-    href: '#map',
-    gradient: 'linear-gradient(135deg, #1b4332 0%, #2d6a4f 100%)',
-  },
-  {
-    id: 2,
-    icon: 'link2',
-    title: 'Xarxa de Mediadors',
-    description: 'Mercats, metges, perruqueries i comerços de barri que connecten veïns — especialment la gent gran — amb el moviment verd.',
-    cta: 'Uneix-te a la xarxa',
-    href: '/participar',
-    gradient: 'linear-gradient(135deg, #276221 0%, #52b788 100%)',
-  },
-  {
-    id: 3,
-    icon: 'clipboard-list',
-    title: 'Com Participar',
-    description: "Voluntari, mediador o ciutadà actiu — hi ha un rol per a tothom. Tots els programes oficials, explicats de forma clara en un sol lloc.",
-    cta: 'Veure com participar',
-    href: '/participar',
-    gradient: 'linear-gradient(135deg, #40916c 0%, #74c69d 100%)',
-  },
-]
 </script>
 
 <style scoped>
@@ -486,87 +434,6 @@ const features = [
 }
 
 /* Features */
-.features {
-  padding: 80px 48px;
-  background: #f8f9f4;
-}
-
-.features-header {
-  text-align: center;
-  margin-bottom: 48px;
-}
-
-.features-header h2 {
-  font-size: 36px;
-  font-weight: 800;
-  color: #1b4332;
-  margin-bottom: 12px;
-  letter-spacing: -0.5px;
-}
-
-.features-header p {
-  font-size: 18px;
-  color: #4a7c59;
-  max-width: 540px;
-  margin: 0 auto;
-}
-
-.cards-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-  max-width: 1000px;
-  margin: 0 auto;
-}
-
-.card {
-  background: white;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-}
-
-.card-image {
-  height: 160px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.card-emoji { color: #fff; }
-
-.card-body { padding: 24px; }
-
-.card-body h3 {
-  font-size: 18px;
-  font-weight: 700;
-  color: #1b4332;
-  margin-bottom: 10px;
-}
-
-.card-body p {
-  font-size: 14px;
-  color: #5a6872;
-  line-height: 1.6;
-  margin-bottom: 16px;
-}
-
-.card-link {
-  font-size: 14px;
-  font-weight: 600;
-  color: #2d6a4f;
-  text-decoration: none;
-  transition: color 0.15s;
-}
-
-.card-link:hover { color: #1b4332; }
-
 /* About */
 .about {
   padding: 80px 48px;

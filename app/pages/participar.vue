@@ -8,7 +8,7 @@
 
     <header class="page-header">
       <h1>Com pots participar?</h1>
-      <p>Totes les maneres de contribuir als espais verds de Barcelona, en un sol lloc. Des de registrar-te a la nostra plataforma fins a accedir als programes oficials de l'Ajuntament.</p>
+      <p>Tots els programes oficials i les formes de participar — explicats de manera clara, en un sol lloc.</p>
     </header>
 
     <!-- Via Barcelona Verd -->
@@ -80,7 +80,7 @@ const roles = [
     icon: 'link2',
     title: 'Mediador/a de Xarxa',
     color: 'linear-gradient(135deg, #276221, #52b788)',
-    description: 'Ets un comerç, mercat, metge, perruqueria o entitat local. Ajudes a connectar els teus clients i veïns amb la plataforma, actuant com a punt de confiança.',
+    description: 'Ets un comerç, mercat, metge, perruqueria o entitat local. Connectes els teus clients i veïns — especialment la gent gran — amb els espais verds i programes del barri, actuant com a punt de confiança.',
     actions: [
       'Rep kit de comunicació (pòsters, flyers)',
       'Accés a formació de 30 minuts',

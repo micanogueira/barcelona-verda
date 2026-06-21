@@ -24,9 +24,9 @@
 
     <div class="navbar-links">
       <a href="#map">Mapa</a>
-      <NuxtLink to="/participar">Com Participar</NuxtLink>
-<a href="#about">Sobre</a>
-      <NuxtLink to="/login" class="btn-login">Entrar</NuxtLink>
+      <NuxtLink to="/participar" class="btn-login">Com Participar</NuxtLink>
+      <a href="#about">Sobre</a>
+      <NuxtLink to="/login">Entrar</NuxtLink>
     </div>
   </nav>
 </template>
