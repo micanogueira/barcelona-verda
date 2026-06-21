@@ -52,7 +52,10 @@ async function loadGreenSpaces() {
     .from('green_spaces')
     .select('id, name, type, description, neighborhood, needs_help, participant_count, location')
 
-  if (error || !data) return
+  if (error) { console.error('Supabase error:', error); return }
+  if (!data?.length) { console.warn('No green spaces returned'); return }
+  console.log('Green spaces loaded:', data.length)
+  console.log('location sample:', JSON.stringify(data[0]?.location))
 
   data.forEach((space) => {
     const coords = parseLocation(space.location)
@@ -82,9 +85,23 @@ async function loadGreenSpaces() {
 
 function parseLocation(location) {
   if (!location) return null
-  if (typeof location === 'object' && location.coordinates) {
-    return location.coordinates
+  // GeoJSON object
+  if (typeof location === 'object' && location.coordinates) return location.coordinates
+  if (typeof location !== 'string') return null
+  // GeoJSON string
+  if (location.startsWith('{')) {
+    try { const g = JSON.parse(location); return g.coordinates ?? null } catch {}
   }
+  // EWKB hex (what PostgREST returns for geography columns)
+  try {
+    const bytes = location.match(/.{2}/g).map(h => parseInt(h, 16))
+    const view = new DataView(new Uint8Array(bytes).buffer)
+    const le = bytes[0] === 1
+    const type = view.getUint32(1, le)
+    const hasSRID = (type & 0x20000000) !== 0
+    const offset = hasSRID ? 9 : 5
+    return [view.getFloat64(offset, le), view.getFloat64(offset + 8, le)]
+  } catch {}
   return null
 }
 
@@ -93,7 +110,11 @@ onUnmounted(() => map?.remove())
 
 <style>
 .map-marker {
+  width: 36px;
+  height: 36px;
   font-size: 24px;
+  line-height: 36px;
+  text-align: center;
   cursor: pointer;
   filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
   transition: transform 0.15s;
