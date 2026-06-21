@@ -288,39 +288,30 @@ const officialPrograms = [
 const features = [
   {
     id: 1,
-    icon: 'pine',
-    title: "Ambaixadors d'Arbres",
-    description: "Adopta un arbre al teu barri. Cuida'l, segueix el seu creixement i guanya reconeixement per la teva feina.",
-    cta: 'Converteix-te en ambaixador',
-    href: '/ambaixadors',
+    icon: 'map2',
+    title: 'Mapa Interactiu',
+    description: "Un únic mapa que unifica parcs, jardins, horts, arbres i punts d'informació — tot el que el site oficial té fragmentat en PDFs i eines separades.",
+    cta: 'Explorar el mapa',
+    href: '#map',
     gradient: 'linear-gradient(135deg, #1b4332 0%, #2d6a4f 100%)',
   },
   {
     id: 2,
     icon: 'link2',
     title: 'Xarxa de Mediadors',
-    description: 'Mercats, metges, perruqueries i comerços de barri que connecten veïns amb el moviment verd.',
+    description: 'Mercats, metges, perruqueries i comerços de barri que connecten veïns — especialment la gent gran — amb el moviment verd.',
     cta: 'Uneix-te a la xarxa',
-    href: '/mediadors',
+    href: '/participar',
     gradient: 'linear-gradient(135deg, #276221 0%, #52b788 100%)',
   },
   {
     id: 3,
     icon: 'clipboard-list',
     title: 'Com Participar',
-    description: "Des de voluntari fins a ambaixador, hi ha un rol per a tothom. Descobreix com pots contribuir.",
-    cta: 'Veure les opcions',
+    description: "Voluntari, mediador o ciutadà actiu — hi ha un rol per a tothom. Tots els programes oficials, explicats de forma clara en un sol lloc.",
+    cta: 'Veure com participar',
     href: '/participar',
     gradient: 'linear-gradient(135deg, #40916c 0%, #74c69d 100%)',
-  },
-  {
-    id: 4,
-    icon: 'confetti',
-    title: 'Festa Anual',
-    description: "Cada any celebrem els veïns més compromesos. Lliurament de premis i nomenament d'ambaixadors.",
-    cta: 'Saber-ne més',
-    href: '/festa',
-    gradient: 'linear-gradient(135deg, #d4a017 0%, #f4c842 100%)',
   },
 ]
 </script>
@@ -586,9 +577,9 @@ const features = [
 
 .cards-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 24px;
-  max-width: 1200px;
+  max-width: 1000px;
   margin: 0 auto;
 }
 
