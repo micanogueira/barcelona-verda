@@ -125,6 +125,48 @@
       </div>
     </section>
 
+    <!-- About Section -->
+    <section id="about" class="about">
+      <div class="about-inner">
+        <div class="about-text">
+          <span class="about-badge">Projecte acadèmic · TU Munich 2026</span>
+          <h2>Sobre Barcelona Verd</h2>
+          <p>
+            Barcelona Verd és una plataforma ciutadana per integrar els veïns — especialment la gent gran — en la cocreació i el manteniment dels espais verds urbans de Barcelona.
+          </p>
+          <p>
+            El projecte neix d'una recerca acadèmica sobre la bretxa de participació en les iniciatives de verd urbà: les polítiques existents sovint arriben massa poc als grups més vulnerables, i els canals digitals actuals de l'Ajuntament no estan pensats per a la inclusió activa.
+          </p>
+          <p>
+            La nostra proposta: una plataforma que actua com a <strong>porta d'entrada amigable</strong> als programes oficials ja existents (Mans al Verd, XHM, Cuida l'escocell), afegint la capa digital de comunitat, reconeixement i visibilitat que avui no existeix.
+          </p>
+          <div class="about-team">
+            <span class="about-team-label">Equip</span>
+            <p>Marta Alfonso · Mehdike Ruveyda · Jacob Stark · Micaelle Lavigne</p>
+            <p class="about-course">Sustainable Smart Cities · TU Munich · Juliol 2026</p>
+          </div>
+        </div>
+        <div class="about-stats">
+          <div class="about-stat">
+            <span class="about-stat-num">250.000</span>
+            <span class="about-stat-label">arbres al patrimoni municipal de Barcelona</span>
+          </div>
+          <div class="about-stat">
+            <span class="about-stat-num">15</span>
+            <span class="about-stat-label">horts municipals gestionats per l'Ajuntament</span>
+          </div>
+          <div class="about-stat">
+            <span class="about-stat-num">73</span>
+            <span class="about-stat-label">barris que poden beneficiar-se de la plataforma</span>
+          </div>
+          <div class="about-stat">
+            <span class="about-stat-num">0</span>
+            <span class="about-stat-label">plataformes unificades de participació en espais verds avui</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Partnership Banner -->
     <section class="partnership">
       <div class="partnership-inner">
@@ -615,6 +657,108 @@ const features = [
 }
 
 .card-link:hover { color: #1b4332; }
+
+/* About */
+.about {
+  padding: 80px 48px;
+  background: white;
+}
+
+.about-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 80px;
+  align-items: start;
+}
+
+.about-badge {
+  display: inline-block;
+  background: #d8f3dc;
+  color: #2d6a4f;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 5px 14px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+  letter-spacing: 0.3px;
+}
+
+.about-text h2 {
+  font-size: 34px;
+  font-weight: 800;
+  color: #1a2e1a;
+  margin-bottom: 20px;
+  letter-spacing: -0.5px;
+}
+
+.about-text p {
+  font-size: 15px;
+  color: #4a5568;
+  line-height: 1.75;
+  margin-bottom: 14px;
+}
+
+.about-text strong { color: #1b4332; }
+
+.about-team {
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid #e8f0e8;
+}
+
+.about-team-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  color: #4a7c59;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 6px;
+}
+
+.about-team p {
+  font-size: 14px;
+  color: #2d3748;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.about-course {
+  font-size: 13px !important;
+  color: #718096 !important;
+  font-weight: 400 !important;
+}
+
+.about-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.about-stat {
+  padding: 20px 24px;
+  background: #f8f9f4;
+  border-radius: 14px;
+  border-left: 4px solid #2d6a4f;
+}
+
+.about-stat-num {
+  display: block;
+  font-size: 36px;
+  font-weight: 800;
+  color: #1b4332;
+  letter-spacing: -1px;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.about-stat-label {
+  font-size: 13px;
+  color: #4a7c59;
+  line-height: 1.4;
+}
 
 /* Official Programs */
 .official {
