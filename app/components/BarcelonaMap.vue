@@ -13,13 +13,13 @@ const props = defineProps({
 const mapContainer = ref(null)
 const supabase = useSupabaseClient()
 let map = null
-const markers = [] // { marker, type }
+const spaceMarkers = [] // { marker, type }
+const treeMarkers  = [] // marker[]
 
 const ICON_BY_TYPE = {
   park:     'trees',
   garden:   'flower',
   hort:     'carrot',
-  square:   'droplet',
   mediator: 'info-circle',
 }
 
@@ -27,11 +27,11 @@ const MARKER_COLOR = {
   park:     '#2d6a4f',
   garden:   '#c75c9e',
   hort:     '#e08e29',
-  square:   '#3a86c8',
   mediator: '#6366f1',
+  tree:     '#52b788',
 }
 
-onMounted(async () => {
+onMounted(() => {
   map = new maplibregl.Map({
     container: mapContainer.value,
     style: {
@@ -54,7 +54,7 @@ onMounted(async () => {
 
   map.addControl(new maplibregl.NavigationControl(), 'top-right')
   map.addControl(new maplibregl.ScaleControl({ unit: 'metric' }), 'bottom-left')
-  map.on('load', () => loadGreenSpaces())
+  map.on('load', () => { loadGreenSpaces(); loadTrees() })
 })
 
 async function loadGreenSpaces() {
@@ -69,7 +69,7 @@ async function loadGreenSpaces() {
     if (!coords) return
 
     const iconName = ICON_BY_TYPE[space.type] ?? 'leaf'
-    const color = MARKER_COLOR[space.type] ?? '#52b788'
+    const color    = MARKER_COLOR[space.type] ?? '#52b788'
 
     const el = document.createElement('div')
     el.className = 'map-marker'
@@ -77,10 +77,10 @@ async function loadGreenSpaces() {
     el.innerHTML = iconMarkup(iconName, { size: 17 })
     if (space.needs_help) el.classList.add('needs-help')
 
-    const marker = new maplibregl.Marker({ element: el })
+    const marker = new maplibregl.Marker({ element: el, anchor: 'center' })
       .setLngLat(coords)
       .setPopup(
-        new maplibregl.Popup({ offset: 25 }).setHTML(`
+        new maplibregl.Popup({ offset: 20 }).setHTML(`
           <div class="popup-content">
             <strong>${space.name}</strong>
             <span class="popup-tag popup-tag--${space.type}">${labelByType(space.type)}</span>
@@ -92,20 +92,57 @@ async function loadGreenSpaces() {
       )
       .addTo(map)
 
-    markers.push({ marker, type: space.type })
+    spaceMarkers.push({ marker, type: space.type })
   })
 }
 
-// Apply filter: show only matching markers
+async function loadTrees() {
+  const { data, error } = await supabase
+    .from('trees')
+    .select('id, name, species, location, health')
+
+  if (error || !data?.length) return
+
+  data.forEach((tree) => {
+    const coords = parseLocation(tree.location)
+    if (!coords) return
+
+    const el = document.createElement('div')
+    el.className = 'map-marker'
+    el.style.background = MARKER_COLOR.tree
+    el.innerHTML = iconMarkup('pine', { size: 17 })
+
+    const marker = new maplibregl.Marker({ element: el, anchor: 'center' })
+      .setLngLat(coords)
+      .setPopup(
+        new maplibregl.Popup({ offset: 20 }).setHTML(`
+          <div class="popup-content">
+            <strong>${tree.name ?? 'Arbre'}</strong>
+            <span class="popup-tag popup-tag--tree">Arbre</span>
+            ${tree.species ? `<p>${tree.species}</p>` : ''}
+            ${tree.health ? `<p class="popup-meta">${iconMarkup('leaf', { size: 13 })} Estat: ${tree.health}</p>` : ''}
+          </div>
+        `)
+      )
+      .addTo(map)
+
+    treeMarkers.push(marker)
+  })
+}
+
 watch(() => props.filter, (val) => {
-  markers.forEach(({ marker, type }) => {
-    const visible = val === 'all' || type === val
-    marker.getElement().style.display = visible ? 'block' : 'none'
+  spaceMarkers.forEach(({ marker, type }) => {
+    const show = val === 'all' || type === val
+    marker.getElement().style.display = show ? 'block' : 'none'
+  })
+  treeMarkers.forEach((marker) => {
+    const show = val === 'all' || val === 'tree'
+    marker.getElement().style.display = show ? 'block' : 'none'
   })
 })
 
 function labelByType(type) {
-  return { park: 'Parc', garden: 'Jardí', hort: 'Hort urbà', square: 'Plaça', mediator: "Punt d'informació" }[type] ?? type
+  return { park: 'Parc', garden: 'Jardí', hort: 'Hort urbà', mediator: "Punt d'informació", tree: 'Arbre' }[type] ?? type
 }
 
 function parseLocation(location) {
@@ -172,8 +209,8 @@ onUnmounted(() => map?.remove())
 }
 .popup-tag--garden   { background: #fce4f6; color: #9c2f7f; }
 .popup-tag--hort     { background: #fef3e2; color: #9a5e0a; }
-.popup-tag--square   { background: #dbeafe; color: #1d4ed8; }
 .popup-tag--mediator { background: #ede9fe; color: #4f46e5; }
+.popup-tag--tree     { background: #d8f3dc; color: #1b4332; }
 .popup-content p { font-size: 13px; color: #4a5568; margin: 4px 0; }
 .popup-meta { display: flex; align-items: center; gap: 4px; color: #718096 !important; font-size: 12px !important; }
 </style>

@@ -110,10 +110,10 @@ const activeFilter = ref('all')
 const panelOpen = ref(true)
 const viewMode = ref('map')
 
-const iconByType = { park: 'trees', garden: 'flower', hort: 'carrot', square: 'droplet', mediator: 'info-circle' }
-const colorByType = { park: '#2d6a4f', garden: '#c75c9e', hort: '#e08e29', square: '#3a86c8', mediator: '#6366f1' }
+const iconByType = { park: 'trees', garden: 'flower', hort: 'carrot', mediator: 'info-circle', tree: 'pine' }
+const colorByType = { park: '#2d6a4f', garden: '#c75c9e', hort: '#e08e29', mediator: '#6366f1', tree: '#52b788' }
 function labelByType(type) {
-  return { park: 'Parc', garden: 'Jardí', hort: 'Hort urbà', square: 'Plaça', mediator: "Punt d'informació" }[type] ?? type
+  return { park: 'Parc', garden: 'Jardí', hort: 'Hort urbà', mediator: "Punt d'informació", tree: 'Arbre' }[type] ?? type
 }
 
 const spaces = ref([])
@@ -135,12 +135,13 @@ async function loadSpaces() {
 watch(viewMode, (val) => { if (val === 'list' && !spaces.value.length) loadSpaces() })
 
 const filters = [
-  { value: 'all',      icon: 'map',      label: 'Tots els espais' },
-  { value: 'park',     icon: 'trees',    label: 'Parcs i jardins' },
-  { value: 'hort',     icon: 'carrot',   label: 'Horts urbans' },
-  { value: 'tree',     icon: 'pine',     label: 'Àrbres' },
-  { value: 'mediator', icon: 'info-circle', label: "Punts d'informació" },
-  { value: 'help',     icon: 'lifebuoy', label: 'On cal ajuda' },
+  { value: 'all',      icon: 'map',          label: 'Tots els espais' },
+  { value: 'park',     icon: 'trees',        label: 'Parcs i jardins' },
+  { value: 'garden',   icon: 'flower',       label: 'Jardins' },
+  { value: 'hort',     icon: 'carrot',       label: 'Horts urbans' },
+  { value: 'tree',     icon: 'pine',         label: 'Àrbres' },
+  { value: 'mediator', icon: 'info-circle',  label: "Punts d'informació" },
+  { value: 'help',     icon: 'lifebuoy',     label: 'On cal ajuda' },
 ]
 
 // Real-time stats from Supabase
