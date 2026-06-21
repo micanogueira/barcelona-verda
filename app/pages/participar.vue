@@ -25,6 +25,10 @@
           </li>
           </ul>
           <NuxtLink to="/login" class="btn-role">{{ role.cta }}</NuxtLink>
+          <a v-if="role.officialProgram" :href="role.officialProgram.url" target="_blank" rel="noopener" class="role-official">
+            <AppIcon name="info-circle" :size="13" />
+            Programa oficial associat: <strong>{{ role.officialProgram.label }}</strong> →
+          </a>
         </div>
       </div>
     </section>
@@ -57,6 +61,7 @@ const roles = [
       'Nomenament oficial a la Festa Anual',
     ],
     cta: 'Convertir-me en ambaixador/a',
+    officialProgram: { label: "Cuida l'escocell", url: 'https://ajuntament.barcelona.cat/espaisverds/ca/participa-hi/mans-al-verd/cuida-lescocell' },
   },
   {
     id: 'mediator',
@@ -85,6 +90,7 @@ const roles = [
       'Certificat de voluntariat oficial',
     ],
     cta: 'Apuntar-me com a voluntari/ària',
+    officialProgram: { label: 'Mans al Verd', url: 'https://ajuntament.barcelona.cat/espaisverds/ca/participa-hi/mans-al-verd' },
   },
   {
     id: 'citizen',
@@ -194,6 +200,23 @@ const steps = [
   transition: background 0.15s;
 }
 .btn-role:hover { background: #1b4332; }
+
+.role-official {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+  font-size: 12px;
+  color: #4a7c59;
+  text-decoration: none;
+  background: #f0faf4;
+  border: 1px solid #c6e8d2;
+  padding: 6px 12px;
+  border-radius: 8px;
+  transition: background 0.15s;
+}
+.role-official:hover { background: #d8f3dc; }
+.role-official strong { color: #1d4ed8; }
 
 /* How it works */
 .how-it-works {
