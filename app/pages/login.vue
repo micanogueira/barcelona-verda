@@ -44,13 +44,14 @@
           <input v-model="password" type="password" placeholder="Mínim 8 caràcters" required minlength="8" />
         </div>
         <div class="field">
-          <label>Rol</label>
+          <label>Com vols participar?</label>
           <select v-model="role">
-            <option value="citizen">Ciutadà/ana</option>
-            <option value="ambassador">Ambaixador/a d'Arbres</option>
             <option value="mediator">Mediador/a de xarxa</option>
             <option value="volunteer">Voluntari/ària</option>
           </select>
+          <span class="field-hint">
+            <NuxtLink to="/participar">Descobreix les diferències →</NuxtLink>
+          </span>
         </div>
         <p v-if="error" class="error-msg">{{ error }}</p>
         <button type="submit" class="btn-submit" :disabled="loading">
@@ -64,10 +65,10 @@
       <div class="side-content">
         <h2>Junts fem Barcelona més verda</h2>
         <ul class="side-list">
-          <li><AppIcon name="pine" :size="20" />Adopta i cuida un arbre al teu barri</li>
-          <li><AppIcon name="map" :size="20" />Explora els espais verds en temps real</li>
-          <li><AppIcon name="link2" :size="20" />Connecta amb la xarxa de mediadors</li>
-          <li><AppIcon name="confetti" :size="20" />Participa en la Festa Anual</li>
+          <li><AppIcon name="map2" :size="20" />Explora tots els espais verds en un únic mapa</li>
+          <li><AppIcon name="link2" :size="20" />Connecta els teus veïns amb els programes del barri</li>
+          <li><AppIcon name="leaf" :size="20" />Accedeix als programes oficials de l'Ajuntament</li>
+          <li><AppIcon name="users" :size="20" />Fes créixer la xarxa de participació</li>
         </ul>
       </div>
     </div>
@@ -82,7 +83,7 @@ const mode = ref('login')
 const email = ref('')
 const password = ref('')
 const name = ref('')
-const role = ref('citizen')
+const role = ref('mediator')
 const error = ref('')
 const loading = ref(false)
 
@@ -210,6 +211,17 @@ async function handleRegister() {
   border-color: #2d6a4f;
   box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.1);
 }
+
+.field-hint {
+  font-size: 12px;
+  color: #718096;
+}
+.field-hint a {
+  color: #2d6a4f;
+  text-decoration: none;
+  font-weight: 600;
+}
+.field-hint a:hover { text-decoration: underline; }
 
 .error-msg {
   color: #e53e3e;
