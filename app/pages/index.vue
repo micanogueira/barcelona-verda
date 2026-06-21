@@ -44,6 +44,22 @@
           </button>
         </div>
 
+        <!-- Hero welcome overlay -->
+        <div v-if="welcomeVisible" class="hero-overlay">
+          <button class="hero-close" @click="welcomeVisible = false" aria-label="Tancar">×</button>
+          <div class="hero-badge">
+            <AppIcon name="leaf" :size="13" /> Barcelona Verd
+          </div>
+          <h1 class="hero-title">La porta d'entrada als espais verds de Barcelona</h1>
+          <p class="hero-desc">Descobreix parcs, horts, jardins i programes oficials — tot en un sol mapa interactiu.</p>
+          <div class="hero-stats" v-if="stats">
+            <span><strong>{{ stats.trees.toLocaleString('ca') }}</strong> arbres</span>
+            <span class="hero-dot" />
+            <span><strong>{{ stats.neighborhoods }}</strong> barris</span>
+          </div>
+          <NuxtLink to="/participar" class="hero-cta">Com Participar →</NuxtLink>
+        </div>
+
         <!-- Filter panel (left side) -->
         <div :class="['filter-panel', { collapsed: !panelOpen }]">
           <button class="panel-toggle" @click="panelOpen = !panelOpen">
@@ -131,6 +147,7 @@ const supabase = useSupabaseClient()
 const activeFilter = ref('all')
 const panelOpen = ref(true)
 const viewMode = ref('map')
+const welcomeVisible = ref(true)
 
 const iconByType = { park: 'trees', garden: 'flower', hort: 'carrot', mediator: 'info-circle', tree: 'pine' }
 const colorByType = { park: '#2d6a4f', garden: '#c75c9e', hort: '#e08e29', mediator: '#6366f1', tree: '#52b788' }
@@ -570,6 +587,95 @@ onMounted(() => {
   font-size: 14px;
 }
 
+/* Hero welcome overlay */
+.hero-overlay {
+  position: absolute;
+  bottom: 48px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 28px 32px 24px;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.14);
+  max-width: 440px;
+  width: calc(100% - 240px);
+  text-align: center;
+}
+
+.hero-close {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #a0aec0;
+  cursor: pointer;
+  line-height: 1;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: color 0.15s;
+}
+.hero-close:hover { color: #4a5568; }
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #2d6a4f;
+  background: #d8f3dc;
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-bottom: 14px;
+}
+
+.hero-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: #1b4332;
+  line-height: 1.3;
+  letter-spacing: -0.3px;
+  margin-bottom: 10px;
+}
+
+.hero-desc {
+  font-size: 14px;
+  color: #4a7c59;
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.hero-stats {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 13px;
+  color: #718096;
+  margin-bottom: 18px;
+}
+.hero-stats strong { color: #1b4332; font-weight: 800; }
+.hero-dot { width: 4px; height: 4px; border-radius: 50%; background: #b7e4c7; }
+
+.hero-cta {
+  display: inline-block;
+  background: #2d6a4f;
+  color: white;
+  text-decoration: none;
+  padding: 10px 24px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  transition: background 0.15s;
+}
+.hero-cta:hover { background: #1b4332; }
+
 /* ── Mobile ── */
 @media (max-width: 768px) {
   .about { padding: 56px 24px; }
@@ -586,5 +692,13 @@ onMounted(() => {
 
   /* Sidebar list */
   .spaces-sidebar { display: none; }
+
+  /* Hero overlay */
+  .hero-overlay {
+    bottom: 20px;
+    width: calc(100% - 32px);
+    padding: 20px 20px 18px;
+  }
+  .hero-title { font-size: 17px; }
 }
 </style>
