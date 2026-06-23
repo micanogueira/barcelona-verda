@@ -130,6 +130,12 @@ defineProps({
 
 .navbar-links a:hover { color: #2d6a4f; }
 
+/* Página atual em destaque */
+.navbar-links a.router-link-exact-active {
+  color: #2d6a4f;
+  font-weight: 700;
+}
+
 .btn-login {
   background: #2d6a4f;
   color: white !important;

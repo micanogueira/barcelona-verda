@@ -404,8 +404,8 @@ onMounted(() => {
   left: 50%;
   transform: translateX(-50%);
   z-index: 5;
-  background: rgba(255, 255, 255, 0.96);
-  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.74);
+  backdrop-filter: blur(5px);
   border-radius: 20px;
   padding: 28px 32px 24px;
   box-shadow: 0 8px 40px rgba(0, 0, 0, 0.14);
@@ -420,7 +420,7 @@ onMounted(() => {
   right: 14px;
   background: none;
   border: none;
-  font-size: 20px;
+  font-size: 28px;
   color: #a0aec0;
   cursor: pointer;
   line-height: 1;

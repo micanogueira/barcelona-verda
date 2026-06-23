@@ -251,7 +251,7 @@ async function handleRegister() {
 
 /* Side panel */
 .auth-side {
-  background: linear-gradient(160deg, #1b4332 0%, #2d6a4f 60%, #52b788 100%);
+  background: #1b4332;
   display: flex;
   align-items: center;
   justify-content: center;
