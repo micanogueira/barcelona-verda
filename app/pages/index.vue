@@ -2,7 +2,7 @@
   <main>
     <!-- Hero: Map Section -->
     <section class="hero">
-      <NavBar :stats="stats" />
+      <NavBar :stats="stats" floating />
 
       <div class="map-wrapper">
         <ClientOnly>
@@ -51,13 +51,7 @@
             <AppIcon name="leaf" :size="13" /> Barcelona Verd
           </div>
           <h1 class="hero-title">La porta d'entrada als espais verds de Barcelona</h1>
-          <p class="hero-desc">Descobreix parcs, horts, jardins i programes oficials — tot en un sol mapa interactiu.</p>
-          <div class="hero-stats" v-if="stats">
-            <span><strong>{{ stats.trees.toLocaleString('ca') }}</strong> arbres</span>
-            <span class="hero-dot" />
-            <span><strong>{{ stats.neighborhoods }}</strong> barris</span>
-          </div>
-          <NuxtLink to="/participar" class="hero-cta">Com Participar →</NuxtLink>
+          <p class="hero-desc">Descobreix parcs, horts, jardins i programes oficials: tot en un sol mapa interactiu.</p>
         </div>
 
         <!-- Filter panel (left side) -->
@@ -88,87 +82,6 @@
         </div>
       </div>
     </section>
-
-    <!-- About Section -->
-    <section id="about" class="about">
-      <div class="about-inner">
-        <div class="about-text">
-          <span class="about-badge">Projecte acadèmic · TU Munich 2026</span>
-          <h2>Sobre Barcelona Verd</h2>
-          <p>
-            Barcelona Verd és una plataforma ciutadana per integrar els veïns — especialment la gent gran — en la cocreació i el manteniment dels espais verds urbans de Barcelona.
-          </p>
-          <p>
-            El projecte neix d'una recerca acadèmica sobre la bretxa de participació en les iniciatives de verd urbà: les polítiques existents sovint arriben massa poc als grups més vulnerables, i els canals digitals actuals de l'Ajuntament no estan pensats per a la inclusió activa. Barcelona compta amb més de <strong>250.000 arbres</strong>, <strong>15 horts municipals</strong> i programes de participació consolidats — però cap eina digital unificada que els connecti entre si i amb els ciutadans dels <strong>73 barris</strong> de la ciutat.
-          </p>
-          <p>
-            La nostra proposta: una plataforma que actua com a <strong>porta d'entrada amigable</strong> als programes oficials ja existents (Mans al Verd, XHM, Cuida l'escocell), afegint la capa digital de comunitat, reconeixement i visibilitat que avui no existeix.
-          </p>
-          <div class="about-team">
-            <span class="about-team-label">Equip</span>
-            <p>Marta Alfonso · Mehdike Ruveyda · Jacob Stark · Micaelle Nogueira</p>
-            <p class="about-course">Sustainable Smart Cities · TU Munich · Juliol 2026</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Partnership Banner -->
-    <section class="partnership">
-      <div class="partnership-inner">
-        <div class="partnership-text">
-          <AppIcon name="heart" :size="20" class="partnership-icon" />
-          <div>
-            <strong>Proposta de col·laboració amb l'Ajuntament</strong>
-            <p>Barcelona Verd pot integrar-se amb <em>decidim.barcelona</em> i els programes Mans al Verd existents, actuant com a capa digital de comunitat sobre la infraestructura institucional ja disponible.</p>
-          </div>
-        </div>
-        <a
-          href="https://ajuntament.barcelona.cat/espaisverds/ca/participa-hi/mans-al-verd"
-          target="_blank"
-          rel="noopener"
-          class="partnership-cta"
-        >
-          Conèixer els programes oficials →
-        </a>
-      </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-      <div class="footer-inner">
-        <div class="footer-brand">
-          <span class="footer-logo">
-            <AppIcon name="leaf" :size="16" /> Barcelona Verd
-          </span>
-          <p>Una plataforma ciutadana per als espais verds urbans de Barcelona.</p>
-          <p class="footer-academic">Projecte acadèmic · Sustainable Smart Cities · TU Munich 2026</p>
-        </div>
-
-        <nav class="footer-nav">
-          <div class="footer-col">
-            <span class="footer-col-title">Plataforma</span>
-            <a href="#map">Mapa interactiu</a>
-            <NuxtLink to="/participar">Com Participar</NuxtLink>
-            <a href="#about">Sobre el projecte</a>
-            <NuxtLink to="/login">Entrar / Registrar-me</NuxtLink>
-          </div>
-          <div class="footer-col">
-            <span class="footer-col-title">Programes oficials</span>
-            <a href="https://ajuntament.barcelona.cat/espaisverds/ca/participa-hi/mans-al-verd/cuida-lescocell" target="_blank" rel="noopener">Cuida l'escocell</a>
-            <a href="https://ajuntament.barcelona.cat/espaisverds/ca/participa-hi/mans-al-verd/xarxa-dhorts-municipals" target="_blank" rel="noopener">Xarxa d'Horts Municipals</a>
-            <a href="https://ajuntament.barcelona.cat/espaisverds/ca/participa-hi/mans-al-verd" target="_blank" rel="noopener">Mans al Verd</a>
-            <a href="https://ajuntament.barcelona.cat/espaisverds/ca" target="_blank" rel="noopener">Espais Verds BCN ↗</a>
-          </div>
-        </nav>
-      </div>
-
-      <div class="footer-bottom">
-        <span>© 2026 Barcelona Verd</span>
-        <span class="footer-sep">·</span>
-        <span>Marta Alfonso · Mehdike Ruveyda · Jacob Stark · Micaelle Nogueira</span>
-      </div>
-    </footer>
   </main>
 </template>
 
@@ -191,6 +104,8 @@ const loadingSpaces = ref(false)
 const filteredSpaces = computed(() => {
   if (activeFilter.value === 'all') return spaces.value
   if (activeFilter.value === 'help') return spaces.value.filter(s => s.needs_help)
+  // "Parcs i jardins" engloba parcs e jardins
+  if (activeFilter.value === 'park') return spaces.value.filter(s => s.type === 'park' || s.type === 'garden')
   return spaces.value.filter(s => s.type === activeFilter.value)
 })
 
@@ -209,7 +124,6 @@ watch(viewMode, (val) => { if (val === 'list' && !spaces.value.length) loadSpace
 const filters = [
   { value: 'all',      icon: 'map',          label: 'Tots els espais' },
   { value: 'park',     icon: 'trees',        label: 'Parcs i jardins' },
-  { value: 'garden',   icon: 'flower',       label: 'Jardins' },
   { value: 'hort',     icon: 'carrot',       label: 'Horts urbans' },
   { value: 'tree',     icon: 'pine',         label: 'Àrbres' },
   { value: 'mediator', icon: 'info-circle',  label: "Punts d'informació" },
@@ -220,16 +134,17 @@ const filters = [
 const stats = ref(null)
 
 async function loadStats() {
-  const [{ count: trees }, { count: ambassadors }, { data: spaces }] = await Promise.all([
+  const [{ count: trees }, { count: mediators }, { count: participants }, { count: needsHelp }] = await Promise.all([
     supabase.from('trees').select('*', { count: 'exact', head: true }),
-    supabase.from('profiles').select('*', { count: 'exact', head: true }).eq('role', 'ambassador'),
-    supabase.from('green_spaces').select('neighborhood'),
+    supabase.from('profiles').select('*', { count: 'exact', head: true }).eq('role', 'mediator'),
+    supabase.from('profiles').select('*', { count: 'exact', head: true }),
+    supabase.from('green_spaces').select('*', { count: 'exact', head: true }).eq('needs_help', true),
   ])
-  const neighborhoods = new Set(spaces?.map(s => s.neighborhood).filter(Boolean)).size
   stats.value = {
     trees: trees ?? 2847,
-    ambassadors: ambassadors ?? 412,
-    neighborhoods: neighborhoods || 73,
+    mediators: mediators ?? 0,
+    participants: participants ?? 0,
+    needsHelp: needsHelp ?? 0,
   }
 }
 
@@ -241,6 +156,7 @@ onMounted(() => {
     .channel('stats')
     .on('postgres_changes', { event: '*', schema: 'public', table: 'trees' }, loadStats)
     .on('postgres_changes', { event: '*', schema: 'public', table: 'profiles' }, loadStats)
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'green_spaces' }, loadStats)
     .subscribe()
 
   onUnmounted(() => supabase.removeChannel(channel))
@@ -481,217 +397,6 @@ onMounted(() => {
   flex-shrink: 0;
 }
 
-/* Features */
-/* About */
-.about {
-  padding: 80px 48px;
-  background: white;
-}
-
-.about-inner {
-  max-width: 760px;
-  margin: 0 auto;
-}
-
-.about-badge {
-  display: inline-block;
-  background: #d8f3dc;
-  color: #2d6a4f;
-  font-size: 12px;
-  font-weight: 700;
-  padding: 5px 14px;
-  border-radius: 20px;
-  margin-bottom: 20px;
-  letter-spacing: 0.3px;
-}
-
-.about-text h2 {
-  font-size: 34px;
-  font-weight: 800;
-  color: #1a2e1a;
-  margin-bottom: 20px;
-  letter-spacing: -0.5px;
-}
-
-.about-text p {
-  font-size: 15px;
-  color: #4a5568;
-  line-height: 1.75;
-  margin-bottom: 14px;
-}
-
-.about-text strong { color: #1b4332; }
-
-.about-team {
-  margin-top: 28px;
-  padding-top: 24px;
-  border-top: 1px solid #e8f0e8;
-}
-
-.about-team-label {
-  display: block;
-  font-size: 11px;
-  font-weight: 700;
-  color: #4a7c59;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  margin-bottom: 6px;
-}
-
-.about-team p {
-  font-size: 14px;
-  color: #2d3748;
-  font-weight: 600;
-  margin-bottom: 4px;
-}
-
-.about-course {
-  font-size: 13px !important;
-  color: #718096 !important;
-  font-weight: 400 !important;
-}
-
-
-/* Partnership banner */
-.partnership {
-  background: #1a2e1a;
-  padding: 32px 48px;
-}
-
-.partnership-inner {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 32px;
-}
-
-.partnership-text {
-  display: flex;
-  align-items: flex-start;
-  gap: 16px;
-  color: white;
-}
-
-.partnership-icon { color: #74c69d; flex-shrink: 0; margin-top: 2px; }
-
-.partnership-text strong {
-  display: block;
-  font-size: 16px;
-  font-weight: 700;
-  color: white;
-  margin-bottom: 6px;
-}
-
-.partnership-text p {
-  font-size: 14px;
-  color: #b7e4c7;
-  line-height: 1.6;
-  margin: 0;
-  max-width: 640px;
-}
-
-.partnership-text em { color: #74c69d; font-style: normal; font-weight: 600; }
-
-.partnership-cta {
-  flex-shrink: 0;
-  background: #2d6a4f;
-  color: white;
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 600;
-  padding: 12px 24px;
-  border-radius: 10px;
-  transition: background 0.15s;
-  white-space: nowrap;
-}
-
-.partnership-cta:hover { background: #40916c; }
-
-/* Footer */
-.footer {
-  background: #f8f9f4;
-  border-top: 1px solid #e2e8e0;
-  padding: 56px 48px 32px;
-}
-
-.footer-inner {
-  max-width: 1100px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr 1.4fr;
-  gap: 64px;
-  padding-bottom: 40px;
-  border-bottom: 1px solid #e2e8e0;
-  margin-bottom: 24px;
-}
-
-.footer-brand { display: flex; flex-direction: column; gap: 10px; }
-
-.footer-logo {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  font-size: 17px;
-  font-weight: 800;
-  color: #1b4332;
-}
-
-.footer-brand p {
-  font-size: 14px;
-  color: #4a7c59;
-  line-height: 1.6;
-  max-width: 300px;
-  margin: 0;
-}
-
-.footer-academic {
-  font-size: 12px !important;
-  color: #a0aec0 !important;
-}
-
-.footer-nav {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 32px;
-}
-
-.footer-col {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.footer-col-title {
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  color: #2d6a4f;
-  margin-bottom: 4px;
-}
-
-.footer-col a {
-  font-size: 14px;
-  color: #4a5568;
-  text-decoration: none;
-  transition: color 0.15s;
-}
-.footer-col a:hover { color: #1b4332; }
-
-.footer-bottom {
-  max-width: 1100px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 13px;
-  color: #a0aec0;
-}
-
-.footer-sep { color: #e2e8e0; }
-
 /* Hero welcome overlay */
 .hero-overlay {
   position: absolute;
@@ -753,53 +458,13 @@ onMounted(() => {
   font-size: 14px;
   color: #4a7c59;
   line-height: 1.6;
-  margin-bottom: 16px;
+  margin-bottom: 0;
 }
-
-.hero-stats {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  font-size: 13px;
-  color: #718096;
-  margin-bottom: 18px;
-}
-.hero-stats strong { color: #1b4332; font-weight: 800; }
-.hero-dot { width: 4px; height: 4px; border-radius: 50%; background: #b7e4c7; }
-
-.hero-cta {
-  display: inline-block;
-  background: #2d6a4f;
-  color: white;
-  text-decoration: none;
-  padding: 10px 24px;
-  border-radius: 10px;
-  font-size: 14px;
-  font-weight: 700;
-  transition: background 0.15s;
-}
-.hero-cta:hover { background: #1b4332; }
 
 /* ── Mobile ── */
 @media (max-width: 768px) {
-  .about { padding: 56px 24px; }
-  .about-text h2 { font-size: 26px; }
-
-  .partnership { padding: 28px 24px; }
-  .partnership-inner { flex-direction: column; gap: 20px; }
-  .partnership-cta { width: 100%; text-align: center; }
-
-  .footer { padding: 40px 24px 24px; }
-  .footer-inner { grid-template-columns: 1fr; gap: 32px; }
-  .footer-nav { grid-template-columns: 1fr 1fr; gap: 24px; }
-  .footer-bottom { flex-direction: column; align-items: flex-start; gap: 4px; }
-
   /* Filter panel */
   .filter-panel { top: 68px; left: 12px; }
-
-  /* Sidebar list */
-  .spaces-sidebar { display: none; }
 
   /* Hero overlay */
   .hero-overlay {

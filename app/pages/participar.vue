@@ -1,41 +1,38 @@
 <template>
   <div class="page">
-    <nav class="topbar">
-      <NuxtLink to="/" class="back">← Inici</NuxtLink>
-      <NuxtLink to="/" class="logo"><AppIcon name="leaf" :size="18" /> Barcelona Verd</NuxtLink>
-      <NuxtLink to="/login" class="topbar-login">Entrar</NuxtLink>
-    </nav>
+    <NavBar />
 
     <header class="page-header">
       <h1>Com pots participar?</h1>
       <p>El projecte Barcelona Verd connecta veïns, voluntaris i la ciutat per crear espais verds junts. Aquí trobaràs totes les formes de participació i els programes oficials, en un sol lloc.</p>
-      <p class="page-header-sub">Siguis voluntari/ària, mediador/a o ciutadà/ana actiu/va, hi ha un rol per a tothom.</p>
+      <p>Siguis voluntari/ària, mediador/a o ciutadà/ana actiu/va, hi ha un rol per a tothom.</p>
     </header>
 
     <!-- All participation options — unified grid -->
     <section class="all-options">
       <div class="official-grid">
 
-        <div v-for="role in roles" :key="role.id" class="official-card">
+        <div v-for="role in roles" :key="role.id" class="official-card" :style="{ borderTopColor: role.color }">
           <div class="official-card-top">
-            <AppIcon :name="role.icon" :size="26" class="official-icon" />
+            <div class="official-icon-badge" :style="{ background: role.color }">
+              <AppIcon :name="role.icon" :size="22" />
+            </div>
           </div>
           <h3>{{ role.title }}</h3>
           <p class="official-desc">{{ role.description }}</p>
-          <div class="official-bv-adds">
-            <span class="official-bv-label">Amb Barcelona Verd</span>
-            <ul class="card-actions">
-              <li v-for="action in role.actions" :key="action">
-                <AppIcon name="check" :size="12" class="check-icon" />{{ action }}
-              </li>
-            </ul>
-          </div>
+          <ul class="card-actions">
+            <li v-for="action in role.actions" :key="action">
+              <AppIcon name="check" :size="12" class="check-icon" />{{ action }}
+            </li>
+          </ul>
           <NuxtLink to="/login" class="btn-card">{{ role.cta }}</NuxtLink>
         </div>
 
-        <div v-for="prog in officialPrograms" :key="prog.id" class="official-card">
+        <div v-for="prog in officialPrograms" :key="prog.id" class="official-card" :style="{ borderTopColor: prog.color }">
           <div class="official-card-top">
-            <AppIcon :name="prog.icon" :size="26" class="official-icon" />
+            <div class="official-icon-badge" :style="{ background: prog.color }">
+              <AppIcon :name="prog.icon" :size="22" />
+            </div>
             <span class="official-tag">Programa oficial</span>
           </div>
           <h3>{{ prog.title }}</h3>
@@ -69,15 +66,15 @@
 const roles = [
   {
     id: 'mediator',
-    icon: 'link2',
+    icon: 'topology-star-3',
     title: 'Mediador/a de Xarxa',
-    color: 'linear-gradient(135deg, #276221, #52b788)',
-    description: 'Ets un comerç, mercat, metge, perruqueria o entitat local. Connectes els teus clients i veïns — especialment la gent gran — amb els espais verds i programes del barri, actuant com a punt de confiança.',
+    color: '#6366f1',
+    description: 'Ets un comerç, mercat, metge, perruqueria o entitat local. Connectes els teus clients i veïns amb els espais verds i programes del barri, actuant com a punt de confiança.',
     actions: [
       'Rep kit de comunicació (pòsters, flyers)',
       'Accés a formació de 30 minuts',
       'Aparèixes al mapa com a punt d\'informació',
-      'Premi anual al mediador/a més actiu/va',
+      'Reconeixement per al mediador/a més actiu/va',
     ],
     cta: 'Unir-me com a mediador/a',
   },
@@ -85,12 +82,12 @@ const roles = [
     id: 'volunteer',
     icon: 'heart',
     title: 'Voluntari/ària',
-    color: 'linear-gradient(135deg, #40916c, #74c69d)',
-    description: 'Dones hores per ajudar en jornades de plantació, manteniment o acompanyament de persones grans que volen participar però necessiten suport digital.',
+    color: '#e2725b',
+    description: 'Acompanyes veïns que volen participar però no saben per on començar, ajudant-los a connectar amb Barcelona Verd i amb els programes oficials.',
     actions: [
-      'Participa en jornades de plantació',
-      'Ajuda persones grans a usar la plataforma',
-      'Coordina activitats als parcs',
+      'Integres els nouvinguts a la plataforma',
+      'Proveeixes de material els punts d\'informació i formes els mediadors/ores de la xarxa',
+      'Orientes cap al programa oficial més adequat',
       'Certificat de voluntariat oficial',
     ],
     cta: 'Apuntar-me com a voluntari/ària',
@@ -101,6 +98,7 @@ const officialPrograms = [
   {
     id: 1,
     icon: 'pine',
+    color: '#52b788',
     title: "Cuida l'escocell",
     description: "Programa municipal d'adopció d'escocells (els espais de terra al voltant dels arbres). Qualsevol veí +18 anys pot apadrinar fins a 3 arbres.",
     bvAdds: "Seguiment visual del progrés, historial de cura i visibilitat al mapa — la Prefeitura té el programa però no la capa digital de comunitat.",
@@ -109,6 +107,7 @@ const officialPrograms = [
   {
     id: 2,
     icon: 'carrot',
+    color: '#e08e29',
     title: "Xarxa d'Horts Municipals",
     description: "15 horts municipals repartits pels 10 districtes, amb parcel·les per a persones +65 anys i entitats. Sorteig públic anual.",
     bvAdds: "Vagas disponibles en temps real i alertes per a noves convocatòries — la web oficial només té PDFs descarregables.",
@@ -117,6 +116,7 @@ const officialPrograms = [
   {
     id: 3,
     icon: 'leaf',
+    color: '#2d6a4f',
     title: "Mans al Verd",
     description: "Programa paraigua que inclou horts, cessió d'espais, cogestió i adopció d'escocells. El gran marc de participació ciutadana en espais verds.",
     bvAdds: "Mapa de projectes actius i visibilitat de qui ja participa al teu barri — el programa existeix però és invisible per a la majoria.",
@@ -125,6 +125,7 @@ const officialPrograms = [
   {
     id: 4,
     icon: 'users',
+    color: '#c75c9e',
     title: "Cogestió d'Espais Públics",
     description: "Entitats sense ànim de lucre poden cogestionar parterres, jardineres o basses naturalitzades durant 2 anys, via formulari.",
     bvAdds: "Llista pública d'entitats en cogestió al mapa, inspirant noves candidatures — ara cap ciutadà sap quines entitats ja gestionen espais al seu barri.",
@@ -142,19 +143,6 @@ const steps = [
 
 <style scoped>
 .page { min-height: 100vh; background: #f8f9f4; }
-
-.topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 20px 48px;
-  background: white;
-  border-bottom: 1px solid #e2e8e0;
-}
-.back { color: #2d6a4f; text-decoration: none; font-size: 14px; font-weight: 500; }
-.logo { display: flex; align-items: center; gap: 6px; font-size: 18px; font-weight: 800; color: #1b4332; text-decoration: none; }
-.topbar-login { color: #2d3748; text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.15s; }
-.topbar-login:hover { color: #2d6a4f; }
 
 .page-header {
   text-align: center;
@@ -186,7 +174,8 @@ const steps = [
   align-items: center;
   gap: 7px;
   font-size: 13px;
-  color: #4a7c59;
+  color: #2d6a4f;
+  font-weight: 700;
   line-height: 1.4;
 }
 
@@ -198,6 +187,7 @@ const steps = [
 .official-card {
   background: white;
   border-radius: 16px;
+  border-top: 4px solid transparent;
   padding: 28px;
   box-shadow: 0 2px 12px rgba(0,0,0,0.06);
   display: flex;
@@ -209,7 +199,16 @@ const steps = [
   align-items: center;
   justify-content: space-between;
 }
-.official-icon { color: #2d6a4f; }
+.official-icon-badge {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  flex-shrink: 0;
+}
 .official-tag {
   font-size: 11px;
   font-weight: 700;
@@ -280,8 +279,6 @@ const steps = [
 
 /* ── Mobile ── */
 @media (max-width: 768px) {
-  .topbar { padding: 16px 20px; }
-
   .page-header { padding: 48px 20px 32px; }
   .page-header h1 { font-size: 30px; }
   .page-header p { font-size: 16px; }

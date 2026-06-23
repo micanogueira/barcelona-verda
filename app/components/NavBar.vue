@@ -1,9 +1,9 @@
 <template>
-  <nav class="navbar">
-    <div class="navbar-brand">
+  <nav class="navbar" :class="{ floating }">
+    <NuxtLink to="/" class="navbar-brand">
       <AppIcon name="leaf" :size="20" class="leaf-icon" />
       <span class="brand-name">Barcelona Verd</span>
-    </div>
+    </NuxtLink>
 
     <div v-if="stats" class="navbar-stats">
       <div class="counter">
@@ -12,20 +12,25 @@
       </div>
       <span class="counter-dot" />
       <div class="counter">
-        <span class="counter-num">{{ stats.ambassadors.toLocaleString('ca') }}</span>
-        <span class="counter-label">Ambaixadors</span>
+        <span class="counter-num">{{ stats.mediators.toLocaleString('ca') }}</span>
+        <span class="counter-label">Mediadors actius</span>
       </div>
       <span class="counter-dot" />
       <div class="counter">
-        <span class="counter-num">{{ stats.neighborhoods }}</span>
-        <span class="counter-label">Barris</span>
+        <span class="counter-num">{{ stats.participants.toLocaleString('ca') }}</span>
+        <span class="counter-label">Participants</span>
+      </div>
+      <span class="counter-dot" />
+      <div class="counter">
+        <span class="counter-num">{{ stats.needsHelp.toLocaleString('ca') }}</span>
+        <span class="counter-label">Cal ajuda</span>
       </div>
     </div>
 
     <div class="navbar-links">
-      <a href="#map">Mapa</a>
+      <NuxtLink to="/">Mapa</NuxtLink>
       <NuxtLink to="/participar" class="btn-login">Com Participar</NuxtLink>
-      <a href="#about">Sobre</a>
+      <NuxtLink to="/sobre">Sobre</NuxtLink>
       <NuxtLink to="/login">Entrar</NuxtLink>
     </div>
   </nav>
@@ -34,15 +39,15 @@
 <script setup>
 defineProps({
   stats: { type: Object, default: null },
+  // floating = barra absoluta sobre o mapa (home). Sem floating = barra fixa no topo (páginas de conteúdo).
+  floating: { type: Boolean, default: false },
 })
 </script>
 
 <style scoped>
 .navbar {
-  position: absolute;
+  position: sticky;
   top: 0;
-  left: 0;
-  right: 0;
   z-index: 10;
   display: flex;
   align-items: center;
@@ -54,6 +59,13 @@ defineProps({
   border-bottom: 1px solid rgba(45, 106, 79, 0.1);
 }
 
+/* Home: barra flutuante sobre o mapa */
+.navbar.floating {
+  position: absolute;
+  left: 0;
+  right: 0;
+}
+
 .navbar-brand {
   display: flex;
   align-items: center;
@@ -61,6 +73,7 @@ defineProps({
   font-size: 18px;
   font-weight: 700;
   color: #1b4332;
+  text-decoration: none;
   flex-shrink: 0;
 }
 

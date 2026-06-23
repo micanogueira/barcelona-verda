@@ -66,7 +66,7 @@
         <h2>Junts fem Barcelona més verda</h2>
         <ul class="side-list">
           <li><AppIcon name="map2" :size="20" />Explora tots els espais verds en un únic mapa</li>
-          <li><AppIcon name="link2" :size="20" />Connecta els teus veïns amb els programes del barri</li>
+          <li><AppIcon name="topology-star-3" :size="20" />Connecta els teus veïns amb els programes del barri</li>
           <li><AppIcon name="leaf" :size="20" />Accedeix als programes oficials de l'Ajuntament</li>
           <li><AppIcon name="users" :size="20" />Fes créixer la xarxa de participació</li>
         </ul>

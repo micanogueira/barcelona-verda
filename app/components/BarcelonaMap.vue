@@ -157,7 +157,9 @@ async function loadTrees() {
 
 watch(() => props.filter, (val) => {
   spaceMarkers.forEach(({ marker, type, needsHelp }) => {
-    const show = val === 'all' || type === val || (val === 'help' && needsHelp)
+    const show = val === 'all' || type === val
+      || (val === 'park' && type === 'garden') // "Parcs i jardins" engloba jardins
+      || (val === 'help' && needsHelp)
     setVisible(marker, show)
   })
   treeMarkers.forEach((marker) => {
