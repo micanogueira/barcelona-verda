@@ -6,7 +6,7 @@
 
       <div class="map-wrapper">
         <ClientOnly>
-          <BarcelonaMap :filter="activeFilter" />
+          <BarcelonaMap ref="mapRef" :filter="activeFilter" />
           <template #fallback>
             <div class="map-placeholder">Carregant mapa...</div>
           </template>
@@ -19,17 +19,30 @@
             <div v-if="filteredSpaces.length === 0" class="list-empty">
               Cap espai trobat per a aquest filtre.
             </div>
-            <div v-for="space in filteredSpaces" :key="space.id" class="list-item">
+            <div
+              v-for="space in filteredSpaces"
+              :key="space.id"
+              class="list-item"
+              role="button"
+              tabindex="0"
+              :style="{ '--accent': colorByType[space.type] ?? '#52b788' }"
+              @click="focusOnMap(space)"
+              @keydown.enter="focusOnMap(space)"
+            >
               <div class="list-item-icon" :style="{ background: colorByType[space.type] }">
                 <AppIcon :name="iconByType[space.type] ?? 'leaf'" :size="18" />
               </div>
               <div class="list-item-body">
                 <strong>{{ space.name }}</strong>
                 <span class="list-item-tag">{{ labelByType(space.type) }}</span>
-                <p v-if="space.neighborhood">{{ space.neighborhood }}</p>
+                <p v-if="space.neighborhood" class="list-item-meta"><AppIcon name="pin" :size="13" />{{ space.neighborhood }}</p>
                 <p v-if="space.description" class="list-item-desc">{{ space.description }}</p>
+                <p v-if="space.participant_count" class="list-item-meta"><AppIcon name="users" :size="13" />{{ space.participant_count }} participants</p>
               </div>
-              <div v-if="space.needs_help" class="list-item-help">Cal ajuda</div>
+              <div class="list-item-right">
+                <span v-if="space.needs_help" class="list-item-help">Cal ajuda</span>
+                <AppIcon name="chevron-left" :size="18" class="list-item-go" />
+              </div>
             </div>
           </div>
         </div>
@@ -97,6 +110,13 @@ const iconByType = { park: 'trees', garden: 'flower', hort: 'carrot', mediator: 
 const colorByType = { park: '#2d6a4f', garden: '#c75c9e', hort: '#e08e29', mediator: '#6366f1', tree: '#52b788' }
 function labelByType(type) {
   return { park: 'Parc', garden: 'Jardí', hort: 'Hort urbà', mediator: "Punt d'informació", tree: 'Arbre' }[type] ?? type
+}
+
+const mapRef = ref(null)
+// Clicar num card da lista volta ao mapa, centrado nesse espaço
+function focusOnMap(space) {
+  viewMode.value = 'map'
+  mapRef.value?.focusSpace?.(space.id)
 }
 
 const spaces = ref([])
@@ -339,8 +359,21 @@ onMounted(() => {
   gap: 16px;
   background: white;
   border-radius: 14px;
+  border-left: 3px solid var(--accent, #52b788);
   padding: 16px 20px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.list-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(0,0,0,0.10);
+}
+
+.list-item:focus-visible {
+  outline: 2px solid #2d6a4f;
+  outline-offset: 2px;
 }
 
 .list-item-icon {
@@ -383,7 +416,25 @@ onMounted(() => {
   margin: 0;
 }
 
+.list-item-meta {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.list-item-meta :deep(svg) { flex-shrink: 0; color: #a0aec0; }
+
 .list-item-desc { color: #4a5568 !important; }
+
+/* Coluna direita: badge "Cal ajuda" + seta de "anar al mapa" */
+.list-item-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 8px;
+  flex-shrink: 0;
+  align-self: center;
+}
 
 .list-item-help {
   font-size: 11px;
@@ -393,8 +444,16 @@ onMounted(() => {
   border: 1px solid #fed7d7;
   padding: 3px 10px;
   border-radius: 6px;
-  align-self: center;
-  flex-shrink: 0;
+}
+
+.list-item-go {
+  color: #cbd5e0;
+  transform: rotate(180deg); /* chevron-left → aponta para a direita */
+  transition: color 0.15s, transform 0.15s;
+}
+.list-item:hover .list-item-go {
+  color: #2d6a4f;
+  transform: rotate(180deg) translateX(-3px); /* desliza para a direita no hover */
 }
 
 /* Hero welcome overlay */

@@ -113,7 +113,7 @@ async function loadGreenSpaces() {
       )
       .addTo(map)
 
-    spaceMarkers.push({ marker, type: space.type, needsHelp: !!space.needs_help })
+    spaceMarkers.push({ marker, id: space.id, type: space.type, needsHelp: !!space.needs_help })
   })
 }
 
@@ -166,6 +166,17 @@ watch(() => props.filter, (val) => {
     setVisible(marker, val === 'all' || val === 'tree')
   })
 })
+
+// Chamado pela vista de lista: centra o mapa no espaço e abre o seu popup
+function focusSpace(id) {
+  if (!map) return
+  const entry = spaceMarkers.find(m => m.id === id)
+  if (!entry) return
+  map.flyTo({ center: entry.marker.getLngLat(), zoom: 16, duration: 800 })
+  if (!entry.marker.getPopup()?.isOpen()) entry.marker.togglePopup()
+}
+
+defineExpose({ focusSpace })
 
 function setVisible(marker, visible) {
   const el = marker.getElement()
