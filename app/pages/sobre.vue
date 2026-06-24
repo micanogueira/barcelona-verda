@@ -18,10 +18,10 @@
             La nostra proposta: una plataforma informativa, fàcil d'usar i amb un to acollidor, que redueix la barrera d'entrada a la participació. Hi introduïm:
           </p>
           <ul class="about-list">
-            <li><AppIcon name="map2" :size="16" class="check-icon" />Un mapa interactiu que mostra tots els espais verds en temps real</li>
-            <li><AppIcon name="topology-star-3" :size="16" class="check-icon" />Una xarxa de mediadors locals (comerços, mercats, professionals) ja integrats al moviment verd</li>
-            <li><AppIcon name="heart" :size="16" class="check-icon" />Una xarxa de voluntaris centrada en la difusió: atreu nous participants i ajuda les persones amb menys facilitat digital a trobar el programa adequat</li>
-            <li><AppIcon name="lifebuoy" :size="16" class="check-icon" />Una capa de visibilitat que mostra quins espais necessiten més ajuda i com creix el moviment per tota la ciutat</li>
+            <li>Un mapa interactiu que mostra tots els espais verds en temps real</li>
+            <li>Una xarxa de mediadors locals (comerços, mercats, professionals) ja integrats al moviment verd</li>
+            <li>Una xarxa de voluntaris centrada en la difusió: atreu nous participants i ajuda les persones amb menys facilitat digital a trobar el programa adequat</li>
+            <li>Una capa de visibilitat que mostra quins espais necessiten més ajuda i com creix el moviment per tota la ciutat</li>
           </ul>
           <p>
             Actua com a porta d'entrada als programes oficials ja existents, com Mans al Verd, la XHM o Cuida l'escocell, fent-los més fàcils de trobar, d'iniciar i de mantenir en el temps.
@@ -95,18 +95,22 @@
 }
 
 .about-list li {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
+  position: relative;
+  padding-left: 18px;
   font-size: 15px;
   color: #4a5568;
   line-height: 1.6;
 }
 
-.about-list .check-icon {
-  flex-shrink: 0;
-  color: #2d6a4f;
-  margin-top: 3px;
+.about-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #2d6a4f;
 }
 
 .about-team {
