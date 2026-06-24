@@ -14,8 +14,8 @@ const props = defineProps({
 const mapContainer = ref(null)
 const supabase = useSupabaseClient()
 let map = null
-const spaceMarkers = [] // { marker, type }
-const treeMarkers  = [] // marker[]
+const spaceMarkers = [] // { marker, id, type, needsHelp }
+const treeMarkers  = [] // { marker, id }
 
 const ICON_BY_TYPE = {
   park:     'trees',
@@ -169,7 +169,7 @@ async function loadTrees() {
       )
       .addTo(map)
 
-    treeMarkers.push(marker)
+    treeMarkers.push({ marker, id: tree.id })
   })
 }
 
@@ -180,15 +180,15 @@ watch(() => props.filter, (val) => {
       || (val === 'help' && needsHelp)
     setVisible(marker, show)
   })
-  treeMarkers.forEach((marker) => {
+  treeMarkers.forEach(({ marker }) => {
     setVisible(marker, val === 'all' || val === 'tree')
   })
 })
 
-// Called by the list view: centers the map on the space and opens its popup
+// Called by the list view: centers the map on the space/escocell and opens its popup
 function focusSpace(id) {
   if (!map) return
-  const entry = spaceMarkers.find(m => m.id === id)
+  const entry = spaceMarkers.find(m => m.id === id) || treeMarkers.find(m => m.id === id)
   if (!entry) return
   map.flyTo({ center: entry.marker.getLngLat(), zoom: 16, duration: 800 })
   if (!entry.marker.getPopup()?.isOpen()) entry.marker.togglePopup()

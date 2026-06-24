@@ -38,9 +38,11 @@
                 <p v-if="space.neighborhood" class="list-item-meta"><AppIcon name="pin" :size="13" />{{ space.neighborhood }}</p>
                 <p v-if="space.description" class="list-item-desc">{{ space.description }}</p>
                 <p v-if="space.participant_count" class="list-item-meta"><AppIcon name="users" :size="13" />{{ space.participant_count }} participants</p>
+                <p v-if="space.escocell && !space.escocell.available" class="list-item-meta"><AppIcon name="user" :size="13" />Apadrinat per {{ space.escocell.padriName }}</p>
               </div>
               <div class="list-item-right">
                 <span v-if="space.needs_help" class="list-item-help">Cal ajuda</span>
+                <span v-else-if="space.escocell?.available" class="list-item-available">Disponible</span>
                 <AppIcon name="chevron-left" :size="18" class="list-item-go" />
               </div>
             </div>
@@ -99,6 +101,8 @@
 </template>
 
 <script setup>
+import { mockEscocellStatus } from '~/utils/escocell'
+
 const supabase = useSupabaseClient()
 
 const activeFilter = ref('all')
@@ -115,7 +119,7 @@ onMounted(() => {
 const iconByType = { park: 'trees', garden: 'flower', hort: 'carrot', mediator: 'info-circle', tree: 'pine' }
 const colorByType = { park: '#2d6a4f', garden: '#c75c9e', hort: '#e08e29', mediator: '#6366f1', tree: '#52b788' }
 function labelByType(type) {
-  return { park: 'Parc', garden: 'Jardí', hort: 'Hort urbà', mediator: "Punt d'informació", tree: 'Arbre' }[type] ?? type
+  return { park: 'Parc', garden: 'Jardí', hort: 'Hort urbà', mediator: "Punt d'informació", tree: 'Escocell' }[type] ?? type
 }
 
 const mapRef = ref(null)
@@ -137,11 +141,24 @@ const filteredSpaces = computed(() => {
 
 async function loadSpaces() {
   loadingSpaces.value = true
-  const { data } = await supabase
-    .from('green_spaces')
-    .select('id, name, type, description, neighborhood, needs_help, participant_count')
-    .order('name')
-  spaces.value = data ?? []
+  // The list mirrors the map: green_spaces + trees (escocells), in one fetch
+  const [{ data: greenData }, { data: treeData }] = await Promise.all([
+    supabase
+      .from('green_spaces')
+      .select('id, name, type, description, neighborhood, needs_help, participant_count'),
+    supabase
+      .from('trees')
+      .select('id, name, species'),
+  ])
+  const greens = greenData ?? []
+  const escocells = (treeData ?? []).map(t => ({
+    id: t.id,
+    name: t.name ?? 'Escocell',
+    type: 'tree',
+    description: t.species,
+    escocell: mockEscocellStatus(t),
+  }))
+  spaces.value = [...greens, ...escocells].sort((a, b) => a.name.localeCompare(b.name, 'ca'))
   loadingSpaces.value = false
 }
 
@@ -451,6 +468,18 @@ onMounted(() => {
   border: 1px solid #fed7d7;
   padding: 3px 10px;
   border-radius: 6px;
+}
+
+/* Escocell disponible badge — same amber as the map marker */
+.list-item-available {
+  font-size: 11px;
+  font-weight: 700;
+  color: #92740a;
+  background: #fefce8;
+  border: 1px solid #fde68a;
+  padding: 3px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
 }
 
 .list-item-go {
