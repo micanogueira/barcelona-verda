@@ -58,7 +58,7 @@
         </div>
 
         <!-- Hero welcome overlay -->
-        <div v-if="welcomeVisible" class="hero-overlay">
+        <div v-if="welcomeVisible && viewMode !== 'list'" class="hero-overlay">
           <button class="hero-close" @click="welcomeVisible = false" aria-label="Tancar">×</button>
           <div class="hero-badge">
             <AppIcon name="leaf" :size="13" /> Barcelona Verd
@@ -105,6 +105,12 @@ const activeFilter = ref('all')
 const panelOpen = ref(true)
 const viewMode = ref('map')
 const welcomeVisible = ref(true)
+
+// Fecha o bloco de boas-vindas automaticamente após alguns segundos
+onMounted(() => {
+  const timer = setTimeout(() => { welcomeVisible.value = false }, 6000)
+  onUnmounted(() => clearTimeout(timer))
+})
 
 const iconByType = { park: 'trees', garden: 'flower', hort: 'carrot', mediator: 'info-circle', tree: 'pine' }
 const colorByType = { park: '#2d6a4f', garden: '#c75c9e', hort: '#e08e29', mediator: '#6366f1', tree: '#52b788' }
@@ -335,7 +341,8 @@ onMounted(() => {
   backdrop-filter: blur(4px);
   overflow-y: auto;
   z-index: 4;
-  padding: 24px 48px;
+  /* padding-left maior para a lista centralizar no espaço à direita do painel de filtres */
+  padding: 24px 56px 24px 240px;
 }
 
 .list-loading, .list-empty {
@@ -349,7 +356,7 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  max-width: 860px;
+  max-width: 920px;
   margin: 0 auto;
 }
 
@@ -524,6 +531,9 @@ onMounted(() => {
 @media (max-width: 768px) {
   /* Filter panel */
   .filter-panel { top: 68px; left: 12px; }
+
+  /* List: painel fica no topo no mobile, sem necessidade de offset lateral */
+  .list-overlay { padding: 16px 14px; }
 
   /* Hero overlay */
   .hero-overlay {
