@@ -106,7 +106,7 @@ const panelOpen = ref(true)
 const viewMode = ref('map')
 const welcomeVisible = ref(true)
 
-// Fecha o bloco de boas-vindas automaticamente após alguns segundos
+// Auto-dismiss the welcome overlay after a few seconds
 onMounted(() => {
   const timer = setTimeout(() => { welcomeVisible.value = false }, 6000)
   onUnmounted(() => clearTimeout(timer))
@@ -119,7 +119,7 @@ function labelByType(type) {
 }
 
 const mapRef = ref(null)
-// Clicar num card da lista volta ao mapa, centrado nesse espaço
+// Clicking a list card returns to the map, centered on that space
 function focusOnMap(space) {
   viewMode.value = 'map'
   mapRef.value?.focusSpace?.(space.id)
@@ -130,7 +130,7 @@ const loadingSpaces = ref(false)
 const filteredSpaces = computed(() => {
   if (activeFilter.value === 'all') return spaces.value
   if (activeFilter.value === 'help') return spaces.value.filter(s => s.needs_help)
-  // "Parcs i jardins" engloba parcs e jardins
+  // "Parcs i jardins" covers both parks and gardens
   if (activeFilter.value === 'park') return spaces.value.filter(s => s.type === 'park' || s.type === 'garden')
   return spaces.value.filter(s => s.type === activeFilter.value)
 })
@@ -341,7 +341,7 @@ onMounted(() => {
   backdrop-filter: blur(4px);
   overflow-y: auto;
   z-index: 4;
-  /* padding-left maior para a lista centralizar no espaço à direita do painel de filtres */
+  /* larger padding-left so the list centers in the space to the right of the filter panel */
   padding: 24px 56px 24px 240px;
 }
 
@@ -455,12 +455,12 @@ onMounted(() => {
 
 .list-item-go {
   color: #cbd5e0;
-  transform: rotate(180deg); /* chevron-left → aponta para a direita */
+  transform: rotate(180deg); /* chevron-left → points to the right */
   transition: color 0.15s, transform 0.15s;
 }
 .list-item:hover .list-item-go {
   color: #2d6a4f;
-  transform: rotate(180deg) translateX(-3px); /* desliza para a direita no hover */
+  transform: rotate(180deg) translateX(-3px); /* slides to the right on hover */
 }
 
 /* Hero welcome overlay */
@@ -532,7 +532,7 @@ onMounted(() => {
   /* Filter panel */
   .filter-panel { top: 68px; left: 12px; }
 
-  /* List: painel fica no topo no mobile, sem necessidade de offset lateral */
+  /* List: the panel sits at the top on mobile, so no side offset is needed */
   .list-overlay { padding: 16px 14px; }
 
   /* Hero overlay */

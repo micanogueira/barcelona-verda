@@ -158,7 +158,7 @@ async function loadTrees() {
 watch(() => props.filter, (val) => {
   spaceMarkers.forEach(({ marker, type, needsHelp }) => {
     const show = val === 'all' || type === val
-      || (val === 'park' && type === 'garden') // "Parcs i jardins" engloba jardins
+      || (val === 'park' && type === 'garden') // "Parcs i jardins" also covers gardens
       || (val === 'help' && needsHelp)
     setVisible(marker, show)
   })
@@ -167,7 +167,7 @@ watch(() => props.filter, (val) => {
   })
 })
 
-// Chamado pela vista de lista: centra o mapa no espaço e abre o seu popup
+// Called by the list view: centers the map on the space and opens its popup
 function focusSpace(id) {
   if (!map) return
   const entry = spaceMarkers.find(m => m.id === id)

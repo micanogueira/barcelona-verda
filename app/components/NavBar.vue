@@ -39,7 +39,7 @@
 <script setup>
 defineProps({
   stats: { type: Object, default: null },
-  // floating = barra absoluta sobre o mapa (home). Sem floating = barra fixa no topo (páginas de conteúdo).
+  // floating = absolute bar over the map (home). Without floating = bar fixed to the top (content pages).
   floating: { type: Boolean, default: false },
 })
 </script>
@@ -130,7 +130,7 @@ defineProps({
 
 .navbar-links a:hover { color: #2d6a4f; }
 
-/* Página atual em destaque */
+/* Current page highlighted */
 .navbar-links a.router-link-exact-active {
   color: #2d6a4f;
   font-weight: 700;
