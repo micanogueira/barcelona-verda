@@ -38,7 +38,7 @@
           <h3>{{ prog.title }}</h3>
           <p class="official-desc">{{ prog.description }}</p>
           <div class="official-bv-adds">
-            <span class="official-bv-label">Barcelona Verd afegeix</span>
+            <span class="official-bv-label">Què hi ha de nou</span>
             <p>{{ prog.bvAdds }}</p>
           </div>
           <a :href="prog.officialUrl" target="_blank" rel="noopener" class="btn-card">
@@ -103,7 +103,7 @@ const officialPrograms = [
     color: '#52b788',
     title: "Cuida l'escocell",
     description: "Programa municipal d'adopció d'escocells (els espais de terra al voltant dels arbres). Qualsevol veí +18 anys pot apadrinar fins a 3 escocells.",
-    bvAdds: "Seguiment visual del progrés, historial de cura i visibilitat al mapa — la Prefeitura té el programa però no la capa digital de comunitat.",
+    bvAdds: "Al mapa veus de seguida quins escocells del teu barri ja tenen padrí i quins t'esperen. Quan un queda lliure, te'l destaquem perquè el pots demanar directament.",
     officialUrl: "https://ajuntament.barcelona.cat/espaisverds/ca/participa-hi/mans-al-verd/cuida-lescocell",
   },
   {
