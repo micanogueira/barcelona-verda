@@ -28,7 +28,7 @@
     </div>
 
     <div class="navbar-links">
-      <NuxtLink to="/">Mapa</NuxtLink>
+      <NuxtLink to="/">Inici</NuxtLink>
       <NuxtLink to="/participar" class="btn-login">Com Participar</NuxtLink>
       <NuxtLink to="/sobre">Sobre</NuxtLink>
       <NuxtLink to="/login">Entrar</NuxtLink>
