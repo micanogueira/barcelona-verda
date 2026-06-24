@@ -97,13 +97,17 @@ async function loadGreenSpaces() {
       .setPopup(
         new maplibregl.Popup({ offset: 20 }).setHTML(`
           <div class="popup-content">
-            ${space.needs_help ? `<div class="popup-help-banner">${iconMarkup('lifebuoy', { size: 13 })} Cal ajuda en aquest espai</div>` : ''}
+            ${space.needs_help ? `
+            <div class="popup-help-banner">
+              <div class="popup-help-title">${iconMarkup('lifebuoy', { size: 13 })} Cal ajuda en aquest espai</div>
+              <p class="popup-help-text">Aquest espai necessita més veïns implicats per mantenir-se actiu i ben cuidat.</p>
+            </div>
+            <a href="/participar" class="popup-help-cta">Vull ajudar →</a>` : ''}
             <strong>${space.name}</strong>
             <span class="popup-tag popup-tag--${space.type}">${labelByType(space.type)}</span>
             ${space.description ? `<p>${space.description}</p>` : ''}
             ${space.neighborhood ? `<p class="popup-meta">${iconMarkup('pin', { size: 13 })} ${space.neighborhood}</p>` : ''}
             ${space.participant_count ? `<p class="popup-meta">${iconMarkup('users', { size: 13 })} ${space.participant_count} participants</p>` : ''}
-            ${space.needs_help ? `<a href="/participar" class="popup-help-cta">Vull ajudar →</a>` : ''}
             ${openCall ? `
             <div class="popup-opportunity-status popup-opportunity-open">
               ${iconMarkup('check', { size: 13 })} Convocatòria oberta
@@ -289,21 +293,30 @@ onUnmounted(() => map?.remove())
 
 .popup-content { font-family: 'Inter', sans-serif; min-width: 190px; }
 .popup-help-banner {
-  display: flex;
-  align-items: center;
-  gap: 6px;
   background: #fff5f5;
-  color: #c53030;
-  font-size: 12px;
-  font-weight: 700;
   padding: 7px 10px;
   border-radius: 6px;
   margin-bottom: 10px;
   border: 1px solid #fed7d7;
 }
+.popup-help-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #c53030;
+  font-size: 12px;
+  font-weight: 700;
+}
+.popup-help-text {
+  font-size: 12px;
+  font-weight: 400;
+  color: #9b2c2c;
+  line-height: 1.5;
+  margin: 4px 0 0;
+}
 .popup-help-cta {
   display: block;
-  margin-top: 10px;
+  margin: 0 0 12px;
   background: #e53e3e;
   color: white;
   text-align: center;
