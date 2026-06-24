@@ -112,7 +112,7 @@ const officialPrograms = [
     color: '#e08e29',
     title: "Xarxa d'Horts Municipals",
     description: "15 horts municipals repartits pels 10 districtes, amb parcel·les per a persones +65 anys i entitats. Sorteig per a persones, concurs per a entitats.",
-    bvAdds: "Centralitzem la informació dels 15 horts i avisem quan s'obre una nova convocatòria — la web oficial només té PDFs descarregables i cap sistema d'alerta.",
+    bvAdds: "Marquem els horts amb convocatòria oberta perquè no se't passi per alt cap oportunitat al teu barri.",
     officialUrl: "https://ajuntament.barcelona.cat/espaisverds/ca/participa-hi/mans-al-verd/xarxa-dhorts-municipals",
   },
   {

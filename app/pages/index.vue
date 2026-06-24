@@ -43,6 +43,7 @@
               <div class="list-item-right">
                 <span v-if="space.needs_help" class="list-item-help">Cal ajuda</span>
                 <span v-else-if="space.escocell?.available" class="list-item-available">Disponible</span>
+                <span v-else-if="space.acceptingApplications" class="list-item-available">Convocatòria oberta</span>
                 <AppIcon name="chevron-left" :size="18" class="list-item-go" />
               </div>
             </div>
@@ -102,6 +103,7 @@
 
 <script setup>
 import { mockEscocellStatus } from '~/utils/escocell'
+import { mockAcceptingApplications } from '~/utils/horts'
 
 const supabase = useSupabaseClient()
 
@@ -150,7 +152,10 @@ async function loadSpaces() {
       .from('trees')
       .select('id, name, species'),
   ])
-  const greens = greenData ?? []
+  const greens = (greenData ?? []).map(g => ({
+    ...g,
+    acceptingApplications: mockAcceptingApplications(g),
+  }))
   const escocells = (treeData ?? []).map(t => ({
     id: t.id,
     name: t.name ?? 'Escocell',

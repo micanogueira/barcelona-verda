@@ -28,3 +28,19 @@ Notas técnicas de funcionalidades discutidas mas ainda não implementadas. Cada
 - Sem push/email — confirmado que não é necessário. O "alerta" é só visual: o marcador already aparece destacado no mapa quando `is_available = true`.
 
 **Filtro no mapa (`index.vue`):** o filtro `tree` (label atual "Àrbres") já cobre essas marcações — não precisa de um filtro novo. Recomendo renomear o label para **"Àrbres (escocells)"** (ou "Arbres i escocells"), pra conectar visualmente com o nome do programa oficial que aparece em `participar.vue` e deixar claro que ao clicar num marcador desse filtro a pessoa vê o status de apadrinhamento, não só info botânica.
+
+**Implementado (mock, 2026-06-24):** `app/utils/escocell.js` centraliza a lógica mock (`mockEscocellStatus`), usada tanto pelo mapa (`BarcelonaMap.vue`) quanto pela lista (`index.vue`), pra garantir que os dois mostrem o mesmo status pra cada escocell. A classe CSS do marcador foi nomeada de forma genérica (`has-opportunity`) e os estilos de popup também (`popup-opportunity-*`), porque a funcionalidade seguinte (horts) reaproveita o mesmo padrão visual.
+
+---
+
+## Xarxa d'Horts Municipals — aviso de convocatòria aberta
+
+**Ideia:** o card "Xarxa d'Horts Municipals" afirma que a plataforma centraliza a info dos 15 horts e avisa quando abre uma nova convocatòria. A primeira parte já é estrutural (a lista/mapa já mostram cada hort com descrição, bairro etc.). A segunda parte — "avisar quando abre convocatòria" — exigia um conceito novo.
+
+**Decisão (2026-06-24):** igual ao escocell, a informação de "convocatòria aberta" vem do site oficial da cidade (curadoria manual por mediadores, sem API oficial), não é algo a plataforma gera. Não tem push/email — o "aviso" é visual: destaque no marcador do mapa + badge na lista, reaproveitando exatamente o padrão visual já criado pro escocell (`has-opportunity` no mapa, `.list-item-available` na lista).
+
+**Schema proposto:** `green_spaces.accepting_applications` (boolean, default `false`, curado manualmente). Por enquanto mockado em `app/utils/horts.js` (`mockAcceptingApplications`), determinístico por id, só pra `type === 'hort'`.
+
+**No mapa:** marcador do hort ganha o mesmo ponto de destaque amarelo (`has-opportunity`) e o popup mostra "Convocatòria oberta" + link pra `OFFICIAL_PROGRAM.hort.url` (mesma URL do card em `participar.vue`).
+
+**Na lista (`index.vue`):** badge "Convocatòria oberta" no lugar de "Cal ajuda"/"Disponible" quando aplicável (mesma classe `.list-item-available`, ordem de prioridade: ajuda > escocell disponível > convocatòria oberta).

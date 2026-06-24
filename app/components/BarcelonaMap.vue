@@ -6,6 +6,7 @@
 import maplibregl from 'maplibre-gl'
 import { iconMarkup } from '~/utils/icons'
 import { mockEscocellStatus, ESCOCELL_URL } from '~/utils/escocell'
+import { mockAcceptingApplications } from '~/utils/horts'
 
 const props = defineProps({
   filter: { type: String, default: 'all' },
@@ -78,10 +79,12 @@ async function loadGreenSpaces() {
 
     const iconName = ICON_BY_TYPE[space.type] ?? 'leaf'
     const color    = MARKER_COLOR[space.type] ?? '#52b788'
+    const openCall = mockAcceptingApplications(space)
 
     const wrapper = document.createElement('div')
     wrapper.className = 'map-marker-wrapper'
     if (space.needs_help) wrapper.classList.add('needs-help')
+    if (openCall) wrapper.classList.add('has-opportunity')
 
     const el = document.createElement('div')
     el.className = 'map-marker'
@@ -101,13 +104,18 @@ async function loadGreenSpaces() {
             ${space.neighborhood ? `<p class="popup-meta">${iconMarkup('pin', { size: 13 })} ${space.neighborhood}</p>` : ''}
             ${space.participant_count ? `<p class="popup-meta">${iconMarkup('users', { size: 13 })} ${space.participant_count} participants</p>` : ''}
             ${space.needs_help ? `<a href="/participar" class="popup-help-cta">Vull ajudar →</a>` : ''}
+            ${openCall ? `
+            <div class="popup-opportunity-status popup-opportunity-open">
+              ${iconMarkup('check', { size: 13 })} Convocatòria oberta
+              <a href="${OFFICIAL_PROGRAM.hort.url}" target="_blank" rel="noopener" class="popup-opportunity-cta">Veure convocatòria →</a>
+            </div>` : ''}
             ${OFFICIAL_PROGRAM[space.type] ? `
             <div class="popup-official">
               ${iconMarkup('info-circle', { size: 12 })}
               <span>Programa oficial:</span>
-              <a href="${OFFICIAL_PROGRAM[space.type].url}" target="_blank" rel="noopener">
-                ${OFFICIAL_PROGRAM[space.type].label} →
-              </a>
+              ${openCall
+                ? `<span>${OFFICIAL_PROGRAM[space.type].label}</span>`
+                : `<a href="${OFFICIAL_PROGRAM[space.type].url}" target="_blank" rel="noopener">${OFFICIAL_PROGRAM[space.type].label} →</a>`}
             </div>` : ''}
           </div>
         `)
@@ -133,7 +141,7 @@ async function loadTrees() {
 
     const wrapper = document.createElement('div')
     wrapper.className = 'map-marker-wrapper'
-    if (status.available) wrapper.classList.add('escocell-available')
+    if (status.available) wrapper.classList.add('has-opportunity')
 
     const el = document.createElement('div')
     el.className = 'map-marker'
@@ -142,9 +150,9 @@ async function loadTrees() {
     wrapper.appendChild(el)
 
     const statusHtml = status.available
-      ? `<div class="popup-escocell-status popup-escocell-available">
+      ? `<div class="popup-opportunity-status popup-opportunity-open">
            ${iconMarkup('check', { size: 13 })} Escocell disponible
-           <a href="${ESCOCELL_URL}" target="_blank" rel="noopener" class="popup-escocell-cta">Sol·licitar-lo →</a>
+           <a href="${ESCOCELL_URL}" target="_blank" rel="noopener" class="popup-opportunity-cta">Sol·licitar-lo →</a>
          </div>`
       : `<div class="popup-escocell-padri">
            ${status.photoUrl ? `<img class="popup-escocell-photo" src="${status.photoUrl}" alt="Escocell apadrinat" loading="lazy" />` : ''}
@@ -269,7 +277,7 @@ onUnmounted(() => map?.remove())
   justify-content: center;
   border: 1.5px solid #fff;
 }
-.map-marker-wrapper.escocell-available::after {
+.map-marker-wrapper.has-opportunity::after {
   content: '';
   position: absolute;
   top: -3px; right: -3px;
@@ -333,7 +341,7 @@ onUnmounted(() => map?.remove())
 .popup-tag--tree     { background: #d8f3dc; color: #1b4332; }
 .popup-content p { font-size: 13px; color: #4a5568; margin: 4px 0; }
 .popup-meta { display: flex; align-items: center; gap: 4px; color: #718096 !important; font-size: 12px !important; }
-.popup-escocell-status {
+.popup-opportunity-status {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -343,13 +351,13 @@ onUnmounted(() => map?.remove())
   border-top: 1px solid #e8f0e8;
   font-size: 12px;
 }
-.popup-escocell-available { color: #92740a; }
-.popup-escocell-cta {
+.popup-opportunity-open { color: #92740a; }
+.popup-opportunity-cta {
   color: #1d4ed8;
   text-decoration: none;
   font-weight: 700;
 }
-.popup-escocell-cta:hover { text-decoration: underline; }
+.popup-opportunity-cta:hover { text-decoration: underline; }
 
 /* Apadrinat (community layer): optional photo + "des de quan" + photo credit */
 .popup-escocell-padri {
