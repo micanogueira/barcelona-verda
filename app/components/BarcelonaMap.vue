@@ -5,6 +5,7 @@
 <script setup>
 import maplibregl from 'maplibre-gl'
 import { iconMarkup } from '~/utils/icons'
+import { mockEscocellStatus, ESCOCELL_URL } from '~/utils/escocell'
 
 const props = defineProps({
   filter: { type: String, default: 'all' },
@@ -36,39 +37,6 @@ const OFFICIAL_PROGRAM = {
   garden:  { label: "Cogestió d'Espais Públics",  url: 'https://ajuntament.barcelona.cat/espaisverds/ca/participa-hi/mans-al-verd/cogestio-despais-publics' },
   hort:    { label: "Xarxa d'Horts Municipals",   url: 'https://ajuntament.barcelona.cat/espaisverds/ca/participa-hi/mans-al-verd/xarxa-dhorts-municipals' },
   mediator: null,
-}
-
-const ESCOCELL_URL = 'https://ajuntament.barcelona.cat/espaisverds/ca/participa-hi/mans-al-verd/cuida-lescocell'
-
-// MOCK ONLY — until `trees.is_available` / `trees.padri_id` actually exist
-// (see docs/notas-funcionalidades.md). Two fixed demo examples by name; the rest
-// is generated deterministically from the id so the preview stays stable on reload.
-const MOCK_PADRI_NAMES = ['Laia', 'Jordi', 'Núria', 'Marc', 'Anna', 'Pere']
-
-// Free-licence photo of escocells in Barcelona (Passeig de Gràcia), CC BY-SA 3.0
-const ESCOCELL_PHOTO = 'https://upload.wikimedia.org/wikipedia/commons/a/a2/Bancs-escocell_del_Passeig_de_Gràcia.jpg'
-
-const MOCK_OVERRIDES = {
-  "Plàtan de Gràcia": { available: true },
-  "Om de l'Eixample": {
-    available: false,
-    padriName: 'Laia',
-    monthsAgo: 7,
-    photoUrl: ESCOCELL_PHOTO,
-    photoCredit: 'Pere López · CC BY-SA',
-  },
-}
-
-function mockEscocellStatus(tree) {
-  if (tree.name && MOCK_OVERRIDES[tree.name]) return MOCK_OVERRIDES[tree.name]
-  let hash = 0
-  for (const c of String(tree.id)) hash = (hash * 31 + c.charCodeAt(0)) >>> 0
-  if (hash % 100 < 25) return { available: true }
-  return {
-    available: false,
-    padriName: MOCK_PADRI_NAMES[hash % MOCK_PADRI_NAMES.length],
-    monthsAgo: 1 + (hash % 11),
-  }
 }
 
 onMounted(() => {
