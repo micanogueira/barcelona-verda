@@ -38,6 +38,39 @@ const OFFICIAL_PROGRAM = {
   mediator: null,
 }
 
+const ESCOCELL_URL = 'https://ajuntament.barcelona.cat/espaisverds/ca/participa-hi/mans-al-verd/cuida-lescocell'
+
+// MOCK ONLY — until `trees.is_available` / `trees.padri_id` actually exist
+// (see docs/notas-funcionalidades.md). Two fixed demo examples by name; the rest
+// is generated deterministically from the id so the preview stays stable on reload.
+const MOCK_PADRI_NAMES = ['Laia', 'Jordi', 'Núria', 'Marc', 'Anna', 'Pere']
+
+// Free-licence photo of escocells in Barcelona (Passeig de Gràcia), CC BY-SA 3.0
+const ESCOCELL_PHOTO = 'https://upload.wikimedia.org/wikipedia/commons/a/a2/Bancs-escocell_del_Passeig_de_Gràcia.jpg'
+
+const MOCK_OVERRIDES = {
+  "Plàtan de Gràcia": { available: true },
+  "Om de l'Eixample": {
+    available: false,
+    padriName: 'Laia',
+    monthsAgo: 7,
+    photoUrl: ESCOCELL_PHOTO,
+    photoCredit: 'Pere López · CC BY-SA',
+  },
+}
+
+function mockEscocellStatus(tree) {
+  if (tree.name && MOCK_OVERRIDES[tree.name]) return MOCK_OVERRIDES[tree.name]
+  let hash = 0
+  for (const c of String(tree.id)) hash = (hash * 31 + c.charCodeAt(0)) >>> 0
+  if (hash % 100 < 25) return { available: true }
+  return {
+    available: false,
+    padriName: MOCK_PADRI_NAMES[hash % MOCK_PADRI_NAMES.length],
+    monthsAgo: 1 + (hash % 11),
+  }
+}
+
 onMounted(() => {
   map = new maplibregl.Map({
     container: mapContainer.value,
@@ -128,8 +161,11 @@ async function loadTrees() {
     const coords = parseLocation(tree.location)
     if (!coords) return
 
+    const status = mockEscocellStatus(tree)
+
     const wrapper = document.createElement('div')
     wrapper.className = 'map-marker-wrapper'
+    if (status.available) wrapper.classList.add('escocell-available')
 
     const el = document.createElement('div')
     el.className = 'map-marker'
@@ -137,15 +173,29 @@ async function loadTrees() {
     el.innerHTML = iconMarkup('pine', { size: 17 })
     wrapper.appendChild(el)
 
+    const statusHtml = status.available
+      ? `<div class="popup-escocell-status popup-escocell-available">
+           ${iconMarkup('check', { size: 13 })} Escocell disponible
+           <a href="${ESCOCELL_URL}" target="_blank" rel="noopener" class="popup-escocell-cta">Sol·licitar-lo →</a>
+         </div>`
+      : `<div class="popup-escocell-padri">
+           ${status.photoUrl ? `<img class="popup-escocell-photo" src="${status.photoUrl}" alt="Escocell apadrinat" loading="lazy" />` : ''}
+           <span class="popup-escocell-padri-line">
+             ${iconMarkup('user', { size: 13 })} Apadrinat per ${status.padriName}, des de fa ${status.monthsAgo} ${status.monthsAgo === 1 ? 'mes' : 'mesos'}
+           </span>
+           ${status.photoCredit ? `<span class="popup-photo-credit">Foto: ${status.photoCredit}</span>` : ''}
+         </div>`
+
     const marker = new maplibregl.Marker({ element: wrapper, anchor: 'center' })
       .setLngLat(coords)
       .setPopup(
         new maplibregl.Popup({ offset: 20 }).setHTML(`
           <div class="popup-content">
-            <strong>${tree.name ?? 'Arbre'}</strong>
-            <span class="popup-tag popup-tag--tree">Arbre</span>
+            <strong>${tree.name ?? 'Escocell'}</strong>
+            <span class="popup-tag popup-tag--tree">Escocell</span>
             ${tree.species ? `<p>${tree.species}</p>` : ''}
             ${tree.health ? `<p class="popup-meta">${iconMarkup('leaf', { size: 13 })} Estat: ${tree.health}</p>` : ''}
+            ${statusHtml}
           </div>
         `)
       )
@@ -251,6 +301,15 @@ onUnmounted(() => map?.remove())
   justify-content: center;
   border: 1.5px solid #fff;
 }
+.map-marker-wrapper.escocell-available::after {
+  content: '';
+  position: absolute;
+  top: -3px; right: -3px;
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: #facc15;
+  border: 1.5px solid #fff;
+}
 
 .popup-content { font-family: 'Inter', sans-serif; min-width: 190px; }
 .popup-help-banner {
@@ -306,6 +365,48 @@ onUnmounted(() => map?.remove())
 .popup-tag--tree     { background: #d8f3dc; color: #1b4332; }
 .popup-content p { font-size: 13px; color: #4a5568; margin: 4px 0; }
 .popup-meta { display: flex; align-items: center; gap: 4px; color: #718096 !important; font-size: 12px !important; }
+.popup-escocell-status {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #e8f0e8;
+  font-size: 12px;
+}
+.popup-escocell-available { color: #92740a; }
+.popup-escocell-cta {
+  color: #1d4ed8;
+  text-decoration: none;
+  font-weight: 700;
+}
+.popup-escocell-cta:hover { text-decoration: underline; }
+
+/* Apadrinat (community layer): optional photo + "des de quan" + photo credit */
+.popup-escocell-padri {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #e8f0e8;
+}
+.popup-escocell-padri-line {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #718096;
+}
+.popup-escocell-photo {
+  display: block;
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+.popup-photo-credit { font-size: 10px; color: #a0aec0; }
 </style>
 
 <style scoped>

@@ -151,7 +151,7 @@ const filters = [
   { value: 'all',      icon: 'map',          label: 'Tots els espais' },
   { value: 'park',     icon: 'trees',        label: 'Parcs i jardins' },
   { value: 'hort',     icon: 'carrot',       label: 'Horts urbans' },
-  { value: 'tree',     icon: 'pine',         label: 'Àrbres' },
+  { value: 'tree',     icon: 'pine',         label: 'Àrbres (escocells)' },
   { value: 'mediator', icon: 'info-circle',  label: "Punts d'informació" },
   { value: 'help',     icon: 'lifebuoy',     label: 'On cal ajuda' },
 ]
