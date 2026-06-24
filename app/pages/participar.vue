@@ -154,7 +154,8 @@ const steps = [
 .page-header p { font-size: 18px; color: #4a7c59; max-width: 580px; margin: 0 auto 12px; }
 .page-header-sub { font-size: 16px !important; color: #2d6a4f !important; font-weight: 600; }
 
-.check-icon { flex-shrink: 0; }
+/* margin-top aligns the check with the first text line when the text wraps onto multiple lines */
+.check-icon { flex-shrink: 0; margin-top: 3px; }
 
 /* Unified options grid */
 .all-options {
@@ -173,7 +174,7 @@ const steps = [
 }
 .card-actions li {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 7px;
   font-size: 13px;
   color: #2d6a4f;
