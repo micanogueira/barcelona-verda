@@ -37,12 +37,31 @@ const MARKER_COLOR = {
   reserva:  '#0d9488',
 }
 
-const OFFICIAL_PROGRAM = {
-  park:    { label: "Cogestió d'Espais Públics",  url: 'https://ajuntament.barcelona.cat/espaisverds/ca/participa-hi/mans-al-verd/cogestio-despais-publics' },
-  garden:  { label: "Cogestió d'Espais Públics",  url: 'https://ajuntament.barcelona.cat/espaisverds/ca/participa-hi/mans-al-verd/cogestio-despais-publics' },
-  hort:    { label: "Xarxa d'Horts Municipals",   url: 'https://ajuntament.barcelona.cat/espaisverds/ca/participa-hi/mans-al-verd/xarxa-dhorts-municipals' },
-  reserva: { label: "Cessió d'Espais Municipals", url: 'https://ajuntament.barcelona.cat/espaisverds/ca/participa-hi/mans-al-verd/cessio-despais-municipals-dus-comunitari' },
-  mediator: null,
+const PROGRAM = {
+  horts:    { label: "Xarxa d'Horts Municipals",   url: 'https://ajuntament.barcelona.cat/espaisverds/ca/participa-hi/mans-al-verd/xarxa-dhorts-municipals' },
+  cessio:   { label: "Cessió d'Espais Municipals", url: 'https://ajuntament.barcelona.cat/espaisverds/ca/participa-hi/mans-al-verd/cessio-despais-municipals-dus-comunitari' },
+  cogestio: { label: "Cogestió d'Espais Públics",  url: 'https://ajuntament.barcelona.cat/espaisverds/ca/participa-hi/mans-al-verd/cogestio-despais-publics' },
+}
+
+// Intrinsic official program per type. `garden` is omitted on purpose: a garden
+// can belong to Cessió, Cogestió, or both at once, so its footer is derived from
+// the badges actually present (see officialProgramsFor).
+const PROGRAM_BY_TYPE = {
+  hort:    PROGRAM.horts,
+  reserva: PROGRAM.cessio,
+  park:    PROGRAM.cogestio,
+}
+
+// Official program(s) shown in the popup footer, kept aligned with the badges.
+function officialProgramsFor(space, { cededTo, cogestionat }) {
+  if (space.type === 'garden') {
+    // A plain garden in neither program shows no official-program footer
+    const progs = []
+    if (cededTo)     progs.push(PROGRAM.cessio)
+    if (cogestionat) progs.push(PROGRAM.cogestio)
+    return progs
+  }
+  return PROGRAM_BY_TYPE[space.type] ? [PROGRAM_BY_TYPE[space.type]] : []
 }
 
 onMounted(() => {
@@ -87,6 +106,7 @@ async function loadGreenSpaces() {
     const openCall    = mockAcceptingApplications(space)
     const cededTo     = mockCededTo(space)
     const cogestionat = mockCogestionat(space)
+    const programs    = officialProgramsFor(space, { cededTo, cogestionat })
 
     const wrapper = document.createElement('div')
     wrapper.className = 'map-marker-wrapper'
@@ -128,15 +148,15 @@ async function loadGreenSpaces() {
             ${openCall ? `
             <div class="popup-opportunity-status popup-opportunity-open">
               ${iconMarkup('check', { size: 13 })} Convocatòria oberta
-              <a href="${OFFICIAL_PROGRAM.hort.url}" target="_blank" rel="noopener" class="popup-opportunity-cta">Veure convocatòria →</a>
+              <a href="${PROGRAM.horts.url}" target="_blank" rel="noopener" class="popup-opportunity-cta">Veure convocatòria →</a>
             </div>` : ''}
-            ${OFFICIAL_PROGRAM[space.type] ? `
+            ${programs.length ? `
             <div class="popup-official">
               ${iconMarkup('info-circle', { size: 12 })}
               <span>Programa oficial:</span>
-              ${openCall
-                ? `<span>${OFFICIAL_PROGRAM[space.type].label}</span>`
-                : `<a href="${OFFICIAL_PROGRAM[space.type].url}" target="_blank" rel="noopener">${OFFICIAL_PROGRAM[space.type].label} →</a>`}
+              ${programs.map(p => (openCall && p === PROGRAM.horts)
+                ? `<span>${p.label}</span>`
+                : `<a href="${p.url}" target="_blank" rel="noopener">${p.label} →</a>`).join(' · ')}
             </div>` : ''}
           </div>
         `)
