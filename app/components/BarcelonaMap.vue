@@ -23,6 +23,7 @@ const ICON_BY_TYPE = {
   garden:   'flower',
   hort:     'carrot',
   mediator: 'info-circle',
+  reserva:  'seedling',
 }
 
 const MARKER_COLOR = {
@@ -31,12 +32,14 @@ const MARKER_COLOR = {
   hort:     '#e08e29',
   mediator: '#6366f1',
   tree:     '#52b788',
+  reserva:  '#0d9488',
 }
 
 const OFFICIAL_PROGRAM = {
   park:    { label: 'Mans al Verd',               url: 'https://ajuntament.barcelona.cat/espaisverds/ca/participa-hi/mans-al-verd' },
   garden:  { label: "Cogestió d'Espais Públics",  url: 'https://ajuntament.barcelona.cat/espaisverds/ca/participa-hi/mans-al-verd/cogestio-despais-publics' },
   hort:    { label: "Xarxa d'Horts Municipals",   url: 'https://ajuntament.barcelona.cat/espaisverds/ca/participa-hi/mans-al-verd/xarxa-dhorts-municipals' },
+  reserva: { label: "Cessió d'Espais Municipals", url: 'https://ajuntament.barcelona.cat/espaisverds/ca/participa-hi/mans-al-verd/cessio-despais-municipals-dus-comunitari' },
   mediator: null,
 }
 
@@ -215,7 +218,7 @@ function setVisible(marker, visible) {
 }
 
 function labelByType(type) {
-  return { park: 'Parc', garden: 'Jardí', hort: 'Hort urbà', mediator: "Punt d'informació", tree: 'Arbre' }[type] ?? type
+  return { park: 'Parc', garden: 'Jardí', hort: 'Hort urbà', mediator: "Punt d'informació", tree: 'Arbre', reserva: 'Reserva de biodiversitat' }[type] ?? type
 }
 
 function parseLocation(location) {
@@ -352,6 +355,7 @@ onUnmounted(() => map?.remove())
 .popup-tag--hort     { background: #fef3e2; color: #9a5e0a; }
 .popup-tag--mediator { background: #ede9fe; color: #4f46e5; }
 .popup-tag--tree     { background: #d8f3dc; color: #1b4332; }
+.popup-tag--reserva  { background: #ccfbf1; color: #0f766e; }
 .popup-content p { font-size: 13px; color: #4a5568; margin: 4px 0; }
 .popup-meta { display: flex; align-items: center; gap: 4px; color: #718096 !important; font-size: 12px !important; }
 .popup-opportunity-status {

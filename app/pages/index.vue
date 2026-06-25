@@ -118,10 +118,10 @@ onMounted(() => {
   onUnmounted(() => clearTimeout(timer))
 })
 
-const iconByType = { park: 'trees', garden: 'flower', hort: 'carrot', mediator: 'info-circle', tree: 'pine' }
-const colorByType = { park: '#2d6a4f', garden: '#c75c9e', hort: '#e08e29', mediator: '#6366f1', tree: '#52b788' }
+const iconByType = { park: 'trees', garden: 'flower', hort: 'carrot', mediator: 'info-circle', tree: 'pine', reserva: 'seedling' }
+const colorByType = { park: '#2d6a4f', garden: '#c75c9e', hort: '#e08e29', mediator: '#6366f1', tree: '#52b788', reserva: '#0d9488' }
 function labelByType(type) {
-  return { park: 'Parc', garden: 'Jardí', hort: 'Hort urbà', mediator: "Punt d'informació", tree: 'Escocell' }[type] ?? type
+  return { park: 'Parc', garden: 'Jardí', hort: 'Hort urbà', mediator: "Punt d'informació", tree: 'Escocell', reserva: 'Reserva de biodiversitat' }[type] ?? type
 }
 
 const mapRef = ref(null)
@@ -173,6 +173,7 @@ const filters = [
   { value: 'all',      icon: 'map',          label: 'Tots els espais' },
   { value: 'park',     icon: 'trees',        label: 'Parcs i jardins' },
   { value: 'hort',     icon: 'carrot',       label: 'Horts urbans' },
+  { value: 'reserva',  icon: 'seedling',     label: 'Reserves de biodiversitat' },
   { value: 'tree',     icon: 'pine',         label: 'Àrbres (escocells)' },
   { value: 'mediator', icon: 'info-circle',  label: "Punts d'informació" },
   { value: 'help',     icon: 'lifebuoy',     label: 'On cal ajuda' },
