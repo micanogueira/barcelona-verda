@@ -37,7 +37,7 @@ const MARKER_COLOR = {
 }
 
 const OFFICIAL_PROGRAM = {
-  park:    { label: 'Mans al Verd',               url: 'https://ajuntament.barcelona.cat/espaisverds/ca/participa-hi/mans-al-verd' },
+  park:    { label: "Cogestió d'Espais Públics",  url: 'https://ajuntament.barcelona.cat/espaisverds/ca/participa-hi/mans-al-verd/cogestio-despais-publics' },
   garden:  { label: "Cogestió d'Espais Públics",  url: 'https://ajuntament.barcelona.cat/espaisverds/ca/participa-hi/mans-al-verd/cogestio-despais-publics' },
   hort:    { label: "Xarxa d'Horts Municipals",   url: 'https://ajuntament.barcelona.cat/espaisverds/ca/participa-hi/mans-al-verd/xarxa-dhorts-municipals' },
   reserva: { label: "Cessió d'Espais Municipals", url: 'https://ajuntament.barcelona.cat/espaisverds/ca/participa-hi/mans-al-verd/cessio-despais-municipals-dus-comunitari' },

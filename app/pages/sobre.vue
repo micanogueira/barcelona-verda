@@ -24,7 +24,7 @@
             <li>Una capa de visibilitat que mostra quins espais necessiten més ajuda i com creix el moviment per tota la ciutat</li>
           </ul>
           <p>
-            Actua com a porta d'entrada als programes oficials ja existents, com Mans al Verd, la XHM o Cuida l'escocell, fent-los més fàcils de trobar, d'iniciar i de mantenir en el temps.
+            Actua com a porta d'entrada als programes oficials ja existents, com la Cessió d'Espais, la XHM o Cuida l'escocell, fent-los més fàcils de trobar, d'iniciar i de mantenir en el temps.
           </p>
           <div class="about-team">
             <span class="about-team-label">Equip</span>

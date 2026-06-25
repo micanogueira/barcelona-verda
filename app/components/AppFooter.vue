@@ -21,7 +21,8 @@
           <span class="footer-col-title">Programes oficials</span>
           <a href="https://ajuntament.barcelona.cat/espaisverds/ca/participa-hi/mans-al-verd/cuida-lescocell" target="_blank" rel="noopener">Cuida l'escocell</a>
           <a href="https://ajuntament.barcelona.cat/espaisverds/ca/participa-hi/mans-al-verd/xarxa-dhorts-municipals" target="_blank" rel="noopener">Xarxa d'Horts Municipals</a>
-          <a href="https://ajuntament.barcelona.cat/espaisverds/ca/participa-hi/mans-al-verd" target="_blank" rel="noopener">Mans al Verd</a>
+          <a href="https://ajuntament.barcelona.cat/espaisverds/ca/participa-hi/mans-al-verd/cessio-despais-municipals-dus-comunitari" target="_blank" rel="noopener">Cessió d'Espais Municipals</a>
+          <a href="https://ajuntament.barcelona.cat/espaisverds/ca/participa-hi/mans-al-verd/cogestio-despais-publics" target="_blank" rel="noopener">Cogestió d'Espais Públics</a>
           <a href="https://ajuntament.barcelona.cat/espaisverds/ca" target="_blank" rel="noopener">Espais Verds BCN ↗</a>
         </div>
       </nav>
