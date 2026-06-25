@@ -129,8 +129,8 @@ const officialPrograms = [
     icon: 'users',
     color: '#c75c9e',
     title: "Cogestió d'Espais Públics",
-    description: "Entitats sense ànim de lucre poden cogestionar parterres, jardineres o basses naturalitzades durant 2 anys, via formulari.",
-    bvAdds: "Un mapa on les entitats en cogestió es poden donar a conèixer al seu barri — avui aquesta informació no és pública en cap lloc oficial.",
+    description: "Entitats sense ànim de lucre poden cogestionar parterres i jardineres dels parcs urbans durant 2 anys, via formulari.",
+    bvAdds: "Més transparència per a la comunitat: al mapa veus quina entitat sense ànim de lucre cogestiona cada parc cogestionat.",
     officialUrl: "https://ajuntament.barcelona.cat/espaisverds/ca/participa-hi/mans-al-verd/cogestio-despais-publics",
   },
 ]

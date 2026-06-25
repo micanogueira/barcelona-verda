@@ -8,6 +8,7 @@ import { iconMarkup } from '~/utils/icons'
 import { mockEscocellStatus, ESCOCELL_URL } from '~/utils/escocell'
 import { mockAcceptingApplications } from '~/utils/horts'
 import { mockCededTo } from '~/utils/cessions'
+import { mockCogestionat } from '~/utils/cogestio'
 
 const props = defineProps({
   filter: { type: String, default: 'all' },
@@ -83,8 +84,9 @@ async function loadGreenSpaces() {
 
     const iconName = ICON_BY_TYPE[space.type] ?? 'leaf'
     const color    = MARKER_COLOR[space.type] ?? '#52b788'
-    const openCall = mockAcceptingApplications(space)
-    const cededTo  = mockCededTo(space)
+    const openCall    = mockAcceptingApplications(space)
+    const cededTo     = mockCededTo(space)
+    const cogestionat = mockCogestionat(space)
 
     const wrapper = document.createElement('div')
     wrapper.className = 'map-marker-wrapper'
@@ -117,6 +119,11 @@ async function loadGreenSpaces() {
             <div class="popup-ceded-badge">
               <span class="popup-ceded-label">${iconMarkup('users', { size: 12 })} Gestionat per</span>
               <span class="popup-ceded-name">${cededTo}</span>
+            </div>` : ''}
+            ${cogestionat ? `
+            <div class="popup-cogestio-badge">
+              <span class="popup-cogestio-label">${iconMarkup('leaf', { size: 12 })} Cogestionat per</span>
+              <span class="popup-cogestio-name">${cogestionat}</span>
             </div>` : ''}
             ${openCall ? `
             <div class="popup-opportunity-status popup-opportunity-open">
@@ -359,6 +366,28 @@ onUnmounted(() => map?.remove())
   white-space: nowrap;
 }
 .popup-ceded-badge .popup-ceded-name { font-size: 11px; font-weight: 600; }
+.popup-cogestio-badge {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 3px 5px;
+  background: #eef2ff;
+  color: #4338ca;
+  font-size: 11px;
+  font-weight: 400;
+  padding: 5px 9px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  border: 1px solid #dbe3fc;
+}
+.popup-cogestio-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+.popup-cogestio-badge .popup-cogestio-name { font-size: 11px; font-weight: 600; }
 .popup-official {
   display: flex;
   align-items: center;

@@ -40,6 +40,7 @@
                 <p v-if="space.participant_count" class="list-item-meta"><AppIcon name="users" :size="13" />{{ space.participant_count }} participants</p>
                 <p v-if="space.escocell && !space.escocell.available" class="list-item-meta"><AppIcon name="user" :size="13" />Apadrinat per {{ space.escocell.padriName }}</p>
                 <p v-if="space.cededTo" class="list-item-meta"><AppIcon name="users" :size="13" />Gestionat per {{ space.cededTo }}</p>
+                <p v-if="space.cogestionat" class="list-item-meta"><AppIcon name="leaf" :size="13" />Cogestionat per {{ space.cogestionat }}</p>
               </div>
               <div class="list-item-right">
                 <span v-if="space.needs_help" class="list-item-help">Cal ajuda</span>
@@ -106,6 +107,7 @@
 import { mockEscocellStatus } from '~/utils/escocell'
 import { mockAcceptingApplications } from '~/utils/horts'
 import { mockCededTo } from '~/utils/cessions'
+import { mockCogestionat } from '~/utils/cogestio'
 
 const supabase = useSupabaseClient()
 
@@ -158,6 +160,7 @@ async function loadSpaces() {
     ...g,
     acceptingApplications: mockAcceptingApplications(g),
     cededTo: mockCededTo(g),
+    cogestionat: mockCogestionat(g),
   }))
   const escocells = (treeData ?? []).map(t => ({
     id: t.id,
