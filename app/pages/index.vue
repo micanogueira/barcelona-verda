@@ -177,10 +177,10 @@ watch(viewMode, (val) => { if (val === 'list' && !spaces.value.length) loadSpace
 
 const filters = [
   { value: 'all',      icon: 'map',          label: 'Tots els espais' },
-  { value: 'park',     icon: 'trees',        label: 'Parcs i jardins' },
-  { value: 'hort',     icon: 'carrot',       label: 'Horts urbans' },
-  { value: 'reserva',  icon: 'seedling',     label: 'Reserves de biodiversitat' },
   { value: 'tree',     icon: 'pine',         label: 'Àrbres (escocells)' },
+  { value: 'hort',     icon: 'carrot',       label: 'Horts urbans' },
+  { value: 'park',     icon: 'trees',        label: 'Parcs i jardins' },
+  { value: 'reserva',  icon: 'seedling',     label: 'Reserves de biodiversitat' },
   { value: 'mediator', icon: 'info-circle',  label: "Punts d'informació" },
   { value: 'help',     icon: 'lifebuoy',     label: 'On cal ajuda' },
 ]
