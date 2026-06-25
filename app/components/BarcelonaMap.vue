@@ -7,6 +7,7 @@ import maplibregl from 'maplibre-gl'
 import { iconMarkup } from '~/utils/icons'
 import { mockEscocellStatus, ESCOCELL_URL } from '~/utils/escocell'
 import { mockAcceptingApplications } from '~/utils/horts'
+import { mockCededTo } from '~/utils/cessions'
 
 const props = defineProps({
   filter: { type: String, default: 'all' },
@@ -83,6 +84,7 @@ async function loadGreenSpaces() {
     const iconName = ICON_BY_TYPE[space.type] ?? 'leaf'
     const color    = MARKER_COLOR[space.type] ?? '#52b788'
     const openCall = mockAcceptingApplications(space)
+    const cededTo  = mockCededTo(space)
 
     const wrapper = document.createElement('div')
     wrapper.className = 'map-marker-wrapper'
@@ -111,6 +113,11 @@ async function loadGreenSpaces() {
             ${space.description ? `<p>${space.description}</p>` : ''}
             ${space.neighborhood ? `<p class="popup-meta">${iconMarkup('pin', { size: 13 })} ${space.neighborhood}</p>` : ''}
             ${space.participant_count ? `<p class="popup-meta">${iconMarkup('users', { size: 13 })} ${space.participant_count} participants</p>` : ''}
+            ${cededTo ? `
+            <div class="popup-ceded-badge">
+              <span class="popup-ceded-label">${iconMarkup('users', { size: 12 })} Gestionat per</span>
+              <span class="popup-ceded-name">${cededTo}</span>
+            </div>` : ''}
             ${openCall ? `
             <div class="popup-opportunity-status popup-opportunity-open">
               ${iconMarkup('check', { size: 13 })} Convocatòria oberta
@@ -330,6 +337,28 @@ onUnmounted(() => map?.remove())
   text-decoration: none;
 }
 .popup-help-cta:hover { background: #c53030; }
+.popup-ceded-badge {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 3px 5px;
+  background: #f0faf4;
+  color: #4a7c59;
+  font-size: 11px;
+  font-weight: 400;
+  padding: 5px 9px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  border: 1px solid #d6f0e0;
+}
+.popup-ceded-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+.popup-ceded-badge .popup-ceded-name { font-size: 11px; font-weight: 600; }
 .popup-official {
   display: flex;
   align-items: center;

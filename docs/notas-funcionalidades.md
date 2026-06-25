@@ -44,3 +44,21 @@ Notas técnicas de funcionalidades discutidas mas ainda não implementadas. Cada
 **No mapa:** marcador do hort ganha o mesmo ponto de destaque amarelo (`has-opportunity`) e o popup mostra "Convocatòria oberta" + link pra `OFFICIAL_PROGRAM.hort.url` (mesma URL do card em `participar.vue`).
 
 **Na lista (`index.vue`):** badge "Convocatòria oberta" no lugar de "Cal ajuda"/"Disponible" quando aplicável (mesma classe `.list-item-available`, ordem de prioridade: ajuda > escocell disponível > convocatòria oberta).
+
+---
+
+## Cessió d'Espais Municipals — visibilidade da entidade gestora
+
+**Ideia:** o card afirma centralizar espaços cedidos ativos e avisar de próximas convocatórias. Na prática, são duas afirmações de viabilidade muito diferente.
+
+**O que o programa real cobre** (confirmado na página oficial, 2026-06-24): a Prefeitura cede solars municipais inativos a **entitats sense ànim de lucre** (não empresas) para criar horts, jardins comunitaris OU reserves de biodiversitat — não é restrito a jardins. O espaço continua de uso comunitário/autogestionado; a Prefeitura mantém a titularidade.
+
+**Parte inviável:** "properes convocatòries" se refere a solars que ainda não foram cedidos — não existe nenhuma linha em `green_spaces` pra isso, já que a tabela só tem espaços já ativos. Não há nada pra mostrar no mapa; essa parte do texto foi descartada.
+
+**Parte viável (mockada):** mostrar qual entidade já gere um espaço cedido. Implementado em `app/utils/cessions.js` (`mockCededTo`), badge "Gestionat per [entitat]" no popup do mapa (`BarcelonaMap.vue`) e meta-line equivalente na lista (`index.vue`), pra lista espelhar o mapa. Sem ponto de destaque no marcador (é informativo, não uma oportunidade de ação).
+
+**Escopo do mock (atualizado 2026-06-24):** aplicado a `garden` (jardí comunitari), `hort` e ao novo type `reserva` (reserva de biodiversitat) — exatamente os três resultados que o programa oficial cobre. Decisão confirmada com a Micaelle: **um type pode pertencer a mais de um programa** (ex.: `hort` também aparece em "Xarxa d'Horts Municipals", `garden` também em "Cogestió d'Espais Públics") — a sobreposição é aceitável, então nenhum type é excluído. O `park` foi **removido** do escopo: a cessão é sobre solars/terrenos pequenos cedidos, não parques municipais grandes já existentes.
+
+**Type `reserva` (criado 2026-06-24):** novo valor no constraint de `green_spaces.type` (`supabase/patch-003.sql`), com 2 reserves de mostra seedadas. Registrado no frontend: ícone `seedling`, cor `#0d9488` (teal), label "Reserva de biodiversitat", filtro próprio "Reserves de biodiversitat", e `OFFICIAL_PROGRAM.reserva` → "Cessió d'Espais Municipals".
+
+**Schema proposto (entidade gestora):** `green_spaces.ceded_to_entity_name` (text, nullable, curado manualmente) ou uma tabela `entities` própria se o produto crescer (nome, tipo de entidade, contato).

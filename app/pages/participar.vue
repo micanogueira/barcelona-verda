@@ -121,7 +121,7 @@ const officialPrograms = [
     color: '#2d6a4f',
     title: "Cessió d'Espais Municipals",
     description: "Solars municipals inactius cedits a entitats sense ànim de lucre per crear-hi horts, jardins comunitaris o reserves de biodiversitat.",
-    bvAdds: "Mapa amb els espais cedits actius i les properes convocatòries, perquè una entitat sàpiga d'un cop d'ull on hi ha oportunitats al seu barri — el procés oficial és opac i sense cap llistat centralitzat.",
+    bvAdds: "Més transparència per a la comunitat: al mapa veus quina entitat sense ànim de lucre gestiona cada espai verd cedit.",
     officialUrl: "https://ajuntament.barcelona.cat/espaisverds/ca/participa-hi/mans-al-verd/cessio-despais-municipals-dus-comunitari",
   },
   {

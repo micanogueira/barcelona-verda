@@ -39,6 +39,7 @@
                 <p v-if="space.description" class="list-item-desc">{{ space.description }}</p>
                 <p v-if="space.participant_count" class="list-item-meta"><AppIcon name="users" :size="13" />{{ space.participant_count }} participants</p>
                 <p v-if="space.escocell && !space.escocell.available" class="list-item-meta"><AppIcon name="user" :size="13" />Apadrinat per {{ space.escocell.padriName }}</p>
+                <p v-if="space.cededTo" class="list-item-meta"><AppIcon name="users" :size="13" />Gestionat per {{ space.cededTo }}</p>
               </div>
               <div class="list-item-right">
                 <span v-if="space.needs_help" class="list-item-help">Cal ajuda</span>
@@ -104,6 +105,7 @@
 <script setup>
 import { mockEscocellStatus } from '~/utils/escocell'
 import { mockAcceptingApplications } from '~/utils/horts'
+import { mockCededTo } from '~/utils/cessions'
 
 const supabase = useSupabaseClient()
 
@@ -155,6 +157,7 @@ async function loadSpaces() {
   const greens = (greenData ?? []).map(g => ({
     ...g,
     acceptingApplications: mockAcceptingApplications(g),
+    cededTo: mockCededTo(g),
   }))
   const escocells = (treeData ?? []).map(t => ({
     id: t.id,
