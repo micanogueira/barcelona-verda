@@ -66,7 +66,7 @@
         <div v-if="welcomeVisible && viewMode !== 'list'" class="hero-overlay">
           <button class="hero-close" @click="welcomeVisible = false" aria-label="Tancar">×</button>
           <div class="hero-badge">
-            <AppIcon name="leaf" :size="13" /> Barcelona Verd
+            <AppIcon name="leaf" :size="13" /> Barcelona Verda
           </div>
           <h1 class="hero-title">La porta d'entrada als espais verds de Barcelona</h1>
           <p class="hero-desc">Descobreix parcs, horts, jardins i programes oficials: tot en un sol mapa interactiu.</p>

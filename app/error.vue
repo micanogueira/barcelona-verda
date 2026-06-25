@@ -35,7 +35,7 @@ const description = computed(() =>
     : "Hi ha hagut un error inesperat. Torna a l'inici i continua explorant.",
 )
 
-useHead({ title: `${is404.value ? '404' : 'Error'} · Barcelona Verd` })
+useHead({ title: `${is404.value ? '404' : 'Error'} · Barcelona Verda` })
 
 const goHome = () => clearError({ redirect: '/' })
 </script>

@@ -4,7 +4,7 @@
 
     <header class="page-header">
       <h1>Com pots participar?</h1>
-      <p>El projecte Barcelona Verd connecta veïns, voluntaris i la ciutat per crear espais verds junts. Aquí trobaràs totes les formes de participació i els programes oficials, en un sol lloc.</p>
+      <p>El projecte Barcelona Verda connecta veïns, voluntaris i la ciutat per crear espais verds junts. Aquí trobaràs totes les formes de participació i els programes oficials, en un sol lloc.</p>
       <p>Siguis voluntari/ària, mediador/a o ciutadà/ana actiu/va, hi ha un rol per a tothom.</p>
     </header>
 
@@ -85,7 +85,7 @@ const roles = [
     icon: 'heart',
     title: 'Voluntari/ària',
     color: '#e2725b',
-    description: 'Acompanyes veïns que volen participar però no saben per on començar, ajudant-los a connectar amb Barcelona Verd i amb els programes oficials.',
+    description: 'Acompanyes veïns que volen participar però no saben per on començar, ajudant-los a connectar amb Barcelona Verda i amb els programes oficials.',
     actions: [
       'Integres els nouvinguts a la plataforma',
       'Proveeixes de material els punts d\'informació i formes els mediadors/ores de la xarxa',
@@ -138,7 +138,7 @@ const officialPrograms = [
 const steps = [
   { title: 'Explora', text: 'Obre el mapa interactiu i descobreix els espais verds, horts i arbres del teu barri — sense necessitat de compte.' },
   { title: 'Tria com participar', text: 'Vols ser voluntari, mediador de xarxa o accedir directament a un programa oficial de l\'Ajuntament?' },
-  { title: 'Registra\'t o accedeix', text: 'Crea el teu compte a Barcelona Verd per als rols de la plataforma, o accedeix al programa oficial que t\'interessa.' },
+  { title: 'Registra\'t o accedeix', text: 'Crea el teu compte a Barcelona Verda per als rols de la plataforma, o accedeix al programa oficial que t\'interessa.' },
   { title: 'Fes créixer la xarxa', text: 'La teva participació és visible al mapa i inspira altres veïns dels 73 barris de Barcelona.' },
 ]
 </script>

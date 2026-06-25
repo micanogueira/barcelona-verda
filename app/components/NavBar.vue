@@ -2,7 +2,7 @@
   <nav class="navbar" :class="{ floating }">
     <NuxtLink to="/" class="navbar-brand">
       <AppIcon name="leaf" :size="20" class="leaf-icon" />
-      <span class="brand-name">Barcelona Verd</span>
+      <span class="brand-name">Barcelona Verda</span>
     </NuxtLink>
 
     <div v-if="stats" class="navbar-stats">

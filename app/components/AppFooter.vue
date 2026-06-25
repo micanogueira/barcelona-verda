@@ -3,7 +3,7 @@
     <div class="footer-inner">
       <div class="footer-brand">
         <span class="footer-logo">
-          <AppIcon name="leaf" :size="16" /> Barcelona Verd
+          <AppIcon name="leaf" :size="16" /> Barcelona Verda
         </span>
         <p>Una plataforma ciutadana per als espais verds urbans de Barcelona.</p>
         <p class="footer-academic">Projecte acadèmic · Sustainable Smart Cities · EuroTeQ 2026</p>
@@ -29,7 +29,7 @@
     </div>
 
     <div class="footer-bottom">
-      <span>© 2026 Barcelona Verd</span>
+      <span>© 2026 Barcelona Verda</span>
       <span class="footer-sep">·</span>
       <span>Jacob Stark · Marta Alfonso · Mehdike Ruveyda · Micaelle Nogueira</span>
     </div>

@@ -9,7 +9,7 @@
 const url = useRequestURL()
 const ogImage = `${url.origin}/og-image.png`
 
-const title = "Barcelona Verd · Espais verds de Barcelona"
+const title = "Barcelona Verda · Espais verds de Barcelona"
 const description = "La porta d'entrada als espais verds de Barcelona: descobreix parcs, horts, jardins i programes oficials en un sol mapa interactiu."
 
 // Social link previews (WhatsApp, Telegram, X, etc.)
@@ -17,14 +17,14 @@ useSeoMeta({
   title,
   description,
   ogType: 'website',
-  ogSiteName: 'Barcelona Verd',
+  ogSiteName: 'Barcelona Verda',
   ogTitle: title,
   ogDescription: description,
   ogUrl: url.href,
   ogImage: ogImage,
   ogImageWidth: 1200,
   ogImageHeight: 630,
-  ogImageAlt: 'Barcelona Verd',
+  ogImageAlt: 'Barcelona Verda',
   ogLocale: 'ca_ES',
   twitterCard: 'summary_large_image',
   twitterTitle: title,

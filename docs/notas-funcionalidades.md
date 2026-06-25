@@ -1,4 +1,4 @@
-# Notas de funcionalidades — Barcelona Verd
+# Notas de funcionalidades — Barcelona Verda
 
 Notas técnicas de funcionalidades discutidas mas ainda não implementadas. Cada seção descreve a estrutura por trás de uma ideia, para referência futura.
 
@@ -16,7 +16,7 @@ Notas técnicas de funcionalidades discutidas mas ainda não implementadas. Cada
 **Correção importante (2026-06-24):** a disponibilidade de um escocell (tem padrinho ou não) vem do site oficial da cidade, não é algo que o nosso sistema gera. Ou seja, não há autocandidatura dentro da plataforma — quem aplica, aplica no site oficial. Isso elimina a necessidade da função `claim_escocell()` da primeira versão desta nota: não existe "reivindicar" um escocell pela nossa plataforma, só *mostrar* o status (curado manualmente, já que a cidade não tem API) e linkar pra fora.
 
 **Mudanças de schema propostas (versão simplificada):**
-1. Renomear `trees.ambassador_id` → `trees.padri_id` (mesma FK para `profiles`) — continua útil para guardar quem é o padrinho/madrinha *quando essa pessoa também usa a Barcelona Verd* (visibilidade/foto/histórico voluntários da comunidade), mas não é o que determina disponibilidade.
+1. Renomear `trees.ambassador_id` → `trees.padri_id` (mesma FK para `profiles`) — continua útil para guardar quem é o padrinho/madrinha *quando essa pessoa também usa a Barcelona Verda* (visibilidade/foto/histórico voluntários da comunidade), mas não é o que determina disponibilidade.
 2. Adicionar `trees.is_available` (boolean, default `false`) — atualizado manualmente por mediadores/admins com base no que veem no site oficial. É a fonte de verdade pro badge "Disponible" no mapa, não um cálculo derivado de `padri_since`.
 3. `trees.padri_since` (`timestamptz`, nullable) segue como campo opcional/comunitário — "há quanto tempo essa pessoa cuida", preenchido por quem já é o padrinho oficial e quer aparecer no mapa.
 4. Nova tabela `tree_care_logs` (`id, tree_id → trees, profile_id → profiles, note, photo_url, created_at`) segue igual — histórico de cuidado, alimentado por quem já é padrinho, não tem relação com a disponibilidade.

@@ -7,9 +7,9 @@
       <div class="about-inner">
         <div class="about-text">
           <span class="about-badge">Projecte acadèmic · EuroTeQ 2026</span>
-          <h2>Sobre Barcelona Verd</h2>
+          <h2>Sobre Barcelona Verda</h2>
           <p>
-            Barcelona Verd és una plataforma ciutadana per implicar els residents en la cocreació i el manteniment dels espais verds urbans de Barcelona.
+            Barcelona Verda és una plataforma ciutadana per implicar els residents en la cocreació i el manteniment dels espais verds urbans de Barcelona.
           </p>
           <p>
             El projecte neix d'una recerca acadèmica sobre la bretxa de participació en les iniciatives de verd urbà: les polítiques existents sovint no arriben als grups més vulnerables, i els canals digitals actuals de l'Ajuntament no estan pensats per a la inclusió activa. Barcelona compta amb més de 250.000 arbres i programes de participació consolidats, però no disposa de cap eina digital unificada que els connecti entre si i amb la ciutadania.

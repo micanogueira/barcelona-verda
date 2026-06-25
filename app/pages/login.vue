@@ -5,7 +5,7 @@
 
       <div class="auth-logo">
         <AppIcon name="leaf" :size="22" class="logo-icon" />
-        Barcelona Verd
+        Barcelona Verda
       </div>
 
       <div class="auth-tabs">
