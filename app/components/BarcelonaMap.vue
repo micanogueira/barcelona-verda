@@ -113,7 +113,7 @@ watch(locale, () => { if (map) renderMarkers() })
 async function loadGreenSpaces() {
   const { data, error } = await supabase
     .from('green_spaces')
-    .select('id, name, type, description, neighborhood, needs_help, participant_count, location, source')
+    .select('id, name, type, description, neighborhood, needs_help, participant_count, location, source, subtype')
 
   if (error || !data?.length) return
 
@@ -129,11 +129,12 @@ async function loadGreenSpaces() {
     const openCall    = isExample && mockAcceptingApplications(space)
     const cededTo     = isExample ? mockCededTo(space) : null
     const cogestionat = isExample ? mockCogestionat(space) : null
-    // The official-program footer is a type-based assumption (all horts → XHM,
-    // all parks → Cogestió) — true enough for our curated demos, but misleading
-    // for imported real data (most gardens aren't municipal; most parks aren't
-    // co-managed). So it, too, is shown only on example rows.
-    const programs    = isExample ? officialProgramsFor(space, { cededTo, cogestionat }) : []
+    // Official-program footer. For curated demos it's the type-based assumption.
+    // For imported real data we only claim a program when the source vouches for
+    // it: municipal horts (ORIGEN → subtype 'municipal') belong to the XHM.
+    const programs    = isExample
+      ? officialProgramsFor(space, { cededTo, cogestionat })
+      : (space.subtype === 'municipal' ? [PROGRAM.horts] : [])
 
     const wrapper = document.createElement('div')
     wrapper.className = 'map-marker-wrapper'
@@ -159,7 +160,7 @@ async function loadGreenSpaces() {
             </div>
             <a href="/participar" class="popup-help-cta">${t('popup.helpCta')}</a>` : ''}
             <strong>${space.name}</strong>
-            <span class="popup-tag popup-tag--${space.type}">${labelByType(space.type)}</span>
+            <span class="popup-tag popup-tag--${space.type}">${labelForSpace(space)}</span>
             ${isExample ? `<span class="popup-example-badge">${t('common.example')}</span>` : ''}
             ${space.description ? `<p>${translateDescription(space.description, locale.value)}</p>` : ''}
             ${space.neighborhood ? `<p class="popup-meta">${iconMarkup('pin', { size: 13 })} ${space.neighborhood}</p>` : ''}
@@ -287,8 +288,10 @@ function setVisible(marker, visible) {
   el.style.pointerEvents = visible ? 'auto' : 'none'
 }
 
-function labelByType(type) {
-  return ['park', 'garden', 'hort', 'mediator', 'tree', 'reserva'].includes(type) ? t(`types.${type}`) : type
+function labelForSpace(space) {
+  // Horts carry a real subtype (municipal / comunitari / social) → refined label.
+  if (space.type === 'hort' && space.subtype) return t(`hortSubtype.${space.subtype}`)
+  return ['park', 'garden', 'hort', 'mediator', 'tree', 'reserva'].includes(space.type) ? t(`types.${space.type}`) : space.type
 }
 
 function parseLocation(location) {

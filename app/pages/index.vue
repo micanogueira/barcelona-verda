@@ -35,7 +35,7 @@
               <div class="list-item-body">
                 <strong>{{ space.name }}</strong>
                 <div class="list-item-tags">
-                  <span class="list-item-tag">{{ labelByType(space.type) }}</span>
+                  <span class="list-item-tag">{{ labelForSpace(space) }}</span>
                   <span v-if="space.source === 'example'" class="list-item-example">{{ t('common.example') }}</span>
                 </div>
                 <p v-if="space.neighborhood" class="list-item-meta"><AppIcon name="pin" :size="13" />{{ space.neighborhood }}</p>
@@ -129,8 +129,10 @@ onMounted(() => {
 
 const iconByType = { park: 'trees', garden: 'flower', hort: 'carrot', mediator: 'info-circle', tree: 'pine', reserva: 'seedling' }
 const colorByType = { park: '#2d6a4f', garden: '#c75c9e', hort: '#e08e29', mediator: '#6366f1', tree: '#52b788', reserva: '#0d9488' }
-function labelByType(type) {
-  return ['park', 'garden', 'hort', 'mediator', 'tree', 'reserva'].includes(type) ? t(`types.${type}`) : type
+function labelForSpace(space) {
+  // Horts carry a real subtype (municipal / comunitari / social) → refined label.
+  if (space.type === 'hort' && space.subtype) return t(`hortSubtype.${space.subtype}`)
+  return ['park', 'garden', 'hort', 'mediator', 'tree', 'reserva'].includes(space.type) ? t(`types.${space.type}`) : space.type
 }
 
 const mapRef = ref(null)
@@ -156,7 +158,7 @@ async function loadSpaces() {
   const [{ data: greenData }, { data: treeData }] = await Promise.all([
     supabase
       .from('green_spaces')
-      .select('id, name, type, description, neighborhood, needs_help, participant_count, source'),
+      .select('id, name, type, description, neighborhood, needs_help, participant_count, source, subtype'),
     supabase
       .from('trees')
       .select('id, name, species, source'),

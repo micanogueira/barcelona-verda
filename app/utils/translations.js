@@ -34,6 +34,12 @@ export const translations = {
       reserva: 'Reserva de biodiversitat',
     },
 
+    hortSubtype: {
+      municipal: 'Hort urbà municipal',
+      comunitari: 'Hort urbà comunitari',
+      social: 'Hort urbà social',
+    },
+
     filters: {
       all: 'Tots els espais',
       tree: 'Àrbres (escocells)',
@@ -241,6 +247,12 @@ export const translations = {
       reserva: 'Biodiversity reserve',
     },
 
+    hortSubtype: {
+      municipal: 'Municipal urban garden',
+      comunitari: 'Community urban garden',
+      social: 'Social urban garden',
+    },
+
     filters: {
       all: 'All spaces',
       tree: 'Trees (tree pits)',
@@ -446,6 +458,12 @@ export const translations = {
       mediator: 'Punto de información',
       tree: 'Alcorque',
       reserva: 'Reserva de biodiversidad',
+    },
+
+    hortSubtype: {
+      municipal: 'Huerto urbano municipal',
+      comunitari: 'Huerto urbano comunitario',
+      social: 'Huerto urbano social',
     },
 
     filters: {
