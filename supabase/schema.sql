@@ -49,6 +49,8 @@ create table public.green_spaces (
   -- 'example' = curated demo rows; 'ajuntament' = imported from city open data
   source text not null default 'example',
   external_id text,
+  -- hort classification from source (municipal / comunitari / social); null otherwise
+  subtype text,
   created_at timestamptz default now()
 );
 
