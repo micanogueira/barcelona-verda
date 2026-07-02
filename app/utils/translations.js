@@ -40,6 +40,12 @@ export const translations = {
       social: 'Hort urbà social',
     },
 
+    hortSubtypeDesc: {
+      municipal: "Hort de la xarxa municipal, per a persones grans (+65 anys) i entitats, amb cultiu ecològic.",
+      comunitari: 'Hort autogestionat per veïns i entitats del barri.',
+      social: 'Hort amb finalitat social i inclusiva, gestionat per entitats.',
+    },
+
     filters: {
       all: 'Tots els espais',
       tree: 'Àrbres (escocells)',
@@ -253,6 +259,12 @@ export const translations = {
       social: 'Social urban garden',
     },
 
+    hortSubtypeDesc: {
+      municipal: 'Part of the municipal network, for residents aged 65+ and organisations, with organic farming.',
+      comunitari: 'Self-managed by local residents and neighbourhood groups.',
+      social: 'Run by organisations with a social, inclusive purpose.',
+    },
+
     filters: {
       all: 'All spaces',
       tree: 'Trees (tree pits)',
@@ -464,6 +476,12 @@ export const translations = {
       municipal: 'Huerto urbano municipal',
       comunitari: 'Huerto urbano comunitario',
       social: 'Huerto urbano social',
+    },
+
+    hortSubtypeDesc: {
+      municipal: 'Huerto de la red municipal, para personas mayores (+65 años) y entidades, con cultivo ecológico.',
+      comunitari: 'Huerto autogestionado por vecinos y entidades del barrio.',
+      social: 'Huerto con finalidad social e inclusiva, gestionado por entidades.',
     },
 
     filters: {

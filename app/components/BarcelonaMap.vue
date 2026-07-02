@@ -135,6 +135,10 @@ async function loadGreenSpaces() {
     const programs    = isExample
       ? officialProgramsFor(space, { cededTo, cogestionat })
       : (space.subtype === 'municipal' ? [PROGRAM.horts] : [])
+    // Real horts have no free-text description → fall back to a short definition
+    // of what that kind of garden is.
+    const subtypeDesc = (space.type === 'hort' && space.subtype) ? t(`hortSubtypeDesc.${space.subtype}`) : null
+    const descText    = space.description ? translateDescription(space.description, locale.value) : subtypeDesc
 
     const wrapper = document.createElement('div')
     wrapper.className = 'map-marker-wrapper'
@@ -162,7 +166,7 @@ async function loadGreenSpaces() {
             <strong>${space.name}</strong>
             <span class="popup-tag popup-tag--${space.type}">${labelForSpace(space)}</span>
             ${isExample ? `<span class="popup-example-badge">${t('common.example')}</span>` : ''}
-            ${space.description ? `<p>${translateDescription(space.description, locale.value)}</p>` : ''}
+            ${descText ? `<p>${descText}</p>` : ''}
             ${space.neighborhood ? `<p class="popup-meta">${iconMarkup('pin', { size: 13 })} ${space.neighborhood}</p>` : ''}
             ${space.participant_count ? `<p class="popup-meta">${iconMarkup('users', { size: 13 })} ${space.participant_count} ${t('common.participants')}</p>` : ''}
             ${cededTo ? `

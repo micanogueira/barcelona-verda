@@ -39,7 +39,7 @@
                   <span v-if="space.source === 'example'" class="list-item-example">{{ t('common.example') }}</span>
                 </div>
                 <p v-if="space.neighborhood" class="list-item-meta"><AppIcon name="pin" :size="13" />{{ space.neighborhood }}</p>
-                <p v-if="space.description" class="list-item-desc">{{ translateDescription(space.description, locale) }}</p>
+                <p v-if="spaceDescription(space)" class="list-item-desc">{{ spaceDescription(space) }}</p>
                 <p v-if="space.participant_count" class="list-item-meta"><AppIcon name="users" :size="13" />{{ space.participant_count }} {{ t('common.participants') }}</p>
                 <p v-if="space.escocell && !space.escocell.available" class="list-item-meta"><AppIcon name="user" :size="13" />{{ t('escocell.sponsoredBy', { name: space.escocell.padriName }) }}</p>
                 <p v-if="space.cededTo" class="list-item-meta"><AppIcon name="users" :size="13" />{{ t('cession.managedBy', { name: space.cededTo }) }}</p>
@@ -133,6 +133,13 @@ function labelForSpace(space) {
   // Horts carry a real subtype (municipal / comunitari / social) → refined label.
   if (space.type === 'hort' && space.subtype) return t(`hortSubtype.${space.subtype}`)
   return ['park', 'garden', 'hort', 'mediator', 'tree', 'reserva'].includes(space.type) ? t(`types.${space.type}`) : space.type
+}
+
+function spaceDescription(space) {
+  // Real free-text description if any; otherwise a short definition of the hort subtype.
+  if (space.description) return translateDescription(space.description, locale.value)
+  if (space.type === 'hort' && space.subtype) return t(`hortSubtypeDesc.${space.subtype}`)
+  return ''
 }
 
 const mapRef = ref(null)
