@@ -46,6 +46,9 @@ create table public.green_spaces (
   neighborhood text,
   needs_help boolean default false,
   participant_count integer default 0,
+  -- 'example' = curated demo rows; 'ajuntament' = imported from city open data
+  source text not null default 'example',
+  external_id text,
   created_at timestamptz default now()
 );
 
@@ -55,6 +58,10 @@ create policy "Authenticated users can insert" on public.green_spaces for insert
 
 -- Spatial index for map queries
 create index green_spaces_location_idx on public.green_spaces using gist (location);
+
+-- Idempotent imports: one row per (source, external_id) when external_id is set
+create unique index green_spaces_source_external_idx
+  on public.green_spaces (source, external_id) where external_id is not null;
 
 -- Trees (individual tree registrations by ambassadors)
 create table public.trees (
@@ -68,6 +75,7 @@ create table public.trees (
   notes text,
   photo_url text,
   named_after text,
+  source text not null default 'example',
   created_at timestamptz default now()
 );
 
