@@ -113,7 +113,7 @@ watch(locale, () => { if (map) renderMarkers() })
 async function loadGreenSpaces() {
   const { data, error } = await supabase
     .from('green_spaces')
-    .select('id, name, type, description, neighborhood, needs_help, participant_count, location')
+    .select('id, name, type, description, neighborhood, needs_help, participant_count, location, source')
 
   if (error || !data?.length) return
 
@@ -123,13 +123,17 @@ async function loadGreenSpaces() {
 
     const iconName = ICON_BY_TYPE[space.type] ?? 'leaf'
     const color    = MARKER_COLOR[space.type] ?? '#52b788'
-    const openCall    = mockAcceptingApplications(space)
-    const cededTo     = mockCededTo(space)
-    const cogestionat = mockCogestionat(space)
+    // Demo-only statuses (open call, ceded/co-managed entities) apply only to our
+    // curated example rows — never to imported real data.
+    const isExample   = space.source === 'example'
+    const openCall    = isExample && mockAcceptingApplications(space)
+    const cededTo     = isExample ? mockCededTo(space) : null
+    const cogestionat = isExample ? mockCogestionat(space) : null
     const programs    = officialProgramsFor(space, { cededTo, cogestionat })
 
     const wrapper = document.createElement('div')
     wrapper.className = 'map-marker-wrapper'
+    if (isExample) wrapper.classList.add('is-example')
     if (space.needs_help) wrapper.classList.add('needs-help')
     if (openCall) wrapper.classList.add('has-opportunity')
 
@@ -152,6 +156,7 @@ async function loadGreenSpaces() {
             <a href="/participar" class="popup-help-cta">${t('popup.helpCta')}</a>` : ''}
             <strong>${space.name}</strong>
             <span class="popup-tag popup-tag--${space.type}">${labelByType(space.type)}</span>
+            ${isExample ? `<span class="popup-example-badge">${t('common.example')}</span>` : ''}
             ${space.description ? `<p>${translateDescription(space.description, locale.value)}</p>` : ''}
             ${space.neighborhood ? `<p class="popup-meta">${iconMarkup('pin', { size: 13 })} ${space.neighborhood}</p>` : ''}
             ${space.participant_count ? `<p class="popup-meta">${iconMarkup('users', { size: 13 })} ${space.participant_count} ${t('common.participants')}</p>` : ''}
@@ -190,7 +195,7 @@ async function loadGreenSpaces() {
 async function loadTrees() {
   const { data, error } = await supabase
     .from('trees')
-    .select('id, name, species, location, health')
+    .select('id, name, species, location, health, source')
 
   if (error || !data?.length) return
 
@@ -198,10 +203,12 @@ async function loadTrees() {
     const coords = parseLocation(tree.location)
     if (!coords) return
 
-    const status = mockEscocellStatus(tree)
+    const isExample = tree.source === 'example'
+    const status = isExample ? mockEscocellStatus(tree) : { available: false }
 
     const wrapper = document.createElement('div')
     wrapper.className = 'map-marker-wrapper'
+    if (isExample) wrapper.classList.add('is-example')
     if (status.available) wrapper.classList.add('has-opportunity')
 
     const el = document.createElement('div')
@@ -210,7 +217,9 @@ async function loadTrees() {
     el.innerHTML = iconMarkup('pine', { size: 17 })
     wrapper.appendChild(el)
 
-    const statusHtml = status.available
+    const statusHtml = !isExample
+      ? ''
+      : status.available
       ? `<div class="popup-opportunity-status popup-opportunity-open">
            ${iconMarkup('check', { size: 13 })} ${t('popup.escocellAvailable')}
            <a href="${ESCOCELL_URL}" target="_blank" rel="noopener" class="popup-opportunity-cta">${t('popup.requestIt')}</a>
@@ -230,6 +239,7 @@ async function loadTrees() {
           <div class="popup-content">
             <strong>${tree.name ?? t('types.tree')}</strong>
             <span class="popup-tag popup-tag--tree">${t('types.tree')}</span>
+            ${isExample ? `<span class="popup-example-badge">${t('common.example')}</span>` : ''}
             ${tree.species ? `<p>${tree.species}</p>` : ''}
             ${tree.health ? `<p class="popup-meta">${iconMarkup('leaf', { size: 13 })} ${t('popup.health', { health: tree.health })}</p>` : ''}
             ${statusHtml}
@@ -325,6 +335,12 @@ onUnmounted(() => map?.remove())
   transition: transform 0.15s;
 }
 .map-marker:hover { transform: scale(1.15); }
+/* Curated example rows get a dark outline so they read as demos, distinct from
+   the white outline of imported real data (and from the red "needs help" badge). */
+.map-marker-wrapper.is-example .map-marker {
+  border-color: #1a202c;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.85), 0 2px 6px rgba(0,0,0,0.3);
+}
 .map-marker-wrapper.needs-help::after {
   content: '!';
   position: absolute;
@@ -456,6 +472,19 @@ onUnmounted(() => map?.remove())
 .popup-tag--mediator { background: #ede9fe; color: #4f46e5; }
 .popup-tag--tree     { background: #d8f3dc; color: #1b4332; }
 .popup-tag--reserva  { background: #ccfbf1; color: #0f766e; }
+.popup-example-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin: 0 0 8px 6px;
+  background: #1a202c;
+  color: #fff;
+  vertical-align: middle;
+}
 .popup-content p { font-size: 13px; color: #4a5568; margin: 4px 0; }
 .popup-meta { display: flex; align-items: center; gap: 4px; color: #718096 !important; font-size: 12px !important; }
 .popup-opportunity-status {

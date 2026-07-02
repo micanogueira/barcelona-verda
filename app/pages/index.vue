@@ -34,7 +34,10 @@
               </div>
               <div class="list-item-body">
                 <strong>{{ space.name }}</strong>
-                <span class="list-item-tag">{{ labelByType(space.type) }}</span>
+                <div class="list-item-tags">
+                  <span class="list-item-tag">{{ labelByType(space.type) }}</span>
+                  <span v-if="space.source === 'example'" class="list-item-example">{{ t('common.example') }}</span>
+                </div>
                 <p v-if="space.neighborhood" class="list-item-meta"><AppIcon name="pin" :size="13" />{{ space.neighborhood }}</p>
                 <p v-if="space.description" class="list-item-desc">{{ translateDescription(space.description, locale) }}</p>
                 <p v-if="space.participant_count" class="list-item-meta"><AppIcon name="users" :size="13" />{{ space.participant_count }} {{ t('common.participants') }}</p>
@@ -153,23 +156,25 @@ async function loadSpaces() {
   const [{ data: greenData }, { data: treeData }] = await Promise.all([
     supabase
       .from('green_spaces')
-      .select('id, name, type, description, neighborhood, needs_help, participant_count'),
+      .select('id, name, type, description, neighborhood, needs_help, participant_count, source'),
     supabase
       .from('trees')
-      .select('id, name, species'),
+      .select('id, name, species, source'),
   ])
+  // Demo-only statuses apply only to curated example rows, never to imported real data.
   const greens = (greenData ?? []).map(g => ({
     ...g,
-    acceptingApplications: mockAcceptingApplications(g),
-    cededTo: mockCededTo(g),
-    cogestionat: mockCogestionat(g),
+    acceptingApplications: g.source === 'example' && mockAcceptingApplications(g),
+    cededTo: g.source === 'example' ? mockCededTo(g) : null,
+    cogestionat: g.source === 'example' ? mockCogestionat(g) : null,
   }))
   const escocells = (treeData ?? []).map(tree => ({
     id: tree.id,
     name: tree.name ?? t('types.tree'),
     type: 'tree',
+    source: tree.source,
     description: tree.species,
-    escocell: mockEscocellStatus(tree),
+    escocell: tree.source === 'example' ? mockEscocellStatus(tree) : null,
   }))
   spaces.value = [...greens, ...escocells].sort((a, b) => a.name.localeCompare(b.name, 'ca'))
   loadingSpaces.value = false
@@ -438,6 +443,12 @@ onMounted(() => {
   color: #1b4332;
 }
 
+.list-item-tags {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
 .list-item-tag {
   font-size: 11px;
   font-weight: 600;
@@ -446,6 +457,18 @@ onMounted(() => {
   padding: 1px 8px;
   border-radius: 4px;
   align-self: flex-start;
+}
+
+/* Curated example row marker — mirrors the dark map outline */
+.list-item-example {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #fff;
+  background: #1a202c;
+  padding: 1px 7px;
+  border-radius: 4px;
 }
 
 .list-item-body p {

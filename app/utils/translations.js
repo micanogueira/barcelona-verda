@@ -22,6 +22,7 @@ export const translations = {
       close: 'Tancar',
       month: 'mes',
       months: 'mesos',
+      example: 'Exemple',
     },
 
     types: {
@@ -228,6 +229,7 @@ export const translations = {
       close: 'Close',
       month: 'month',
       months: 'months',
+      example: 'Example',
     },
 
     types: {
@@ -434,6 +436,7 @@ export const translations = {
       close: 'Cerrar',
       month: 'mes',
       months: 'meses',
+      example: 'Ejemplo',
     },
 
     types: {
