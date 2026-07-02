@@ -34,5 +34,5 @@ INSERT INTO public.green_spaces (name, type, description, location, district, ne
   -- Mediadors / Punts d''informació
   ('Mercat de la Boqueria',      'mediator', 'Punt d''informació al mercat més famós de Barcelona', ST_Point(2.1723, 41.3813), 'Ciutat Vella',    'El Raval',                 false, 0),
   ('Mercat de l''Abaceria',      'mediator', 'Punt d''informació al mercat de Gràcia',             ST_Point(2.1553, 41.4029), 'Gràcia',           'Vila de Gràcia',           false, 0),
-  ('CAP Gràcia',                 'mediator', 'Centre d''atenció primària — punt de difusió',       ST_Point(2.1571, 41.4015), 'Gràcia',           'Vila de Gràcia',           false, 0),
-  ('Biblioteca Poblenou',        'mediator', 'Biblioteca municipal — punt d''informació',          ST_Point(2.2002, 41.4017), 'Sant Martí',       'Poblenou',                 false, 0);
+  ('CAP Gràcia',                 'mediator', 'Punt de difusió: Centre d''atenció primària',        ST_Point(2.1571, 41.4015), 'Gràcia',           'Vila de Gràcia',           false, 0),
+  ('Biblioteca Poblenou',        'mediator', 'Punt d''informació: Biblioteca municipal',           ST_Point(2.2002, 41.4017), 'Sant Martí',       'Poblenou',                 false, 0);
