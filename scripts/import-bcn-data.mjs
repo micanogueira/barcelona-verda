@@ -15,7 +15,7 @@
 // tagged with a `subtype` derived from the ArcGIS ORIGEN field
 // (municipal / comunitari / social); municipal ones map to the XHM program.
 
-import { writeFileSync } from 'node:fs'
+import { readFileSync, writeFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
 
@@ -25,6 +25,38 @@ const PAGE = 1000
 
 const esc = (v) => (v == null || String(v).trim() === '') ? 'NULL' : `'${String(v).trim().replace(/'/g, "''")}'`
 const finite = (n) => typeof n === 'number' && Number.isFinite(n)
+
+// Official neighbourhood boundaries (73 barris, EPSG:25831) for point-in-polygon.
+// The ArcGIS "Parcs" layer has no barri/districte field, so we derive them from
+// each garden's projected centroid. Slim file extracted from Open Data BCN's
+// "Administrative units" dataset (Unitats_Administratives_BCN, barri polygons).
+const BARRIS = JSON.parse(readFileSync(new URL('./data/barris-bcn.geojson', import.meta.url), 'utf8'))
+for (const f of BARRIS.features) {
+  let minx = Infinity, miny = Infinity, maxx = -Infinity, maxy = -Infinity
+  const scan = (c) => { if (typeof c[0] === 'number') { minx = Math.min(minx, c[0]); maxx = Math.max(maxx, c[0]); miny = Math.min(miny, c[1]); maxy = Math.max(maxy, c[1]) } else c.forEach(scan) }
+  scan(f.geometry.coordinates)
+  f.bbox = [minx, miny, maxx, maxy]
+}
+const ringHas = (x, y, ring) => {
+  let inside = false
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    const [xi, yi] = ring[i], [xj, yj] = ring[j]
+    if (((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi)) inside = !inside
+  }
+  return inside
+}
+const polyHas = (x, y, rings) => { let inside = false; for (const r of rings) if (ringHas(x, y, r)) inside = !inside; return inside }
+// Returns { barri, districte } for a point in EPSG:25831, or null.
+const neighbourhoodAt = (x, y) => {
+  for (const f of BARRIS.features) {
+    const b = f.bbox
+    if (x < b[0] || x > b[2] || y < b[1] || y > b[3]) continue
+    const g = f.geometry
+    const hit = g.type === 'MultiPolygon' ? g.coordinates.some(p => polyHas(x, y, p)) : polyHas(x, y, g.coordinates)
+    if (hit) return f.properties
+  }
+  return null
+}
 
 // A hort is a school garden if ORIGEN/TIPUS mentions "escolar" (or "Educatiu").
 const isSchoolGarden = (p) => {
@@ -47,10 +79,10 @@ const hortSubtype = (origen) => {
   return null
 }
 
-async function fetchPaged(layer, { outFields, geojson }) {
+async function fetchPaged(layer, { outFields, geojson, sr = 4326 }) {
   const out = []
   for (let offset = 0; ; offset += PAGE) {
-    const common = `where=1%3D1&outFields=${encodeURIComponent(outFields)}&outSR=4326&resultOffset=${offset}&resultRecordCount=${PAGE}`
+    const common = `where=1%3D1&outFields=${encodeURIComponent(outFields)}&outSR=${sr}&resultOffset=${offset}&resultRecordCount=${PAGE}`
     const url = geojson
       ? `${BASE}/${layer}/query?${common}&f=geojson`
       : `${BASE}/${layer}/query?${common}&returnGeometry=false&returnCentroid=true&f=json`
@@ -109,7 +141,13 @@ async function main() {
   // The layer is called "Parcs" but ~half the entries are named "Jardins de …";
   // type them by name so gardens get the garden label/icon instead of "Parc".
   const parkFeats = await fetchPaged(4, { outFields: 'Nom,Codi,OBJECTID', geojson: false })
+  // Same centroids in EPSG:25831 to look up the neighbourhood by point-in-polygon.
+  const centroid25831 = {}
+  for (const f of await fetchPaged(4, { outFields: 'OBJECTID', geojson: false, sr: 25831 })) {
+    if (f.centroid) centroid25831[f.attributes.OBJECTID] = f.centroid
+  }
   const parks = []
+  let withBarri = 0
   for (const f of parkFeats) {
     const a = f.attributes || {}
     const lng = f.centroid?.x, lat = f.centroid?.y
@@ -117,10 +155,15 @@ async function main() {
     const extId = `parc-${a.OBJECTID}`
     if (!keep(extId)) continue
     const name = a.Nom || 'Parc'
+    const c = centroid25831[a.OBJECTID]
+    const nb = c ? neighbourhoodAt(c.x, c.y) : null
+    if (nb) withBarri++
     parks.push({
       name,
       type: /jard/i.test(name) ? 'garden' : 'park',
-      address: null, district: null, neighborhood: null,
+      address: null,
+      district: nb?.districte ?? null,
+      neighborhood: nb?.barri ?? null,
       subtype: null,
       lng, lat, extId,
     })
@@ -141,7 +184,7 @@ async function main() {
     'COMMIT;\n'
   const outPath = join(dirname(fileURLToPath(import.meta.url)), '..', 'supabase', 'import-real-data.sql')
   writeFileSync(outPath, sql)
-  console.log(`Horts: ${horts.length} (schools skipped: ${schoolsSkipped}) | Parcs: ${parks.length} | Total: ${horts.length + parks.length}`)
+  console.log(`Horts: ${horts.length} (schools skipped: ${schoolsSkipped}) | Parcs i jardins: ${parks.length} (with neighbourhood: ${withBarri}) | Total: ${horts.length + parks.length}`)
   console.log(`Written: ${outPath}`)
 }
 
