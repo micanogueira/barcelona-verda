@@ -129,7 +129,11 @@ async function loadGreenSpaces() {
     const openCall    = isExample && mockAcceptingApplications(space)
     const cededTo     = isExample ? mockCededTo(space) : null
     const cogestionat = isExample ? mockCogestionat(space) : null
-    const programs    = officialProgramsFor(space, { cededTo, cogestionat })
+    // The official-program footer is a type-based assumption (all horts → XHM,
+    // all parks → Cogestió) — true enough for our curated demos, but misleading
+    // for imported real data (most gardens aren't municipal; most parks aren't
+    // co-managed). So it, too, is shown only on example rows.
+    const programs    = isExample ? officialProgramsFor(space, { cededTo, cogestionat }) : []
 
     const wrapper = document.createElement('div')
     wrapper.className = 'map-marker-wrapper'
