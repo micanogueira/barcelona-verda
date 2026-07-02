@@ -105,7 +105,9 @@ async function main() {
     })
   }
 
-  // --- Parcs (layer 4, polygons → centroid) ---
+  // --- Parcs i jardins (layer 4, polygons → centroid) ---
+  // The layer is called "Parcs" but ~half the entries are named "Jardins de …";
+  // type them by name so gardens get the garden label/icon instead of "Parc".
   const parkFeats = await fetchPaged(4, { outFields: 'Nom,Codi,OBJECTID', geojson: false })
   const parks = []
   for (const f of parkFeats) {
@@ -114,9 +116,10 @@ async function main() {
     if (!finite(lng) || !finite(lat)) continue
     const extId = `parc-${a.OBJECTID}`
     if (!keep(extId)) continue
+    const name = a.Nom || 'Parc'
     parks.push({
-      name: a.Nom || 'Parc',
-      type: 'park',
+      name,
+      type: /jard/i.test(name) ? 'garden' : 'park',
       address: null, district: null, neighborhood: null,
       subtype: null,
       lng, lat, extId,
