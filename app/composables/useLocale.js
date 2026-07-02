@@ -5,7 +5,7 @@ import { translations } from '~/utils/translations'
 // audience. Persistence is restored client-side by plugins/locale.client.js so
 // SSR always renders the default and no hydration mismatch occurs.
 const DEFAULT_LOCALE = 'ca'
-const SUPPORTED = ['ca', 'en']
+const SUPPORTED = ['ca', 'es', 'en']
 
 function lookup(dict, key) {
   return key.split('.').reduce((o, k) => (o == null ? undefined : o[k]), dict)

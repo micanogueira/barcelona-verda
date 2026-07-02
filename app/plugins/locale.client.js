@@ -6,7 +6,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.hook('app:mounted', () => {
     try {
       const saved = localStorage.getItem('bv-locale')
-      if (saved === 'ca' || saved === 'en') locale.value = saved
+      if (saved === 'ca' || saved === 'es' || saved === 'en') locale.value = saved
     } catch {}
   })
 })

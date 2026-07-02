@@ -34,6 +34,7 @@
       <NuxtLink to="/login">{{ t('nav.login') }}</NuxtLink>
       <div class="lang-toggle" role="group" aria-label="Language">
         <button :class="{ active: locale === 'ca' }" @click="setLocale('ca')">CA</button>
+        <button :class="{ active: locale === 'es' }" @click="setLocale('es')">ES</button>
         <button :class="{ active: locale === 'en' }" @click="setLocale('en')">EN</button>
       </div>
     </div>

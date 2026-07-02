@@ -414,4 +414,210 @@ export const translations = {
       cta: 'Back to the map →',
     },
   },
+
+  es: {
+    nav: {
+      home: 'Inicio',
+      participate: 'Participa',
+      about: 'Sobre',
+      login: 'Entrar',
+      stats: {
+        trees: 'Árboles',
+        mediators: 'Mediadores activos',
+        participants: 'Participantes',
+        needsHelp: 'Necesita ayuda',
+      },
+    },
+
+    common: {
+      participants: 'participantes',
+      close: 'Cerrar',
+      month: 'mes',
+      months: 'meses',
+    },
+
+    types: {
+      park: 'Parque',
+      garden: 'Jardín',
+      hort: 'Huerto urbano',
+      mediator: 'Punto de información',
+      tree: 'Alcorque',
+      reserva: 'Reserva de biodiversidad',
+    },
+
+    filters: {
+      all: 'Todos los espacios',
+      tree: 'Árboles (alcorques)',
+      hort: 'Huertos urbanos',
+      park: 'Parques y jardines',
+      reserva: 'Reservas de biodiversidad',
+      mediator: 'Puntos de información',
+      help: 'Dónde se necesita ayuda',
+    },
+
+    status: {
+      needsHelp: 'Necesita ayuda',
+      available: 'Disponible',
+      openCall: 'Convocatoria abierta',
+    },
+
+    map: {
+      loadingMap: 'Cargando mapa...',
+      loadingSpaces: 'Cargando espacios...',
+      emptyFilter: 'No se ha encontrado ningún espacio para este filtro.',
+      viewMap: 'Mapa',
+      viewList: 'Lista',
+      panelTitle: 'Espacios verdes',
+    },
+
+    home: {
+      heroTitle: 'La puerta de entrada a los espacios verdes de Barcelona',
+      heroDesc: 'Descubre parques, huertos, jardines y programas oficiales, todo en un solo mapa interactivo.',
+    },
+
+    escocell: {
+      sponsoredBy: 'Apadrinado por {name}',
+    },
+
+    cession: {
+      managedBy: 'Gestionado por {name}',
+      managedByLabel: 'Gestionado por',
+    },
+
+    cogestio: {
+      comanagedBy: 'Cogestionado por {name}',
+      comanagedByLabel: 'Cogestionado por',
+    },
+
+    popup: {
+      needsHelpTitle: 'Este espacio necesita ayuda',
+      needsHelpText: 'Este espacio necesita más vecinos implicados para mantenerse activo y bien cuidado.',
+      helpCta: 'Quiero ayudar →',
+      viewCall: 'Ver convocatoria →',
+      officialProgram: 'Programa oficial:',
+      escocellAvailable: 'Alcorque disponible',
+      requestIt: 'Solicitarlo →',
+      sponsoredSince: 'Apadrinado por {name} · hace {n} {unit}',
+      photo: 'Foto: {credit}',
+      health: 'Estado: {health}',
+      escocellAlt: 'Alcorque apadrinado',
+    },
+
+    about: {
+      badge: 'Proyecto académico · EuroTeQ 2026',
+      title: 'Sobre Barcelona Verda',
+      p1: 'Barcelona Verda es una plataforma ciudadana para implicar a los residentes en la cocreación y el mantenimiento de los espacios verdes urbanos de Barcelona.',
+      p2: 'El proyecto nace de una investigación académica sobre la brecha de participación en las iniciativas de verde urbano: las políticas existentes a menudo no llegan a los grupos más vulnerables, y los canales digitales actuales del Ayuntamiento no están pensados para la inclusión activa. Barcelona cuenta con más de 250.000 árboles y programas de participación consolidados, pero no dispone de ninguna herramienta digital unificada que los conecte entre sí y con la ciudadanía.',
+      p3: 'Nuestra propuesta: una plataforma informativa, fácil de usar y con un tono acogedor, que reduce la barrera de entrada a la participación. Incorporamos:',
+      li1: 'Un mapa interactivo que muestra todos los espacios verdes en tiempo real',
+      li2: 'Una red de mediadores locales (comercios, mercados, profesionales) ya integrados en el movimiento verde',
+      li3: 'Una red de voluntarios centrada en la difusión: atrae a nuevos participantes y ayuda a las personas con menos facilidad digital a encontrar el programa adecuado',
+      li4: 'Una capa de visibilidad que muestra qué espacios necesitan más ayuda y cómo crece el movimiento por toda la ciudad',
+      p4: "Actúa como puerta de entrada a los programas oficiales ya existentes, como la Cessió d'Espais, la XHM o Cuida l'escocell, haciéndolos más fáciles de encontrar, de iniciar y de mantener en el tiempo.",
+      teamLabel: 'Equipo',
+      course: 'Student challenge: Sustainable Smart Cities · EuroTeQ Universities · Julio 2026',
+    },
+
+    participate: {
+      title: '¿Cómo puedes participar?',
+      intro1: 'Barcelona Verda conecta a vecinos, voluntarios y la ciudad para crear espacios verdes juntos. Aquí encontrarás todas las formas de participación y los programas oficiales, en un solo lugar.',
+      intro2: 'Seas voluntario/a, mediador/a o ciudadano/a activo/a, hay un rol para todos.',
+      officialTag: 'Programa oficial',
+      whatsNew: 'Qué hay de nuevo',
+      accessProgram: 'Ir al programa →',
+      howTitle: '¿Cómo funciona?',
+      roles: {
+        mediator: {
+          title: 'Mediador/a de Red',
+          description: 'Eres un comercio, mercado, médico, peluquería o entidad local. Conectas a tus clientes y vecinos con los espacios verdes y programas del barrio, actuando como punto de confianza.',
+          actions: [
+            'Recibe un kit de comunicación (pósteres, folletos)',
+            'Acceso a una formación de 30 minutos',
+            'Apareces en el mapa como punto de información',
+            'Reconocimiento para el mediador/a más activo/a',
+          ],
+          cta: 'Unirme como mediador/a',
+        },
+        volunteer: {
+          title: 'Voluntario/a',
+          description: 'Acompañas a vecinos que quieren participar pero no saben por dónde empezar, ayudándoles a conectar con Barcelona Verda y con los programas oficiales.',
+          actions: [
+            'Integras a los recién llegados en la plataforma',
+            'Proporcionas material a los puntos de información y formas a los mediadores/as de la red',
+            'Orientas hacia el programa oficial más adecuado',
+            'Certificado de voluntariado oficial',
+          ],
+          cta: 'Apuntarme como voluntario/a',
+        },
+      },
+      programs: {
+        1: {
+          description: 'Programa municipal de adopción de alcorques (los espacios de tierra alrededor de los árboles). Cualquier vecino mayor de 18 años puede apadrinar hasta 3 alcorques.',
+          bvAdds: 'En el mapa ves al instante qué alcorques de tu barrio ya tienen padrino y cuáles te esperan. Cuando uno queda libre, te lo destacamos para que puedas solicitarlo directamente.',
+        },
+        2: {
+          description: '15 huertos municipales repartidos por los 10 distritos, con parcelas para personas mayores de 65 años y entidades. Sorteo para personas, concurso para entidades.',
+          bvAdds: 'Marcamos los huertos con convocatoria abierta para que no se te pase ninguna oportunidad en tu barrio.',
+        },
+        3: {
+          description: 'Solares municipales inactivos cedidos a entidades sin ánimo de lucro para crear huertos, jardines comunitarios o reservas de biodiversidad.',
+          bvAdds: 'Más transparencia para la comunidad: en el mapa ves qué entidad sin ánimo de lucro gestiona cada espacio verde cedido.',
+        },
+        4: {
+          description: 'Las entidades sin ánimo de lucro pueden cogestionar parterres y jardineras de los parques urbanos durante 2 años, mediante formulario.',
+          bvAdds: 'Más transparencia para la comunidad: en el mapa ves qué entidad sin ánimo de lucro cogestiona cada parque cogestionado.',
+        },
+      },
+      steps: [
+        { title: 'Explora', text: 'Abre el mapa interactivo y descubre los espacios verdes, huertos y árboles de tu barrio, sin necesidad de cuenta.' },
+        { title: 'Elige cómo participar', text: '¿Quieres ser voluntario, mediador de red o acceder directamente a un programa oficial del Ayuntamiento?' },
+        { title: 'Regístrate o accede', text: 'Crea tu cuenta en Barcelona Verda para los roles de la plataforma, o accede al programa oficial que te interese.' },
+        { title: 'Haz crecer la red', text: 'Tu participación es visible en el mapa e inspira a otros vecinos de los 73 barrios de Barcelona.' },
+      ],
+    },
+
+    login: {
+      back: '← Volver al inicio',
+      loginTab: 'Entrar',
+      registerTab: 'Registrarme',
+      email: 'Correo electrónico',
+      emailPlaceholder: 'nombre@ejemplo.com',
+      password: 'Contraseña',
+      fullName: 'Nombre completo',
+      namePlaceholder: 'María García',
+      passwordHintRegister: 'Mínimo 8 caracteres',
+      roleQuestion: '¿Cómo quieres participar?',
+      roleMediator: 'Mediador/a de red',
+      roleVolunteer: 'Voluntario/a',
+      discoverDiff: 'Descubre las diferencias →',
+      loggingIn: 'Entrando...',
+      registering: 'Registrando...',
+      createAccount: 'Crear cuenta',
+      loginBtn: 'Entrar',
+      sideTitle: 'Juntos hacemos Barcelona más verde',
+      side1: 'Explora todos los espacios verdes en un único mapa',
+      side2: 'Conecta a tus vecinos con los programas del barrio',
+      side3: 'Accede a los programas oficiales del Ayuntamiento',
+      side4: 'Haz crecer la red de participación',
+    },
+
+    footer: {
+      tagline: 'Una plataforma ciudadana para los espacios verdes urbanos de Barcelona.',
+      academic: 'Proyecto académico · Sustainable Smart Cities · EuroTeQ 2026',
+      platformTitle: 'Plataforma',
+      interactiveMap: 'Mapa interactivo',
+      participate: 'Cómo participar',
+      aboutProject: 'Sobre el proyecto',
+      loginRegister: 'Entrar / Registrarme',
+      officialPrograms: 'Programas oficiales',
+    },
+
+    error: {
+      title404: 'Esta página no está en el mapa',
+      titleGeneric: 'Algo ha salido mal',
+      desc404: 'Parece que te has desviado del camino. ¿Volvemos a los espacios verdes de Barcelona?',
+      descGeneric: 'Ha habido un error inesperado. Vuelve al inicio y sigue explorando.',
+      cta: 'Volver al mapa →',
+    },
+  },
 }
