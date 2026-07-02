@@ -6,30 +6,22 @@
     <section class="about">
       <div class="about-inner">
         <div class="about-text">
-          <span class="about-badge">Projecte acadèmic · EuroTeQ 2026</span>
-          <h2>Sobre Barcelona Verda</h2>
-          <p>
-            Barcelona Verda és una plataforma ciutadana per implicar els residents en la cocreació i el manteniment dels espais verds urbans de Barcelona.
-          </p>
-          <p>
-            El projecte neix d'una recerca acadèmica sobre la bretxa de participació en les iniciatives de verd urbà: les polítiques existents sovint no arriben als grups més vulnerables, i els canals digitals actuals de l'Ajuntament no estan pensats per a la inclusió activa. Barcelona compta amb més de 250.000 arbres i programes de participació consolidats, però no disposa de cap eina digital unificada que els connecti entre si i amb la ciutadania.
-          </p>
-          <p>
-            La nostra proposta: una plataforma informativa, fàcil d'usar i amb un to acollidor, que redueix la barrera d'entrada a la participació. Hi introduïm:
-          </p>
+          <span class="about-badge">{{ t('about.badge') }}</span>
+          <h2>{{ t('about.title') }}</h2>
+          <p>{{ t('about.p1') }}</p>
+          <p>{{ t('about.p2') }}</p>
+          <p>{{ t('about.p3') }}</p>
           <ul class="about-list">
-            <li>Un mapa interactiu que mostra tots els espais verds en temps real</li>
-            <li>Una xarxa de mediadors locals (comerços, mercats, professionals) ja integrats al moviment verd</li>
-            <li>Una xarxa de voluntaris centrada en la difusió: atreu nous participants i ajuda les persones amb menys facilitat digital a trobar el programa adequat</li>
-            <li>Una capa de visibilitat que mostra quins espais necessiten més ajuda i com creix el moviment per tota la ciutat</li>
+            <li>{{ t('about.li1') }}</li>
+            <li>{{ t('about.li2') }}</li>
+            <li>{{ t('about.li3') }}</li>
+            <li>{{ t('about.li4') }}</li>
           </ul>
-          <p>
-            Actua com a porta d'entrada als programes oficials ja existents, com la Cessió d'Espais, la XHM o Cuida l'escocell, fent-los més fàcils de trobar, d'iniciar i de mantenir en el temps.
-          </p>
+          <p>{{ t('about.p4') }}</p>
           <div class="about-team">
-            <span class="about-team-label">Equip</span>
+            <span class="about-team-label">{{ t('about.teamLabel') }}</span>
             <p>Jacob Stark · Marta Alfonso · Mehdike Ruveyda · Micaelle Nogueira</p>
-            <p class="about-course">Student challenge: Sustainable Smart Cities · EuroTeQ Universities · Juliol 2026</p>
+            <p class="about-course">{{ t('about.course') }}</p>
           </div>
         </div>
       </div>
@@ -40,6 +32,7 @@
 </template>
 
 <script setup>
+const { t } = useLocale()
 </script>
 
 <style scoped>

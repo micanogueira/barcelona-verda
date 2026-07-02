@@ -9,10 +9,13 @@ import { mockEscocellStatus, ESCOCELL_URL } from '~/utils/escocell'
 import { mockAcceptingApplications } from '~/utils/horts'
 import { mockCededTo } from '~/utils/cessions'
 import { mockCogestionat } from '~/utils/cogestio'
+import { translateDescription } from '~/utils/descriptions'
 
 const props = defineProps({
   filter: { type: String, default: 'all' },
 })
+
+const { t, locale } = useLocale()
 
 const mapContainer = ref(null)
 const supabase = useSupabaseClient()
@@ -87,8 +90,25 @@ onMounted(() => {
 
   map.addControl(new maplibregl.NavigationControl(), 'top-right')
   map.addControl(new maplibregl.ScaleControl({ unit: 'metric' }), 'bottom-left')
-  map.on('load', () => { loadGreenSpaces(); loadTrees() })
+  map.on('load', renderMarkers)
 })
+
+// Popups are built as HTML strings at render time, so switching language means
+// tearing down the markers and rebuilding them with the new translations.
+function clearMarkers() {
+  spaceMarkers.forEach(({ marker }) => marker.remove())
+  treeMarkers.forEach(({ marker }) => marker.remove())
+  spaceMarkers.length = 0
+  treeMarkers.length = 0
+}
+
+async function renderMarkers() {
+  clearMarkers()
+  await Promise.all([loadGreenSpaces(), loadTrees()])
+  applyFilter(props.filter)
+}
+
+watch(locale, () => { if (map) renderMarkers() })
 
 async function loadGreenSpaces() {
   const { data, error } = await supabase
@@ -126,34 +146,34 @@ async function loadGreenSpaces() {
           <div class="popup-content">
             ${space.needs_help ? `
             <div class="popup-help-banner">
-              <div class="popup-help-title">${iconMarkup('lifebuoy', { size: 13 })} Cal ajuda en aquest espai</div>
-              <p class="popup-help-text">Aquest espai necessita més veïns implicats per mantenir-se actiu i ben cuidat.</p>
+              <div class="popup-help-title">${iconMarkup('lifebuoy', { size: 13 })} ${t('popup.needsHelpTitle')}</div>
+              <p class="popup-help-text">${t('popup.needsHelpText')}</p>
             </div>
-            <a href="/participar" class="popup-help-cta">Vull ajudar →</a>` : ''}
+            <a href="/participar" class="popup-help-cta">${t('popup.helpCta')}</a>` : ''}
             <strong>${space.name}</strong>
             <span class="popup-tag popup-tag--${space.type}">${labelByType(space.type)}</span>
-            ${space.description ? `<p>${space.description}</p>` : ''}
+            ${space.description ? `<p>${translateDescription(space.description, locale.value)}</p>` : ''}
             ${space.neighborhood ? `<p class="popup-meta">${iconMarkup('pin', { size: 13 })} ${space.neighborhood}</p>` : ''}
-            ${space.participant_count ? `<p class="popup-meta">${iconMarkup('users', { size: 13 })} ${space.participant_count} participants</p>` : ''}
+            ${space.participant_count ? `<p class="popup-meta">${iconMarkup('users', { size: 13 })} ${space.participant_count} ${t('common.participants')}</p>` : ''}
             ${cededTo ? `
             <div class="popup-ceded-badge">
-              <span class="popup-ceded-label">${iconMarkup('users', { size: 12 })} Gestionat per</span>
+              <span class="popup-ceded-label">${iconMarkup('users', { size: 12 })} ${t('cession.managedByLabel')}</span>
               <span class="popup-ceded-name">${cededTo}</span>
             </div>` : ''}
             ${cogestionat ? `
             <div class="popup-cogestio-badge">
-              <span class="popup-cogestio-label">${iconMarkup('leaf', { size: 12 })} Cogestionat per</span>
+              <span class="popup-cogestio-label">${iconMarkup('leaf', { size: 12 })} ${t('cogestio.comanagedByLabel')}</span>
               <span class="popup-cogestio-name">${cogestionat}</span>
             </div>` : ''}
             ${openCall ? `
             <div class="popup-opportunity-status popup-opportunity-open">
-              ${iconMarkup('check', { size: 13 })} Convocatòria oberta
-              <a href="${PROGRAM.horts.url}" target="_blank" rel="noopener" class="popup-opportunity-cta">Veure convocatòria →</a>
+              ${iconMarkup('check', { size: 13 })} ${t('status.openCall')}
+              <a href="${PROGRAM.horts.url}" target="_blank" rel="noopener" class="popup-opportunity-cta">${t('popup.viewCall')}</a>
             </div>` : ''}
             ${programs.length ? `
             <div class="popup-official">
               ${iconMarkup('info-circle', { size: 12 })}
-              <span>Programa oficial:</span>
+              <span>${t('popup.officialProgram')}</span>
               ${programs.map(p => (openCall && p === PROGRAM.horts)
                 ? `<span>${p.label}</span>`
                 : `<a href="${p.url}" target="_blank" rel="noopener">${p.label} →</a>`).join(' · ')}
@@ -192,15 +212,15 @@ async function loadTrees() {
 
     const statusHtml = status.available
       ? `<div class="popup-opportunity-status popup-opportunity-open">
-           ${iconMarkup('check', { size: 13 })} Escocell disponible
-           <a href="${ESCOCELL_URL}" target="_blank" rel="noopener" class="popup-opportunity-cta">Sol·licitar-lo →</a>
+           ${iconMarkup('check', { size: 13 })} ${t('popup.escocellAvailable')}
+           <a href="${ESCOCELL_URL}" target="_blank" rel="noopener" class="popup-opportunity-cta">${t('popup.requestIt')}</a>
          </div>`
       : `<div class="popup-escocell-padri">
-           ${status.photoUrl ? `<img class="popup-escocell-photo" src="${status.photoUrl}" alt="Escocell apadrinat" loading="lazy" />` : ''}
+           ${status.photoUrl ? `<img class="popup-escocell-photo" src="${status.photoUrl}" alt="${t('popup.escocellAlt')}" loading="lazy" />` : ''}
            <span class="popup-escocell-padri-line">
-             ${iconMarkup('user', { size: 13 })} Apadrinat per ${status.padriName}, des de fa ${status.monthsAgo} ${status.monthsAgo === 1 ? 'mes' : 'mesos'}
+             ${iconMarkup('user', { size: 13 })} ${t('popup.sponsoredSince', { name: status.padriName, n: status.monthsAgo, unit: status.monthsAgo === 1 ? t('common.month') : t('common.months') })}
            </span>
-           ${status.photoCredit ? `<span class="popup-photo-credit">Foto: ${status.photoCredit}</span>` : ''}
+           ${status.photoCredit ? `<span class="popup-photo-credit">${t('popup.photo', { credit: status.photoCredit })}</span>` : ''}
          </div>`
 
     const marker = new maplibregl.Marker({ element: wrapper, anchor: 'center' })
@@ -208,10 +228,10 @@ async function loadTrees() {
       .setPopup(
         new maplibregl.Popup({ offset: 20 }).setHTML(`
           <div class="popup-content">
-            <strong>${tree.name ?? 'Escocell'}</strong>
-            <span class="popup-tag popup-tag--tree">Escocell</span>
+            <strong>${tree.name ?? t('types.tree')}</strong>
+            <span class="popup-tag popup-tag--tree">${t('types.tree')}</span>
             ${tree.species ? `<p>${tree.species}</p>` : ''}
-            ${tree.health ? `<p class="popup-meta">${iconMarkup('leaf', { size: 13 })} Estat: ${tree.health}</p>` : ''}
+            ${tree.health ? `<p class="popup-meta">${iconMarkup('leaf', { size: 13 })} ${t('popup.health', { health: tree.health })}</p>` : ''}
             ${statusHtml}
           </div>
         `)
@@ -222,7 +242,7 @@ async function loadTrees() {
   })
 }
 
-watch(() => props.filter, (val) => {
+function applyFilter(val) {
   spaceMarkers.forEach(({ marker, type, needsHelp }) => {
     const show = val === 'all' || type === val
       || (val === 'park' && type === 'garden') // "Parcs i jardins" also covers gardens
@@ -232,7 +252,9 @@ watch(() => props.filter, (val) => {
   treeMarkers.forEach(({ marker }) => {
     setVisible(marker, val === 'all' || val === 'tree')
   })
-})
+}
+
+watch(() => props.filter, applyFilter)
 
 // Called by the list view: centers the map on the space/escocell and opens its popup
 function focusSpace(id) {
@@ -252,7 +274,7 @@ function setVisible(marker, visible) {
 }
 
 function labelByType(type) {
-  return { park: 'Parc', garden: 'Jardí', hort: 'Hort urbà', mediator: "Punt d'informació", tree: 'Arbre', reserva: 'Reserva de biodiversitat' }[type] ?? type
+  return ['park', 'garden', 'hort', 'mediator', 'tree', 'reserva'].includes(type) ? t(`types.${type}`) : type
 }
 
 function parseLocation(location) {

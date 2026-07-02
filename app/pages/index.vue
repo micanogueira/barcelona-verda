@@ -8,16 +8,16 @@
         <ClientOnly>
           <BarcelonaMap ref="mapRef" :filter="activeFilter" />
           <template #fallback>
-            <div class="map-placeholder">Carregant mapa...</div>
+            <div class="map-placeholder">{{ t('map.loadingMap') }}</div>
           </template>
         </ClientOnly>
 
         <!-- List view overlay -->
         <div v-if="viewMode === 'list'" class="list-overlay">
-          <div v-if="loadingSpaces" class="list-loading">Carregant espais...</div>
+          <div v-if="loadingSpaces" class="list-loading">{{ t('map.loadingSpaces') }}</div>
           <div v-else class="list-items">
             <div v-if="filteredSpaces.length === 0" class="list-empty">
-              Cap espai trobat per a aquest filtre.
+              {{ t('map.emptyFilter') }}
             </div>
             <div
               v-for="space in filteredSpaces"
@@ -36,16 +36,16 @@
                 <strong>{{ space.name }}</strong>
                 <span class="list-item-tag">{{ labelByType(space.type) }}</span>
                 <p v-if="space.neighborhood" class="list-item-meta"><AppIcon name="pin" :size="13" />{{ space.neighborhood }}</p>
-                <p v-if="space.description" class="list-item-desc">{{ space.description }}</p>
-                <p v-if="space.participant_count" class="list-item-meta"><AppIcon name="users" :size="13" />{{ space.participant_count }} participants</p>
-                <p v-if="space.escocell && !space.escocell.available" class="list-item-meta"><AppIcon name="user" :size="13" />Apadrinat per {{ space.escocell.padriName }}</p>
-                <p v-if="space.cededTo" class="list-item-meta"><AppIcon name="users" :size="13" />Gestionat per {{ space.cededTo }}</p>
-                <p v-if="space.cogestionat" class="list-item-meta"><AppIcon name="leaf" :size="13" />Cogestionat per {{ space.cogestionat }}</p>
+                <p v-if="space.description" class="list-item-desc">{{ translateDescription(space.description, locale) }}</p>
+                <p v-if="space.participant_count" class="list-item-meta"><AppIcon name="users" :size="13" />{{ space.participant_count }} {{ t('common.participants') }}</p>
+                <p v-if="space.escocell && !space.escocell.available" class="list-item-meta"><AppIcon name="user" :size="13" />{{ t('escocell.sponsoredBy', { name: space.escocell.padriName }) }}</p>
+                <p v-if="space.cededTo" class="list-item-meta"><AppIcon name="users" :size="13" />{{ t('cession.managedBy', { name: space.cededTo }) }}</p>
+                <p v-if="space.cogestionat" class="list-item-meta"><AppIcon name="leaf" :size="13" />{{ t('cogestio.comanagedBy', { name: space.cogestionat }) }}</p>
               </div>
               <div class="list-item-right">
-                <span v-if="space.needs_help" class="list-item-help">Cal ajuda</span>
-                <span v-else-if="space.escocell?.available" class="list-item-available">Disponible</span>
-                <span v-else-if="space.acceptingApplications" class="list-item-available">Convocatòria oberta</span>
+                <span v-if="space.needs_help" class="list-item-help">{{ t('status.needsHelp') }}</span>
+                <span v-else-if="space.escocell?.available" class="list-item-available">{{ t('status.available') }}</span>
+                <span v-else-if="space.acceptingApplications" class="list-item-available">{{ t('status.openCall') }}</span>
                 <AppIcon name="chevron-left" :size="18" class="list-item-go" />
               </div>
             </div>
@@ -55,28 +55,28 @@
         <!-- View toggle (map / list) -->
         <div class="view-toggle">
           <button :class="['view-btn', { active: viewMode === 'map' }]" @click="viewMode = 'map'">
-            <AppIcon name="map" :size="15" /> Mapa
+            <AppIcon name="map" :size="15" /> {{ t('map.viewMap') }}
           </button>
           <button :class="['view-btn', { active: viewMode === 'list' }]" @click="viewMode = 'list'">
-            <AppIcon name="clipboard-list" :size="15" /> Llista
+            <AppIcon name="clipboard-list" :size="15" /> {{ t('map.viewList') }}
           </button>
         </div>
 
         <!-- Hero welcome overlay -->
         <div v-if="welcomeVisible && viewMode !== 'list'" class="hero-overlay">
-          <button class="hero-close" @click="welcomeVisible = false" aria-label="Tancar">×</button>
+          <button class="hero-close" @click="welcomeVisible = false" :aria-label="t('common.close')">×</button>
           <div class="hero-badge">
             <AppIcon name="leaf" :size="13" /> Barcelona Verda
           </div>
-          <h1 class="hero-title">La porta d'entrada als espais verds de Barcelona</h1>
-          <p class="hero-desc">Descobreix parcs, horts, jardins i programes oficials: tot en un sol mapa interactiu.</p>
+          <h1 class="hero-title">{{ t('home.heroTitle') }}</h1>
+          <p class="hero-desc">{{ t('home.heroDesc') }}</p>
         </div>
 
         <!-- Filter panel (left side) -->
         <div :class="['filter-panel', { collapsed: !panelOpen }]">
           <button class="panel-toggle" @click="panelOpen = !panelOpen">
             <AppIcon name="map2" :size="16" class="filter-icon" />
-            <span v-if="panelOpen" class="toggle-label">Espais verds</span>
+            <span v-if="panelOpen" class="toggle-label">{{ t('map.panelTitle') }}</span>
             <AppIcon
               name="chevron-left"
               :size="14"
@@ -108,8 +108,10 @@ import { mockEscocellStatus } from '~/utils/escocell'
 import { mockAcceptingApplications } from '~/utils/horts'
 import { mockCededTo } from '~/utils/cessions'
 import { mockCogestionat } from '~/utils/cogestio'
+import { translateDescription } from '~/utils/descriptions'
 
 const supabase = useSupabaseClient()
+const { t, locale } = useLocale()
 
 const activeFilter = ref('all')
 const panelOpen = ref(true)
@@ -125,7 +127,7 @@ onMounted(() => {
 const iconByType = { park: 'trees', garden: 'flower', hort: 'carrot', mediator: 'info-circle', tree: 'pine', reserva: 'seedling' }
 const colorByType = { park: '#2d6a4f', garden: '#c75c9e', hort: '#e08e29', mediator: '#6366f1', tree: '#52b788', reserva: '#0d9488' }
 function labelByType(type) {
-  return { park: 'Parc', garden: 'Jardí', hort: 'Hort urbà', mediator: "Punt d'informació", tree: 'Escocell', reserva: 'Reserva de biodiversitat' }[type] ?? type
+  return ['park', 'garden', 'hort', 'mediator', 'tree', 'reserva'].includes(type) ? t(`types.${type}`) : type
 }
 
 const mapRef = ref(null)
@@ -162,12 +164,12 @@ async function loadSpaces() {
     cededTo: mockCededTo(g),
     cogestionat: mockCogestionat(g),
   }))
-  const escocells = (treeData ?? []).map(t => ({
-    id: t.id,
-    name: t.name ?? 'Escocell',
+  const escocells = (treeData ?? []).map(tree => ({
+    id: tree.id,
+    name: tree.name ?? t('types.tree'),
     type: 'tree',
-    description: t.species,
-    escocell: mockEscocellStatus(t),
+    description: tree.species,
+    escocell: mockEscocellStatus(tree),
   }))
   spaces.value = [...greens, ...escocells].sort((a, b) => a.name.localeCompare(b.name, 'ca'))
   loadingSpaces.value = false
@@ -175,15 +177,15 @@ async function loadSpaces() {
 
 watch(viewMode, (val) => { if (val === 'list' && !spaces.value.length) loadSpaces() })
 
-const filters = [
-  { value: 'all',      icon: 'map',          label: 'Tots els espais' },
-  { value: 'tree',     icon: 'pine',         label: 'Àrbres (escocells)' },
-  { value: 'hort',     icon: 'carrot',       label: 'Horts urbans' },
-  { value: 'park',     icon: 'trees',        label: 'Parcs i jardins' },
-  { value: 'reserva',  icon: 'seedling',     label: 'Reserves de biodiversitat' },
-  { value: 'mediator', icon: 'info-circle',  label: "Punts d'informació" },
-  { value: 'help',     icon: 'lifebuoy',     label: 'On cal ajuda' },
-]
+const filters = computed(() => [
+  { value: 'all',      icon: 'map',          label: t('filters.all') },
+  { value: 'tree',     icon: 'pine',         label: t('filters.tree') },
+  { value: 'hort',     icon: 'carrot',       label: t('filters.hort') },
+  { value: 'park',     icon: 'trees',        label: t('filters.park') },
+  { value: 'reserva',  icon: 'seedling',     label: t('filters.reserva') },
+  { value: 'mediator', icon: 'info-circle',  label: t('filters.mediator') },
+  { value: 'help',     icon: 'lifebuoy',     label: t('filters.help') },
+])
 
 // Real-time stats from Supabase
 const stats = ref(null)

@@ -7,31 +7,35 @@
 
     <div v-if="stats" class="navbar-stats">
       <div class="counter">
-        <span class="counter-num">{{ stats.trees.toLocaleString('ca') }}</span>
-        <span class="counter-label">Àrbres</span>
+        <span class="counter-num">{{ stats.trees.toLocaleString(locale) }}</span>
+        <span class="counter-label">{{ t('nav.stats.trees') }}</span>
       </div>
       <span class="counter-dot" />
       <div class="counter">
-        <span class="counter-num">{{ stats.mediators.toLocaleString('ca') }}</span>
-        <span class="counter-label">Mediadors actius</span>
+        <span class="counter-num">{{ stats.mediators.toLocaleString(locale) }}</span>
+        <span class="counter-label">{{ t('nav.stats.mediators') }}</span>
       </div>
       <span class="counter-dot" />
       <div class="counter">
-        <span class="counter-num">{{ stats.participants.toLocaleString('ca') }}</span>
-        <span class="counter-label">Participants</span>
+        <span class="counter-num">{{ stats.participants.toLocaleString(locale) }}</span>
+        <span class="counter-label">{{ t('nav.stats.participants') }}</span>
       </div>
       <span class="counter-dot" />
       <div class="counter">
-        <span class="counter-num">{{ stats.needsHelp.toLocaleString('ca') }}</span>
-        <span class="counter-label">Cal ajuda</span>
+        <span class="counter-num">{{ stats.needsHelp.toLocaleString(locale) }}</span>
+        <span class="counter-label">{{ t('nav.stats.needsHelp') }}</span>
       </div>
     </div>
 
     <div class="navbar-links">
-      <NuxtLink to="/">Inici</NuxtLink>
-      <NuxtLink to="/participar" class="btn-login">Com Participar</NuxtLink>
-      <NuxtLink to="/sobre">Sobre</NuxtLink>
-      <NuxtLink to="/login">Entrar</NuxtLink>
+      <NuxtLink to="/">{{ t('nav.home') }}</NuxtLink>
+      <NuxtLink to="/participar" class="btn-login">{{ t('nav.participate') }}</NuxtLink>
+      <NuxtLink to="/sobre">{{ t('nav.about') }}</NuxtLink>
+      <NuxtLink to="/login">{{ t('nav.login') }}</NuxtLink>
+      <div class="lang-toggle" role="group" aria-label="Language">
+        <button :class="{ active: locale === 'ca' }" @click="setLocale('ca')">CA</button>
+        <button :class="{ active: locale === 'en' }" @click="setLocale('en')">EN</button>
+      </div>
     </div>
   </nav>
 </template>
@@ -42,6 +46,8 @@ defineProps({
   // floating = absolute bar over the map (home). Without floating = bar fixed to the top (content pages).
   floating: { type: Boolean, default: false },
 })
+
+const { t, locale, setLocale } = useLocale()
 </script>
 
 <style scoped>
@@ -147,6 +153,34 @@ defineProps({
 
 .btn-login:hover { background: #1b4332 !important; }
 
+/* Language toggle (CA | EN) */
+.lang-toggle {
+  display: flex;
+  gap: 2px;
+  background: #f0faf4;
+  border-radius: 8px;
+  padding: 3px;
+}
+
+.lang-toggle button {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+  color: #4a7c59;
+  padding: 3px 8px;
+  border-radius: 6px;
+  transition: all 0.15s;
+}
+
+.lang-toggle button:hover { color: #1b4332; }
+
+.lang-toggle button.active {
+  background: #2d6a4f;
+  color: white;
+}
+
 @media (max-width: 768px) {
   .navbar { padding: 0 20px; height: 56px; }
   .navbar-brand { font-size: 15px; }
@@ -154,5 +188,6 @@ defineProps({
   .navbar-links { gap: 14px; }
   .navbar-links a { font-size: 13px; }
   .btn-login { padding: 6px 12px; font-size: 13px; }
+  .lang-toggle button { padding: 3px 6px; font-size: 11px; }
 }
 </style>

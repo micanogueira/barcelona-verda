@@ -5,20 +5,20 @@
         <span class="footer-logo">
           <AppIcon name="leaf" :size="16" /> Barcelona Verda
         </span>
-        <p>Una plataforma ciutadana per als espais verds urbans de Barcelona.</p>
-        <p class="footer-academic">Projecte acadèmic · Sustainable Smart Cities · EuroTeQ 2026</p>
+        <p>{{ t('footer.tagline') }}</p>
+        <p class="footer-academic">{{ t('footer.academic') }}</p>
       </div>
 
       <nav class="footer-nav">
         <div class="footer-col">
-          <span class="footer-col-title">Plataforma</span>
-          <NuxtLink to="/">Mapa interactiu</NuxtLink>
-          <NuxtLink to="/participar">Com Participar</NuxtLink>
-          <NuxtLink to="/sobre">Sobre el projecte</NuxtLink>
-          <NuxtLink to="/login">Entrar / Registrar-me</NuxtLink>
+          <span class="footer-col-title">{{ t('footer.platformTitle') }}</span>
+          <NuxtLink to="/">{{ t('footer.interactiveMap') }}</NuxtLink>
+          <NuxtLink to="/participar">{{ t('footer.participate') }}</NuxtLink>
+          <NuxtLink to="/sobre">{{ t('footer.aboutProject') }}</NuxtLink>
+          <NuxtLink to="/login">{{ t('footer.loginRegister') }}</NuxtLink>
         </div>
         <div class="footer-col">
-          <span class="footer-col-title">Programes oficials</span>
+          <span class="footer-col-title">{{ t('footer.officialPrograms') }}</span>
           <a href="https://ajuntament.barcelona.cat/espaisverds/ca/participa-hi/mans-al-verd/cuida-lescocell" target="_blank" rel="noopener">Cuida l'escocell</a>
           <a href="https://ajuntament.barcelona.cat/espaisverds/ca/participa-hi/mans-al-verd/xarxa-dhorts-municipals" target="_blank" rel="noopener">Xarxa d'Horts Municipals</a>
           <a href="https://ajuntament.barcelona.cat/espaisverds/ca/participa-hi/mans-al-verd/cessio-despais-municipals-dus-comunitari" target="_blank" rel="noopener">Cessió d'Espais Municipals</a>
@@ -37,6 +37,7 @@
 </template>
 
 <script setup>
+const { t } = useLocale()
 </script>
 
 <style scoped>

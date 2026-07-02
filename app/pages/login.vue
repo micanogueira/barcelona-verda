@@ -1,7 +1,7 @@
 <template>
   <div class="auth-page">
     <div class="auth-card">
-      <NuxtLink to="/" class="back-link">← Tornar a l'inici</NuxtLink>
+      <NuxtLink to="/" class="back-link">{{ t('login.back') }}</NuxtLink>
 
       <div class="auth-logo">
         <AppIcon name="leaf" :size="22" class="logo-icon" />
@@ -9,53 +9,53 @@
       </div>
 
       <div class="auth-tabs">
-        <button :class="['tab', { active: mode === 'login' }]" @click="mode = 'login'">Entrar</button>
-        <button :class="['tab', { active: mode === 'register' }]" @click="mode = 'register'">Registrar-me</button>
+        <button :class="['tab', { active: mode === 'login' }]" @click="mode = 'login'">{{ t('login.loginTab') }}</button>
+        <button :class="['tab', { active: mode === 'register' }]" @click="mode = 'register'">{{ t('login.registerTab') }}</button>
       </div>
 
       <!-- Login -->
       <form v-if="mode === 'login'" class="auth-form" @submit.prevent="handleLogin">
         <div class="field">
-          <label>Correu electrònic</label>
-          <input v-model="email" type="email" placeholder="nom@exemple.com" required />
+          <label>{{ t('login.email') }}</label>
+          <input v-model="email" type="email" :placeholder="t('login.emailPlaceholder')" required />
         </div>
         <div class="field">
-          <label>Contrasenya</label>
+          <label>{{ t('login.password') }}</label>
           <input v-model="password" type="password" placeholder="••••••••" required />
         </div>
         <p v-if="error" class="error-msg">{{ error }}</p>
         <button type="submit" class="btn-submit" :disabled="loading">
-          {{ loading ? 'Entrant...' : 'Entrar' }}
+          {{ loading ? t('login.loggingIn') : t('login.loginBtn') }}
         </button>
       </form>
 
       <!-- Register -->
       <form v-else class="auth-form" @submit.prevent="handleRegister">
         <div class="field">
-          <label>Nom complet</label>
-          <input v-model="name" type="text" placeholder="Maria García" required />
+          <label>{{ t('login.fullName') }}</label>
+          <input v-model="name" type="text" :placeholder="t('login.namePlaceholder')" required />
         </div>
         <div class="field">
-          <label>Correu electrònic</label>
-          <input v-model="email" type="email" placeholder="nom@exemple.com" required />
+          <label>{{ t('login.email') }}</label>
+          <input v-model="email" type="email" :placeholder="t('login.emailPlaceholder')" required />
         </div>
         <div class="field">
-          <label>Contrasenya</label>
-          <input v-model="password" type="password" placeholder="Mínim 8 caràcters" required minlength="8" />
+          <label>{{ t('login.password') }}</label>
+          <input v-model="password" type="password" :placeholder="t('login.passwordHintRegister')" required minlength="8" />
         </div>
         <div class="field">
-          <label>Com vols participar?</label>
+          <label>{{ t('login.roleQuestion') }}</label>
           <select v-model="role">
-            <option value="mediator">Mediador/a de xarxa</option>
-            <option value="volunteer">Voluntari/ària</option>
+            <option value="mediator">{{ t('login.roleMediator') }}</option>
+            <option value="volunteer">{{ t('login.roleVolunteer') }}</option>
           </select>
           <span class="field-hint">
-            <NuxtLink to="/participar">Descobreix les diferències →</NuxtLink>
+            <NuxtLink to="/participar">{{ t('login.discoverDiff') }}</NuxtLink>
           </span>
         </div>
         <p v-if="error" class="error-msg">{{ error }}</p>
         <button type="submit" class="btn-submit" :disabled="loading">
-          {{ loading ? 'Registrant...' : 'Crear compte' }}
+          {{ loading ? t('login.registering') : t('login.createAccount') }}
         </button>
       </form>
     </div>
@@ -63,12 +63,12 @@
     <!-- Side panel -->
     <div class="auth-side">
       <div class="side-content">
-        <h2>Junts fem Barcelona més verda</h2>
+        <h2>{{ t('login.sideTitle') }}</h2>
         <ul class="side-list">
-          <li><AppIcon name="map2" :size="20" />Explora tots els espais verds en un únic mapa</li>
-          <li><AppIcon name="topology-star-3" :size="20" />Connecta els teus veïns amb els programes del barri</li>
-          <li><AppIcon name="leaf" :size="20" />Accedeix als programes oficials de l'Ajuntament</li>
-          <li><AppIcon name="users" :size="20" />Fes créixer la xarxa de participació</li>
+          <li><AppIcon name="map2" :size="20" />{{ t('login.side1') }}</li>
+          <li><AppIcon name="topology-star-3" :size="20" />{{ t('login.side2') }}</li>
+          <li><AppIcon name="leaf" :size="20" />{{ t('login.side3') }}</li>
+          <li><AppIcon name="users" :size="20" />{{ t('login.side4') }}</li>
         </ul>
       </div>
     </div>
@@ -76,6 +76,7 @@
 </template>
 
 <script setup>
+const { t } = useLocale()
 const supabase = useSupabaseClient()
 const router = useRouter()
 

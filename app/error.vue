@@ -10,13 +10,15 @@
         <span class="error-code">{{ is404 ? '404' : error.statusCode }}</span>
         <h1>{{ title }}</h1>
         <p>{{ description }}</p>
-        <button class="error-cta" @click="goHome">Torna al mapa →</button>
+        <button class="error-cta" @click="goHome">{{ t('error.cta') }}</button>
       </div>
     </main>
   </div>
 </template>
 
 <script setup>
+const { t } = useLocale()
+
 const props = defineProps({
   error: { type: Object, default: () => ({}) },
 })
@@ -24,15 +26,11 @@ const props = defineProps({
 const is404 = computed(() => props.error?.statusCode === 404)
 
 const title = computed(() =>
-  is404.value
-    ? 'Aquesta pàgina no surt al mapa'
-    : 'Alguna cosa ha anat malament',
+  is404.value ? t('error.title404') : t('error.titleGeneric'),
 )
 
 const description = computed(() =>
-  is404.value
-    ? "Sembla que t'has desviat del camí. Tornem als espais verds de Barcelona?"
-    : "Hi ha hagut un error inesperat. Torna a l'inici i continua explorant.",
+  is404.value ? t('error.desc404') : t('error.descGeneric'),
 )
 
 useHead({ title: `${is404.value ? '404' : 'Error'} · Barcelona Verda` })

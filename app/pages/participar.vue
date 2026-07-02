@@ -3,9 +3,9 @@
     <NavBar />
 
     <header class="page-header">
-      <h1>Com pots participar?</h1>
-      <p>El projecte Barcelona Verda connecta veïns, voluntaris i la ciutat per crear espais verds junts. Aquí trobaràs totes les formes de participació i els programes oficials, en un sol lloc.</p>
-      <p>Siguis voluntari/ària, mediador/a o ciutadà/ana actiu/va, hi ha un rol per a tothom.</p>
+      <h1>{{ t('participate.title') }}</h1>
+      <p>{{ t('participate.intro1') }}</p>
+      <p>{{ t('participate.intro2') }}</p>
     </header>
 
     <!-- All participation options — unified grid -->
@@ -33,16 +33,16 @@
             <div class="official-icon-badge" :style="{ background: prog.color }">
               <AppIcon :name="prog.icon" :size="22" />
             </div>
-            <span class="official-tag">Programa oficial</span>
+            <span class="official-tag">{{ t('participate.officialTag') }}</span>
           </div>
           <h3>{{ prog.title }}</h3>
           <p class="official-desc">{{ prog.description }}</p>
           <div class="official-bv-adds">
-            <span class="official-bv-label">Què hi ha de nou</span>
+            <span class="official-bv-label">{{ t('participate.whatsNew') }}</span>
             <p>{{ prog.bvAdds }}</p>
           </div>
           <a :href="prog.officialUrl" target="_blank" rel="noopener" class="btn-card">
-            Accedeix al programa →
+            {{ t('participate.accessProgram') }}
           </a>
         </div>
 
@@ -50,7 +50,7 @@
     </section>
 
     <section class="how-it-works">
-      <h2>Com funciona?</h2>
+      <h2>{{ t('participate.howTitle') }}</h2>
       <div class="steps">
         <div v-for="(step, i) in steps" :key="i" class="step">
           <div class="step-num">{{ i + 1 }}</div>
@@ -65,45 +65,40 @@
 </template>
 
 <script setup>
-const roles = [
+const { t } = useLocale()
+
+// Roles/programs/steps are computed so their labels re-render on locale change.
+// Official program titles stay as their Catalan proper names (they link to the
+// Catalan municipal site); only the descriptive copy is translated.
+const roles = computed(() => [
   {
     id: 'mediator',
     icon: 'topology-star-3',
-    title: 'Mediador/a de Xarxa',
     color: '#6366f1',
-    description: 'Ets un comerç, mercat, metge, perruqueria o entitat local. Connectes els teus clients i veïns amb els espais verds i programes del barri, actuant com a punt de confiança.',
-    actions: [
-      'Rep kit de comunicació (pòsters, flyers)',
-      'Accés a formació de 30 minuts',
-      'Aparèixes al mapa com a punt d\'informació',
-      'Reconeixement per al mediador/a més actiu/va',
-    ],
-    cta: 'Unir-me com a mediador/a',
+    title: t('participate.roles.mediator.title'),
+    description: t('participate.roles.mediator.description'),
+    actions: t('participate.roles.mediator.actions'),
+    cta: t('participate.roles.mediator.cta'),
   },
   {
     id: 'volunteer',
     icon: 'heart',
-    title: 'Voluntari/ària',
     color: '#e2725b',
-    description: 'Acompanyes veïns que volen participar però no saben per on començar, ajudant-los a connectar amb Barcelona Verda i amb els programes oficials.',
-    actions: [
-      'Integres els nouvinguts a la plataforma',
-      'Proveeixes de material els punts d\'informació i formes els mediadors/ores de la xarxa',
-      'Orientes cap al programa oficial més adequat',
-      'Certificat de voluntariat oficial',
-    ],
-    cta: 'Apuntar-me com a voluntari/ària',
+    title: t('participate.roles.volunteer.title'),
+    description: t('participate.roles.volunteer.description'),
+    actions: t('participate.roles.volunteer.actions'),
+    cta: t('participate.roles.volunteer.cta'),
   },
-]
+])
 
-const officialPrograms = [
+const officialPrograms = computed(() => [
   {
     id: 1,
     icon: 'pine',
     color: '#52b788',
     title: "Cuida l'escocell",
-    description: "Programa municipal d'adopció d'escocells (els espais de terra al voltant dels arbres). Qualsevol veí +18 anys pot apadrinar fins a 3 escocells.",
-    bvAdds: "Al mapa veus de seguida quins escocells del teu barri ja tenen padrí i quins t'esperen. Quan un queda lliure, te'l destaquem perquè el pots demanar directament.",
+    description: t('participate.programs.1.description'),
+    bvAdds: t('participate.programs.1.bvAdds'),
     officialUrl: "https://ajuntament.barcelona.cat/espaisverds/ca/participa-hi/mans-al-verd/cuida-lescocell",
   },
   {
@@ -111,8 +106,8 @@ const officialPrograms = [
     icon: 'carrot',
     color: '#e08e29',
     title: "Xarxa d'Horts Municipals",
-    description: "15 horts municipals repartits pels 10 districtes, amb parcel·les per a persones +65 anys i entitats. Sorteig per a persones, concurs per a entitats.",
-    bvAdds: "Marquem els horts amb convocatòria oberta perquè no se't passi per alt cap oportunitat al teu barri.",
+    description: t('participate.programs.2.description'),
+    bvAdds: t('participate.programs.2.bvAdds'),
     officialUrl: "https://ajuntament.barcelona.cat/espaisverds/ca/participa-hi/mans-al-verd/xarxa-dhorts-municipals",
   },
   {
@@ -120,8 +115,8 @@ const officialPrograms = [
     icon: 'leaf',
     color: '#2d6a4f',
     title: "Cessió d'Espais Municipals",
-    description: "Solars municipals inactius cedits a entitats sense ànim de lucre per crear-hi horts, jardins comunitaris o reserves de biodiversitat.",
-    bvAdds: "Més transparència per a la comunitat: al mapa veus quina entitat sense ànim de lucre gestiona cada espai verd cedit.",
+    description: t('participate.programs.3.description'),
+    bvAdds: t('participate.programs.3.bvAdds'),
     officialUrl: "https://ajuntament.barcelona.cat/espaisverds/ca/participa-hi/mans-al-verd/cessio-despais-municipals-dus-comunitari",
   },
   {
@@ -129,18 +124,13 @@ const officialPrograms = [
     icon: 'users',
     color: '#c75c9e',
     title: "Cogestió d'Espais Públics",
-    description: "Entitats sense ànim de lucre poden cogestionar parterres i jardineres dels parcs urbans durant 2 anys, via formulari.",
-    bvAdds: "Més transparència per a la comunitat: al mapa veus quina entitat sense ànim de lucre cogestiona cada parc cogestionat.",
+    description: t('participate.programs.4.description'),
+    bvAdds: t('participate.programs.4.bvAdds'),
     officialUrl: "https://ajuntament.barcelona.cat/espaisverds/ca/participa-hi/mans-al-verd/cogestio-despais-publics",
   },
-]
+])
 
-const steps = [
-  { title: 'Explora', text: 'Obre el mapa interactiu i descobreix els espais verds, horts i arbres del teu barri — sense necessitat de compte.' },
-  { title: 'Tria com participar', text: 'Vols ser voluntari, mediador de xarxa o accedir directament a un programa oficial de l\'Ajuntament?' },
-  { title: 'Registra\'t o accedeix', text: 'Crea el teu compte a Barcelona Verda per als rols de la plataforma, o accedeix al programa oficial que t\'interessa.' },
-  { title: 'Fes créixer la xarxa', text: 'La teva participació és visible al mapa i inspira altres veïns dels 73 barris de Barcelona.' },
-]
+const steps = computed(() => t('participate.steps'))
 </script>
 
 <style scoped>
