@@ -13,6 +13,7 @@ import { translateDescription } from '~/utils/descriptions'
 
 const props = defineProps({
   filter: { type: String, default: 'all' },
+  neighborhood: { type: String, default: '' },
 })
 
 const { t, locale } = useLocale()
@@ -20,7 +21,8 @@ const { t, locale } = useLocale()
 const mapContainer = ref(null)
 const supabase = useSupabaseClient()
 let map = null
-const spaceMarkers = [] // { marker, id, type, needsHelp }
+let barrisFC = null // official neighbourhood boundaries (WGS84), for the outline
+const spaceMarkers = [] // { marker, id, type, needsHelp, neighborhood }
 const treeMarkers  = [] // { marker, id }
 
 const ICON_BY_TYPE = {
@@ -90,8 +92,40 @@ onMounted(() => {
 
   map.addControl(new maplibregl.NavigationControl(), 'top-right')
   map.addControl(new maplibregl.ScaleControl({ unit: 'metric' }), 'bottom-left')
-  map.on('load', renderMarkers)
+  map.on('load', () => { renderMarkers(); setupBarris() })
 })
+
+// Load the neighbourhood boundaries once and add a dashed outline + soft fill,
+// both hidden until a barri is selected.
+async function setupBarris() {
+  try {
+    barrisFC = await (await fetch('/barris-bcn.geojson')).json()
+  } catch { return }
+  if (!map || map.getSource('barris')) return
+  map.addSource('barris', { type: 'geojson', data: barrisFC })
+  map.addLayer({ id: 'barri-fill', type: 'fill', source: 'barris', paint: { 'fill-color': '#2d6a4f', 'fill-opacity': 0.06 }, filter: ['==', ['get', 'barri'], '__none__'] })
+  map.addLayer({ id: 'barri-outline', type: 'line', source: 'barris', paint: { 'line-color': '#2d6a4f', 'line-width': 2.5, 'line-dasharray': [2, 1] }, filter: ['==', ['get', 'barri'], '__none__'] })
+  highlightNeighborhood(props.neighborhood)
+}
+
+function bboxOf(feature) {
+  let minx = Infinity, miny = Infinity, maxx = -Infinity, maxy = -Infinity
+  const scan = (c) => { if (typeof c[0] === 'number') { minx = Math.min(minx, c[0]); maxx = Math.max(maxx, c[0]); miny = Math.min(miny, c[1]); maxy = Math.max(maxy, c[1]) } else c.forEach(scan) }
+  scan(feature.geometry.coordinates)
+  return [[minx, miny], [maxx, maxy]]
+}
+
+// Show the selected barri's outline and zoom to it; clears when name is empty.
+function highlightNeighborhood(name) {
+  if (!map || !map.getLayer('barri-outline')) return
+  const filter = ['==', ['get', 'barri'], name || '__none__']
+  map.setFilter('barri-outline', filter)
+  map.setFilter('barri-fill', filter)
+  if (name && barrisFC) {
+    const feat = barrisFC.features.find(f => f.properties.barri === name)
+    if (feat) map.fitBounds(bboxOf(feat), { padding: 60, duration: 800, maxZoom: 15.5 })
+  }
+}
 
 // Popups are built as HTML strings at render time, so switching language means
 // tearing down the markers and rebuilding them with the new translations.
@@ -197,7 +231,7 @@ async function loadGreenSpaces() {
       )
       .addTo(map)
 
-    spaceMarkers.push({ marker, id: space.id, type: space.type, needsHelp: !!space.needs_help })
+    spaceMarkers.push({ marker, id: space.id, type: space.type, needsHelp: !!space.needs_help, neighborhood: space.neighborhood })
   })
 }
 
@@ -262,18 +296,21 @@ async function loadTrees() {
 }
 
 function applyFilter(val) {
-  spaceMarkers.forEach(({ marker, type, needsHelp }) => {
-    const show = val === 'all' || type === val
+  const nb = props.neighborhood
+  spaceMarkers.forEach(({ marker, type, needsHelp, neighborhood }) => {
+    const typeOk = val === 'all' || type === val
       || (val === 'park' && type === 'garden') // "Parcs i jardins" also covers gardens
       || (val === 'help' && needsHelp)
-    setVisible(marker, show)
+    setVisible(marker, typeOk && (!nb || neighborhood === nb))
   })
   treeMarkers.forEach(({ marker }) => {
-    setVisible(marker, val === 'all' || val === 'tree')
+    // Trees carry no neighbourhood, so they hide whenever a barri is selected.
+    setVisible(marker, (val === 'all' || val === 'tree') && !nb)
   })
 }
 
 watch(() => props.filter, applyFilter)
+watch(() => props.neighborhood, (name) => { applyFilter(props.filter); highlightNeighborhood(name) })
 
 // Called by the list view: centers the map on the space/escocell and opens its popup
 function focusSpace(id) {

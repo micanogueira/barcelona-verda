@@ -69,6 +69,7 @@ export const translations = {
       viewMap: 'Mapa',
       viewList: 'Llista',
       panelTitle: 'Espais verds',
+      allNeighborhoods: 'Tots els barris',
     },
 
     home: {
@@ -288,6 +289,7 @@ export const translations = {
       viewMap: 'Map',
       viewList: 'List',
       panelTitle: 'Green spaces',
+      allNeighborhoods: 'All neighbourhoods',
     },
 
     home: {
@@ -507,6 +509,7 @@ export const translations = {
       viewMap: 'Mapa',
       viewList: 'Lista',
       panelTitle: 'Espacios verdes',
+      allNeighborhoods: 'Todos los barrios',
     },
 
     home: {

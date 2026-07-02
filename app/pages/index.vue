@@ -6,7 +6,7 @@
 
       <div class="map-wrapper">
         <ClientOnly>
-          <BarcelonaMap ref="mapRef" :filter="activeFilter" />
+          <BarcelonaMap ref="mapRef" :filter="activeFilter" :neighborhood="activeNeighborhood" />
           <template #fallback>
             <div class="map-placeholder">{{ t('map.loadingMap') }}</div>
           </template>
@@ -90,6 +90,16 @@
 
           <template v-if="panelOpen">
             <div class="filter-divider" />
+            <div class="neighborhood-filter">
+              <AppIcon name="pin" :size="14" class="filter-icon" />
+              <select v-model="activeNeighborhood" class="neighborhood-select" :aria-label="t('map.allNeighborhoods')">
+                <option value="">{{ t('map.allNeighborhoods') }}</option>
+                <optgroup v-for="g in neighborhoodGroups" :key="g.district" :label="g.district">
+                  <option v-for="b in g.barris" :key="b" :value="b">{{ b }}</option>
+                </optgroup>
+              </select>
+            </div>
+            <div class="filter-divider" />
             <button
               v-for="f in filters"
               :key="f.value"
@@ -117,6 +127,7 @@ const supabase = useSupabaseClient()
 const { t, locale } = useLocale()
 
 const activeFilter = ref('all')
+const activeNeighborhood = ref('')
 const panelOpen = ref(true)
 const viewMode = ref('map')
 const welcomeVisible = ref(true)
@@ -152,11 +163,27 @@ function focusOnMap(space) {
 const spaces = ref([])
 const loadingSpaces = ref(false)
 const filteredSpaces = computed(() => {
-  if (activeFilter.value === 'all') return spaces.value
-  if (activeFilter.value === 'help') return spaces.value.filter(s => s.needs_help)
+  let list = spaces.value
+  // Neighborhood is a second, independent axis — combined (AND) with the type filter.
+  if (activeNeighborhood.value) list = list.filter(s => s.neighborhood === activeNeighborhood.value)
+  if (activeFilter.value === 'all') return list
+  if (activeFilter.value === 'help') return list.filter(s => s.needs_help)
   // "Parcs i jardins" covers both parks and gardens
-  if (activeFilter.value === 'park') return spaces.value.filter(s => s.type === 'park' || s.type === 'garden')
-  return spaces.value.filter(s => s.type === activeFilter.value)
+  if (activeFilter.value === 'park') return list.filter(s => s.type === 'park' || s.type === 'garden')
+  return list.filter(s => s.type === activeFilter.value)
+})
+
+// Neighborhoods that actually have green spaces, grouped by district for the dropdown.
+const neighborhoodGroups = computed(() => {
+  const byDistrict = {}
+  for (const s of spaces.value) {
+    if (!s.neighborhood) continue
+    const d = s.district || '—'
+    ;(byDistrict[d] = byDistrict[d] || new Set()).add(s.neighborhood)
+  }
+  return Object.keys(byDistrict)
+    .sort((a, b) => a.localeCompare(b, 'ca'))
+    .map(d => ({ district: d, barris: [...byDistrict[d]].sort((a, b) => a.localeCompare(b, 'ca')) }))
 })
 
 async function loadSpaces() {
@@ -165,7 +192,7 @@ async function loadSpaces() {
   const [{ data: greenData }, { data: treeData }] = await Promise.all([
     supabase
       .from('green_spaces')
-      .select('id, name, type, description, neighborhood, needs_help, participant_count, source, subtype'),
+      .select('id, name, type, description, neighborhood, district, needs_help, participant_count, source, subtype'),
     supabase
       .from('trees')
       .select('id, name, species, source'),
@@ -189,6 +216,8 @@ async function loadSpaces() {
   loadingSpaces.value = false
 }
 
+// Load once on mount so the neighborhood dropdown has options even in map view.
+onMounted(loadSpaces)
 watch(viewMode, (val) => { if (val === 'list' && !spaces.value.length) loadSpaces() })
 
 const filters = computed(() => [
@@ -311,6 +340,35 @@ onMounted(() => {
   height: 1px;
   background: #e8f5ee;
   margin: 2px 4px;
+}
+
+/* Neighborhood dropdown */
+.neighborhood-filter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 2px 4px;
+  color: #4a7c59;
+}
+
+.neighborhood-select {
+  flex: 1;
+  min-width: 0;
+  border: 1px solid #d6f0e0;
+  border-radius: 8px;
+  padding: 7px 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #1b4332;
+  background: #fff;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.neighborhood-select:focus {
+  outline: none;
+  border-color: #2d6a4f;
+  box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.1);
 }
 
 .filter-btn {
