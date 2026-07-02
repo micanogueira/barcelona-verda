@@ -26,11 +26,13 @@ const PAGE = 1000
 const esc = (v) => (v == null || String(v).trim() === '') ? 'NULL' : `'${String(v).trim().replace(/'/g, "''")}'`
 const finite = (n) => typeof n === 'number' && Number.isFinite(n)
 
-// Official neighbourhood boundaries (73 barris, EPSG:25831) for point-in-polygon.
-// The ArcGIS "Parcs" layer has no barri/districte field, so we derive them from
-// each garden's projected centroid. Slim file extracted from Open Data BCN's
-// "Administrative units" dataset (Unitats_Administratives_BCN, barri polygons).
-const BARRIS = JSON.parse(readFileSync(new URL('./data/barris-bcn.geojson', import.meta.url), 'utf8'))
+// Official neighbourhood boundaries (73 barris, WGS84) for point-in-polygon.
+// We derive barri/districte from each space's coordinates so the names are
+// consistent everywhere (the ArcGIS parks layer has none, and hort barri names
+// are cased differently from the official ones — which would break the map
+// outline). Same file the map loads for the outline. Source: Open Data BCN
+// "Administrative units", reprojected to WGS84.
+const BARRIS = JSON.parse(readFileSync(new URL('../public/barris-bcn.geojson', import.meta.url), 'utf8'))
 for (const f of BARRIS.features) {
   let minx = Infinity, miny = Infinity, maxx = -Infinity, maxy = -Infinity
   const scan = (c) => { if (typeof c[0] === 'number') { minx = Math.min(minx, c[0]); maxx = Math.max(maxx, c[0]); miny = Math.min(miny, c[1]); maxy = Math.max(maxy, c[1]) } else c.forEach(scan) }
@@ -126,12 +128,13 @@ async function main() {
     if (!finite(lng) || !finite(lat)) continue
     const extId = `hort-${p.OBJECTID}`
     if (!keep(extId)) continue
+    const nb = neighbourhoodAt(lng, lat) // official barri name (falls back to source)
     horts.push({
       name: p.NOM || 'Hort urbà',
       type: 'hort',
       address: p.ADRECA,
-      district: p.Districte,
-      neighborhood: p.Barri,
+      district: nb?.districte ?? p.Districte,
+      neighborhood: nb?.barri ?? p.Barri,
       subtype: hortSubtype(p.ORIGEN),
       lng, lat, extId,
     })
@@ -141,11 +144,6 @@ async function main() {
   // The layer is called "Parcs" but ~half the entries are named "Jardins de …";
   // type them by name so gardens get the garden label/icon instead of "Parc".
   const parkFeats = await fetchPaged(4, { outFields: 'Nom,Codi,OBJECTID', geojson: false })
-  // Same centroids in EPSG:25831 to look up the neighbourhood by point-in-polygon.
-  const centroid25831 = {}
-  for (const f of await fetchPaged(4, { outFields: 'OBJECTID', geojson: false, sr: 25831 })) {
-    if (f.centroid) centroid25831[f.attributes.OBJECTID] = f.centroid
-  }
   const parks = []
   let withBarri = 0
   for (const f of parkFeats) {
@@ -155,8 +153,7 @@ async function main() {
     const extId = `parc-${a.OBJECTID}`
     if (!keep(extId)) continue
     const name = a.Nom || 'Parc'
-    const c = centroid25831[a.OBJECTID]
-    const nb = c ? neighbourhoodAt(c.x, c.y) : null
+    const nb = neighbourhoodAt(lng, lat)
     if (nb) withBarri++
     parks.push({
       name,
