@@ -34,11 +34,14 @@ const isSchoolGarden = (p) => {
 }
 
 // Map the ArcGIS ORIGEN field to our hort subtype (label + program tag driver).
-// Municipal* → municipal (XHM); Comunitari / Social keep their own label;
-// everything else (private, public, unknown) stays a plain "Hort urbà".
+// Only ORIGEN exactly 'Municipal' is the real XHM network — cross-checked
+// against the city directory (GuiaBCN "Horts Urbans" category), which matches
+// these ~15 one-to-one. Other municipally-originated horts (Pla Buits, Dte,
+// IMPD…) are NOT part of XHM, so they stay a plain "Hort urbà" and get no badge.
+// Comunitari / Social keep their own label; everything else is a plain hort.
 const hortSubtype = (origen) => {
   const o = (origen || '').trim().toLowerCase()
-  if (o.startsWith('municipal')) return 'municipal'
+  if (o === 'municipal') return 'municipal'
   if (o === 'comunitari') return 'comunitari'
   if (o === 'social') return 'social'
   return null
