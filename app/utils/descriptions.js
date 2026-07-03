@@ -26,6 +26,10 @@ const DESCRIPTIONS = {
     "Punt d'informació al mercat de Gràcia": 'Info point at the Gràcia market',
     "Punt de difusió: Centre d'atenció primària": 'Outreach Point: Primary Care Centre',
     "Punt d'informació: Biblioteca municipal": 'Info Point: Municipal Library',
+    "Punt d'informació a la Universitat de Barcelona": 'Info point at the University of Barcelona',
+    "Punt d'informació a la Universitat Pompeu Fabra": 'Info point at Pompeu Fabra University',
+    "Punt d'informació a l'institut Jaume Balmes": 'Info point at Jaume Balmes secondary school',
+    'Punt de difusió al centre cívic Pati Llimona': 'Outreach point at the Pati Llimona civic centre',
     'Solar municipal cedit, naturalitzat com a refugi de biodiversitat urbana': 'Municipal plot handed over and rewilded as an urban biodiversity refuge',
     'Espai cedit a una entitat per crear un refugi de fauna i flora autòctona': 'Space handed over to an organisation to create a refuge for native wildlife and plants',
     // Legacy keys (pre patch-004): keep the lookup working until the live DB is updated.
@@ -54,6 +58,10 @@ const DESCRIPTIONS = {
     "Punt d'informació al mercat de Gràcia": 'Punto de información en el mercado de Gràcia',
     "Punt de difusió: Centre d'atenció primària": 'Punto de difusión: Centro de atención primaria',
     "Punt d'informació: Biblioteca municipal": 'Punto de información: Biblioteca municipal',
+    "Punt d'informació a la Universitat de Barcelona": 'Punto de información en la Universidad de Barcelona',
+    "Punt d'informació a la Universitat Pompeu Fabra": 'Punto de información en la Universidad Pompeu Fabra',
+    "Punt d'informació a l'institut Jaume Balmes": 'Punto de información en el instituto Jaume Balmes',
+    'Punt de difusió al centre cívic Pati Llimona': 'Punto de difusión en el centro cívico Pati Llimona',
     'Solar municipal cedit, naturalitzat com a refugi de biodiversitat urbana': 'Solar municipal cedido, naturalizado como refugio de biodiversidad urbana',
     'Espai cedit a una entitat per crear un refugi de fauna i flora autòctona': 'Espacio cedido a una entidad para crear un refugio de fauna y flora autóctona',
     // Legacy keys (pre patch-004): keep the lookup working until the live DB is updated.

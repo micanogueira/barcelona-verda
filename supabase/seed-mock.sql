@@ -35,4 +35,8 @@ INSERT INTO public.green_spaces (name, type, description, location, district, ne
   ('Mercat de la Boqueria',      'mediator', 'Punt d''informació al mercat més famós de Barcelona', ST_Point(2.1723, 41.3813), 'Ciutat Vella',    'El Raval',                 false, 0),
   ('Mercat de l''Abaceria',      'mediator', 'Punt d''informació al mercat de Gràcia',             ST_Point(2.1553, 41.4029), 'Gràcia',           'Vila de Gràcia',           false, 0),
   ('CAP Gràcia',                 'mediator', 'Punt de difusió: Centre d''atenció primària',        ST_Point(2.1571, 41.4015), 'Gràcia',           'Vila de Gràcia',           false, 0),
-  ('Biblioteca Poblenou',        'mediator', 'Punt d''informació: Biblioteca municipal',           ST_Point(2.2002, 41.4017), 'Sant Martí',       'Poblenou',                 false, 0);
+  ('Biblioteca Poblenou',        'mediator', 'Punt d''informació: Biblioteca municipal',           ST_Point(2.2002, 41.4017), 'Sant Martí',       'Poblenou',                 false, 0),
+  ('Universitat de Barcelona',   'mediator', 'Punt d''informació a la Universitat de Barcelona',   ST_Point(2.1634784, 41.3868595), 'Eixample',     'l''Antiga Esquerra de l''Eixample', false, 0),
+  ('Universitat Pompeu Fabra',   'mediator', 'Punt d''informació a la Universitat Pompeu Fabra',   ST_Point(2.1911055, 41.3892781), 'Sant Martí',   'la Vila Olímpica del Poblenou',     false, 0),
+  ('Institut Jaume Balmes',      'mediator', 'Punt d''informació a l''institut Jaume Balmes',      ST_Point(2.1667258, 41.3923084), 'Eixample',     'la Dreta de l''Eixample',           false, 0),
+  ('Centre Cívic Pati Llimona',  'mediator', 'Punt de difusió al centre cívic Pati Llimona',       ST_Point(2.1792828, 41.3817452), 'Ciutat Vella', 'el Barri Gòtic',                    false, 0);
