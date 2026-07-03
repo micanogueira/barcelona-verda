@@ -302,12 +302,14 @@ onMounted(() => {
   border-radius: 14px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
   z-index: 5;
-  min-width: 170px;
-  transition: min-width 0.2s;
+  /* Fixed width sized to the type buttons, so the long barri names in the
+     dropdown truncate instead of stretching the panel (and leaving empty space). */
+  width: 224px;
+  transition: width 0.2s;
 }
 
 .filter-panel.collapsed {
-  min-width: unset;
+  width: auto;
 }
 
 .panel-toggle {
@@ -363,6 +365,9 @@ onMounted(() => {
   background: #fff;
   cursor: pointer;
   transition: border-color 0.15s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .neighborhood-select:focus {
@@ -386,6 +391,9 @@ onMounted(() => {
   transition: all 0.15s;
   text-align: left;
   width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .filter-btn:hover {
