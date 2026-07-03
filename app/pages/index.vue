@@ -295,10 +295,10 @@ onMounted(() => {
   left: 20px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(8px);
-  padding: 10px;
+  padding: 7px;
   border-radius: 14px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
   z-index: 5;
@@ -314,10 +314,10 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 10px;
+  padding: 6px 9px;
   border: none;
   border-radius: 9px;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
   color: #1b4332;
   background: #f0faf4;
@@ -339,7 +339,7 @@ onMounted(() => {
 .filter-divider {
   height: 1px;
   background: #e8f5ee;
-  margin: 2px 4px;
+  margin: 1px 4px;
 }
 
 /* Neighborhood dropdown */
@@ -347,7 +347,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 2px 4px;
+  padding: 1px 4px;
   color: #4a7c59;
 }
 
@@ -356,8 +356,8 @@ onMounted(() => {
   min-width: 0;
   border: 1px solid #d6f0e0;
   border-radius: 8px;
-  padding: 7px 8px;
-  font-size: 13px;
+  padding: 5px 7px;
+  font-size: 12px;
   font-weight: 500;
   color: #1b4332;
   background: #fff;
@@ -375,10 +375,10 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 9px 10px;
+  padding: 6px 9px;
   border: none;
   border-radius: 9px;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
   cursor: pointer;
   background: transparent;
