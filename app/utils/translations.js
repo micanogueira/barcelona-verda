@@ -12,7 +12,7 @@ export const translations = {
       stats: {
         trees: 'Àrbres',
         mediators: 'Mediadors actius',
-        participants: 'Participants',
+        volunteers: 'Voluntaris',
         needsHelp: 'Cal ajuda',
       },
     },
@@ -232,7 +232,7 @@ export const translations = {
       stats: {
         trees: 'Trees',
         mediators: 'Active mediators',
-        participants: 'Participants',
+        volunteers: 'Volunteers',
         needsHelp: 'Need help',
       },
     },
@@ -452,7 +452,7 @@ export const translations = {
       stats: {
         trees: 'Árboles',
         mediators: 'Mediadores activos',
-        participants: 'Participantes',
+        volunteers: 'Voluntarios',
         needsHelp: 'Necesita ayuda',
       },
     },

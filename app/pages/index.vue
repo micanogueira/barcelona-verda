@@ -233,21 +233,23 @@ const filters = computed(() => [
 // Real-time stats from Supabase
 const stats = ref(null)
 
+// Example volunteer count until real sign-ups exist (volunteers register on the
+// platform, they don't appear on the map).
+const EXAMPLE_VOLUNTEERS = 12
+
 async function loadStats() {
   // Counters mirror what's actually on the map (driven by our example rows):
-  // trees = escocells, mediators = mediator points, participants = sum of
-  // participant_count, needsHelp = spaces flagged for help.
-  const [{ count: trees }, { count: mediators }, { count: needsHelp }, { data: partRows }] = await Promise.all([
+  // trees = escocells, mediators = mediator points, needsHelp = spaces flagged
+  // for help. Volunteers come from sign-ups (none yet) → example number.
+  const [{ count: trees }, { count: mediators }, { count: needsHelp }] = await Promise.all([
     supabase.from('trees').select('*', { count: 'exact', head: true }),
     supabase.from('green_spaces').select('*', { count: 'exact', head: true }).eq('type', 'mediator'),
     supabase.from('green_spaces').select('*', { count: 'exact', head: true }).eq('needs_help', true),
-    supabase.from('green_spaces').select('participant_count').gt('participant_count', 0),
   ])
-  const participants = (partRows ?? []).reduce((sum, r) => sum + (r.participant_count || 0), 0)
   stats.value = {
     trees: trees ?? 0,
     mediators: mediators ?? 0,
-    participants,
+    volunteers: EXAMPLE_VOLUNTEERS,
     needsHelp: needsHelp ?? 0,
   }
 }

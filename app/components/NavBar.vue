@@ -17,8 +17,8 @@
       </div>
       <span class="counter-dot" />
       <div class="counter">
-        <span class="counter-num">{{ stats.participants.toLocaleString(locale) }}</span>
-        <span class="counter-label">{{ t('nav.stats.participants') }}</span>
+        <span class="counter-num">{{ stats.volunteers.toLocaleString(locale) }}</span>
+        <span class="counter-label">{{ t('nav.stats.volunteers') }}</span>
       </div>
       <span class="counter-dot" />
       <div class="counter">
