@@ -234,16 +234,20 @@ const filters = computed(() => [
 const stats = ref(null)
 
 async function loadStats() {
-  const [{ count: trees }, { count: mediators }, { count: participants }, { count: needsHelp }] = await Promise.all([
+  // Counters mirror what's actually on the map (driven by our example rows):
+  // trees = escocells, mediators = mediator points, participants = sum of
+  // participant_count, needsHelp = spaces flagged for help.
+  const [{ count: trees }, { count: mediators }, { count: needsHelp }, { data: partRows }] = await Promise.all([
     supabase.from('trees').select('*', { count: 'exact', head: true }),
-    supabase.from('profiles').select('*', { count: 'exact', head: true }).eq('role', 'mediator'),
-    supabase.from('profiles').select('*', { count: 'exact', head: true }),
+    supabase.from('green_spaces').select('*', { count: 'exact', head: true }).eq('type', 'mediator'),
     supabase.from('green_spaces').select('*', { count: 'exact', head: true }).eq('needs_help', true),
+    supabase.from('green_spaces').select('participant_count').gt('participant_count', 0),
   ])
+  const participants = (partRows ?? []).reduce((sum, r) => sum + (r.participant_count || 0), 0)
   stats.value = {
-    trees: trees ?? 2847,
+    trees: trees ?? 0,
     mediators: mediators ?? 0,
-    participants: participants ?? 0,
+    participants,
     needsHelp: needsHelp ?? 0,
   }
 }
@@ -255,7 +259,6 @@ onMounted(() => {
   const channel = supabase
     .channel('stats')
     .on('postgres_changes', { event: '*', schema: 'public', table: 'trees' }, loadStats)
-    .on('postgres_changes', { event: '*', schema: 'public', table: 'profiles' }, loadStats)
     .on('postgres_changes', { event: '*', schema: 'public', table: 'green_spaces' }, loadStats)
     .subscribe()
 
