@@ -10,7 +10,7 @@ export const translations = {
       about: 'Sobre',
       login: 'Entrar',
       stats: {
-        trees: 'Àrbres',
+        trees: 'Escocells',
         mediators: 'Mediadors actius',
         volunteers: 'Voluntaris',
         needsHelp: 'Cal ajuda',
@@ -48,7 +48,7 @@ export const translations = {
 
     filters: {
       all: 'Tots els espais',
-      tree: 'Àrbres (escocells)',
+      tree: 'Escocells',
       hort: 'Horts urbans',
       park: 'Parcs i jardins',
       reserva: 'Reserves de biodiversitat',
@@ -230,7 +230,7 @@ export const translations = {
       about: 'About',
       login: 'Log in',
       stats: {
-        trees: 'Trees',
+        trees: 'Tree pits',
         mediators: 'Active mediators',
         volunteers: 'Volunteers',
         needsHelp: 'Need help',
@@ -268,7 +268,7 @@ export const translations = {
 
     filters: {
       all: 'All spaces',
-      tree: 'Trees (tree pits)',
+      tree: 'Tree pits',
       hort: 'Urban gardens',
       park: 'Parks & gardens',
       reserva: 'Biodiversity reserves',
@@ -450,7 +450,7 @@ export const translations = {
       about: 'Sobre',
       login: 'Entrar',
       stats: {
-        trees: 'Árboles',
+        trees: 'Alcorques',
         mediators: 'Mediadores activos',
         volunteers: 'Voluntarios',
         needsHelp: 'Necesita ayuda',
@@ -488,7 +488,7 @@ export const translations = {
 
     filters: {
       all: 'Todos los espacios',
-      tree: 'Árboles (alcorques)',
+      tree: 'Alcorques',
       hort: 'Huertos urbanos',
       park: 'Parques y jardines',
       reserva: 'Reservas de biodiversidad',
